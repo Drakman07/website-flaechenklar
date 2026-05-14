@@ -31,5 +31,14 @@
       linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
     background-size: 32px 32px;
+    animation: grid-drift 60s linear infinite;
   }
+  @keyframes grid-drift {
+    from { background-position: 0 0; }
+    to   { background-position: 32px 32px; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid-blueprint-dark { animation: none; }
 }
