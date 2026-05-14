@@ -1,5 +1,6 @@
 import { Menu } from "lucide-react";
 import type { MouseEvent } from "react";
+import logoUrl from "@/assets/logo.svg";
 
 const links = [
   { href: "#funktionen", label: "Funktionen" },
@@ -17,8 +18,8 @@ export function Nav() {
   return (
     <header className="sticky top-0 z-50 border-b border-outline bg-white/90 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        <a href="#top" className="text-lg font-bold tracking-tight text-navy">
-          Flächen<span className="text-teal">Klar</span>
+        <a href="#top" className="flex items-center" aria-label="FlächenKlar — Startseite">
+          <img src={logoUrl} alt="FlächenKlar" className="h-9 w-auto" />
         </a>
 
         <nav className="hidden items-center gap-7 md:flex">
