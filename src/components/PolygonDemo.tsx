@@ -137,9 +137,7 @@ export function PolygonDemo() {
           .map((p, i) => `${i === 0 ? "M" : "L"}${p.x} ${p.y}`)
           .join(" ") + (isClosed ? " Z" : "");
 
-  const area = isClosed
-    ? svgAreaToM2(polygonArea(activePoints))
-    : svgAreaToM2(polygonArea(activePoints));
+  const area = svgAreaToM2(polygonArea(activePoints));
 
   const cursor = showingUser ? "cursor-crosshair" : "cursor-pointer";
 
@@ -191,7 +189,7 @@ export function PolygonDemo() {
         <button
           type="button"
           onClick={handleReset}
-          className="absolute bottom-4 right-4 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/80 hover:bg-white/10"
+          className="absolute bottom-4 right-4 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/80 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal focus-visible:ring-offset-2 focus-visible:ring-offset-navy"
         >
           <RotateCcw size={12} /> Zurücksetzen
         </button>

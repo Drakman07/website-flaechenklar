@@ -8,16 +8,19 @@ export function useInView<T extends Element = HTMLDivElement>(
 
   useEffect(() => {
     const node = ref.current;
-    if (!node || inView) return;
+    if (!node) return;
     const obs = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) setInView(true);
+        if (entry.isIntersecting) {
+          setInView(true);
+          obs.disconnect();
+        }
       },
       { threshold },
     );
     obs.observe(node);
     return () => obs.disconnect();
-  }, [threshold, inView]);
+  }, [threshold]);
 
   return [ref, inView] as const;
 }
