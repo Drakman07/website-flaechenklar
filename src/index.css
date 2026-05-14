@@ -15,6 +15,7 @@
   html { scroll-behavior: smooth; }
   body { @apply bg-white text-ink antialiased font-sans; }
   section[id] { scroll-margin-top: 5rem; }
+  option { @apply bg-white text-ink; }
 }
 
 @layer components {
