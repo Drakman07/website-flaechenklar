@@ -12,8 +12,8 @@ export function Preise() {
             Klar gestaffelt nach Einwohnerklasse.
           </h2>
           <p className="mt-4 text-base text-ink/70 md:text-lg">
-            Einmalige Lizenz pro Behörde, jährliche Wartung optional. Jahr 1 ist
-            immer inklusive.
+            Einmalkauf nach Einwohnerklasse. Wartung im ersten Jahr inklusive,
+            ab dem zweiten Jahr 10 % p. a., jährlich kündbar.
           </p>
         </div>
 

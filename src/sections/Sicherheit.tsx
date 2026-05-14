@@ -9,8 +9,12 @@ export function Sicherheit() {
             Sicherheit & Datenschutz
           </p>
           <h2 className="mt-3 text-3xl font-bold text-navy md:text-4xl">
-            Sechs Punkte, die wichtig sind.
+            Bauherrendaten verlassen nie den Rechner.
           </h2>
+          <p className="mt-4 text-base text-ink/70 md:text-lg">
+            Kein Cloud-Service, kein Account, kein Tracking. Genau so, wie der
+            Datenschutzbeauftragte es haben will.
+          </p>
         </div>
 
         <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">

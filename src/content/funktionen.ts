@@ -1,12 +1,12 @@
 import {
   FileText,
-  Pencil,
-  Calculator,
+  Ruler,
+  PenTool,
   Layers,
-  FileCheck2,
-  ShieldCheck,
-  Workflow,
-  Printer,
+  Triangle,
+  FileOutput,
+  Save,
+  Cpu,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -15,42 +15,42 @@ export type Funktion = { icon: LucideIcon; title: string; text: string };
 export const funktionen: readonly Funktion[] = [
   {
     icon: FileText,
-    title: "PDF-Import",
-    text: "Digitalen Bauantrag direkt im Browser öffnen. Keine Konvertierung, kein Upload.",
+    title: "Bauantrags-PDFs direkt laden",
+    text: "PDF per Drag & Drop laden, im Browser anzeigen, blättern. Keine Konvertierung, kein Drucken, kein zweiter Bildschirm.",
   },
   {
-    icon: Pencil,
-    title: "Polygon zeichnen",
-    text: "Geschossflächen mit der Maus umfahren. Falsch gezogen? Einfach neu, nicht neu anfangen.",
+    icon: Ruler,
+    title: "Maßstab pro Plan-Region",
+    text: "Zwei Klicks auf eine eingezeichnete Bemaßung, Sollwert eintippen — Region kalibriert. Mehrere Maßstäbe pro Seite kein Problem.",
   },
   {
-    icon: Calculator,
-    title: "Maßstab automatisch",
-    text: "Erkennt den Maßstab aus dem Plankopf und rechnet Pixel in Quadratmeter um.",
+    icon: PenTool,
+    title: "Polygone mit Snap & Bemaßung",
+    text: "Außenkontur abklicken, Kanten nachträglich bemaßen, Eckpunkte verschieben. Fläche per Shoelace-Formel automatisch.",
   },
   {
     icon: Layers,
-    title: "Mehrere Geschosse",
-    text: "EG, OG, DG, Keller — jede Ebene einzeln. Summe und Einzelwerte landen im Protokoll.",
+    title: "Geschosse separat verwalten",
+    text: "EG, OG, DG — jedes Geschoss eigene Polygone, eigene Regionen, eigene Berechnung. Übersichtlich in der Seitenleiste.",
   },
   {
-    icon: FileCheck2,
-    title: "Vollgeschoss-Logik",
-    text: "Prüfung nach Art. 2 BayBO automatisch. Halbgeschoss oder Vollgeschoss? Das Tool weiß es.",
+    icon: Triangle,
+    title: "Vollgeschoss-Berechnung (Dach)",
+    text: "Art. 83 Abs. 7 BayBO als Modul: Kniestock, Dachneigung, Gauben → Anteil ≥ 2,30 m. Mit SVG-Diagramm zur Plausibilität.",
   },
   {
-    icon: ShieldCheck,
-    title: "Offline & lokal",
-    text: "Läuft im Browser, ohne Cloud, ohne Account. Plan verlässt nie Ihren Rechner.",
+    icon: FileOutput,
+    title: "Druckreifes Aufmaßprotokoll",
+    text: "Ein Klick → PDF mit Deckblatt, Geschossaufstellung, Plan-Ausschnitten und Berechnungsanhang. Akten-fertig.",
   },
   {
-    icon: Workflow,
-    title: "Reproduzierbar",
-    text: "Projekt-Datei speichern, später öffnen, weiterarbeiten. Übergabe an Kollegen ohne Reibung.",
+    icon: Save,
+    title: ".gfproj-Projektdatei",
+    text: "Kompletter Stand inkl. Original-PDF in einer Datei. Archivierbar, weitergebbar, jederzeit wieder aufrufbar.",
   },
   {
-    icon: Printer,
-    title: "Druckreifes Protokoll",
-    text: "PDF-Aufmaßprotokoll als Berechnungsgrundlage für den Herstellungsbeitrag nach Art. 5 KAG Bayern.",
+    icon: Cpu,
+    title: "Auto-Recovery",
+    text: "Browser stürzt ab? IndexedDB-Snapshot alle 30 Sekunden — kein Datenverlust beim nächsten Start.",
   },
 ] as const;
