@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Datenschutzerklärung – FlächenKlar</title>
+  <meta name="robots" content="noindex">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #0f1f3d;
+      --navy-deep: #091526;
+      --teal: #2ab09a;
+      --text: #1a2f52;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --bg: #f8fafc;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Helvetica Neue, system-ui, -apple-system, sans-serif;
+      background: #fff;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-inner {
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: -0.025em;
+    }
+    .logo span { color: var(--teal); }
+    .back-link {
+      font-size: 0.875rem;
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+    .back-link:hover { color: var(--navy); }
+
+    /* Content */
+    main {
+      max-width: 48rem;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 6rem;
+    }
+    .label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--teal);
+    }
+    h1 {
+      margin-top: 0.75rem;
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .legal-body {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      color: #334155;
+    }
+    .legal-body h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+    .legal-body p + p { margin-top: 0.5rem; }
+    .legal-body a { color: var(--teal); text-decoration: none; }
+    .legal-body a:hover { text-decoration: underline; }
+    .legal-body ul {
+      margin-top: 0.5rem;
+      padding-left: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--navy-deep);
+      color: rgba(255,255,255,0.4);
+      padding: 2.5rem 1.5rem;
+      font-size: 0.8125rem;
+      text-align: center;
+    }
+    footer a {
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      margin: 0 0.75rem;
+    }
+    footer a:hover { color: rgba(255,255,255,0.7); }
+    .footer-copy { margin-top: 0.5rem; font-size: 0.75rem; color: rgba(255,255,255,0.25); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">Flächen<span>Klar</span></a>
+    <a href="/" class="back-link">← Zurück zur Startseite</a>
+  </div>
+</header>
+
+<main>
+  <div class="label">Rechtliches</div>
+  <h1>Datenschutzerklärung</h1>
+
+  <div class="legal-body">
+
+    <div>
+      <h2>1. Verantwortlicher</h2>
+      <p>Alexander Geitner<br>Lärchenstraße 18, 92361 Berngau</p>
+      <p>E-Mail: <a href="mailto:info@flaechenklar.de">info@flaechenklar.de</a></p>
+    </div>
+
+    <div>
+      <h2>2. Allgemeines</h2>
+      <p>Diese Website verwendet keine Cookies, kein Tracking und keine Analyse-Dienste. Es werden keine personenbezogenen Daten aktiv erhoben oder gespeichert, die über die technisch notwendige Verarbeitung durch den Hosting-Anbieter hinausgehen.</p>
+    </div>
+
+    <div>
+      <h2>3. Kontaktformular</h2>
+      <p>Das Kontaktformular auf dieser Website öffnet Ihr lokales E-Mail-Programm (mailto:-Link). Es findet keine serverseitige Verarbeitung der eingegebenen Daten statt. Ihre Daten werden ausschließlich durch Ihr E-Mail-Programm und den von Ihnen gewählten E-Mail-Anbieter verarbeitet.</p>
+    </div>
+
+    <div>
+      <h2>4. Hosting – Cloudflare Workers</h2>
+      <p>Diese Website wird auf der Plattform Cloudflare Workers der Cloudflare, Inc. (101 Townsend St., San Francisco, CA 94107, USA) gehostet und ausgeliefert. Beim Aufruf der Website werden technisch notwendige Daten verarbeitet, insbesondere:</p>
+      <ul>
+        <li>IP-Adresse des anfragenden Geräts</li>
+        <li>Datum und Uhrzeit des Zugriffs</li>
+        <li>Name und URL der abgerufenen Datei</li>
+        <li>Übertragene Datenmenge und HTTP-Statuscode</li>
+        <li>Verwendeter Browser, Betriebssystem und Referrer-URL</li>
+      </ul>
+      <p>Diese Verarbeitung dient der technischen Auslieferung der Website sowie dem Schutz vor Angriffen (z. B. DDoS). Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einer sicheren und zuverlässigen Bereitstellung der Website).</p>
+      <p>Drittlandtransfer: Cloudflare ist ein US-Unternehmen. Datenübermittlungen in die USA erfolgen auf Grundlage des Angemessenheitsbeschlusses der EU-Kommission zum EU-US Data Privacy Framework (DPF) gemäß Art. 45 DSGVO; Cloudflare ist unter dem DPF zertifiziert. Ergänzend stützt Cloudflare Übermittlungen auf Standardvertragsklauseln (SCCs) gemäß Art. 46 Abs. 2 lit. c DSGVO. Weitere Informationen: <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">cloudflare.com/privacypolicy</a></p>
+    </div>
+
+    <div>
+      <h2>5. Externe Links</h2>
+      <p>Diese Website enthält Links zu externen Websites Dritter. Wir haben keinen Einfluss auf deren Inhalte und übernehmen hierfür keine Gewähr. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter verantwortlich.</p>
+    </div>
+
+    <div>
+      <h2>6. Ihre Rechte</h2>
+      <p>Sie haben gegenüber dem Verantwortlichen folgende Rechte hinsichtlich der Sie betreffenden personenbezogenen Daten: Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16 DSGVO), Löschung (Art. 17 DSGVO), Einschränkung der Verarbeitung (Art. 18 DSGVO) sowie Widerspruch gegen die Verarbeitung (Art. 21 DSGVO). Zudem haben Sie das Recht, sich bei der zuständigen Datenschutz-Aufsichtsbehörde zu beschweren.</p>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div>
+    <a href="/impressum">Impressum</a>
+    <a href="/datenschutz">Datenschutz</a>
+  </div>
+  <div class="footer-copy">© 2026 Alexander Geitner</div>
+</footer>
+
+</body>
+</html>
