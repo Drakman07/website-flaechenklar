@@ -1,35 +1,60 @@
+import { CheckCircle2 } from "lucide-react";
+
+const chancePunkte = [
+  "Maße direkt aus dem digitalen Bauantrag",
+  "Polygone mit automatischer Flächenberechnung",
+  "Vollgeschoss nach Art. 83 Abs. 7 BayBO als Modul",
+  "Druckreifes PDF-Aufmaßprotokoll auf Knopfdruck",
+  "Wiederholbar, nachvollziehbar, archivierbar",
+];
+
 export function ProblemChance() {
   return (
     <section className="bg-white py-20">
       <div className="mx-auto grid max-w-6xl gap-12 px-6 lg:grid-cols-2 lg:gap-16">
         <div>
-          <h2 className="text-3xl font-bold text-navy md:text-4xl">
+          <p className="text-xs font-semibold uppercase tracking-wider text-teal">
+            Das Problem
+          </p>
+          <h2 className="mt-3 text-3xl font-bold text-navy md:text-4xl">
             Der digitale Bauantrag ist da. Das Lineal nicht.
           </h2>
           <p className="mt-6 text-base text-ink/80 md:text-lg">
-            Seit 1. Januar 2025 kommen Bauanträge in bayerischen Bauämtern
-            digital. Pläne als PDF, Stempel als Signatur, alles paperless. Nur
-            das Aufmaß für den Herstellungsbeitrag — das hängt weiterhin am
-            ausgedruckten Plan, am Lineal, an der Hand-Berechnung.
+            Seit 1. Januar 2025 gehen Bauanträge nach der Bayerischen
+            Bauordnung direkt beim Landratsamt ein — die Gemeinde wird digital
+            beteiligt, der Vorgang landet als PDF in der Akte. Papierpläne zum
+            Ausmessen mit dem Lineal gibt es nicht mehr. Die Geschossflächen
+            müssen aber trotzdem ermittelt werden: für den Herstellungsbeitrag,
+            für die Akte, für jede Plan-Korrektur.
           </p>
           <p className="mt-4 text-base text-ink/80 md:text-lg">
-            FlächenKlar ändert das. PDF rein, Polygon ziehen, fertig — und
-            falsch gezogen? Einfach neu zeichnen, nicht neu anfangen.
+            Wer darin nur eine Last sieht, übersieht die Chance: Ein digitaler
+            Bauantrag lässt sich mit dem richtigen Werkzeug schneller und
+            präziser auswerten als jeder Papierplan mit dem Lineal. Kein
+            Ausdrucken, kein Abgreifen, kein Abtippen — und bei Planänderungen
+            einfach neu zeichnen, nicht neu anfangen.
           </p>
         </div>
 
-        <div className="rounded-lg border border-outline bg-slate-50 p-8">
+        <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-teal">
-            Die Chance
+            Mit FlächenKlar
           </p>
-          <h3 className="mt-3 text-2xl font-bold text-navy md:text-3xl">
+          <h2 className="mt-3 text-3xl font-bold text-navy md:text-4xl">
             PDF rein, Aufmaßprotokoll raus.
-          </h3>
-          <p className="mt-4 text-ink/80">
-            Ein Werkzeug, das genau dort ansetzt, wo der digitale Bauantrag
-            aufhört: am rechtssicheren Aufmaß. Direkt aus dem PDF, ohne Druck,
-            ohne Excel, ohne CAD-Lizenz.
-          </p>
+          </h2>
+          <ul className="mt-6 space-y-3">
+            {chancePunkte.map((punkt) => (
+              <li key={punkt} className="flex items-start gap-3">
+                <CheckCircle2
+                  className="mt-0.5 shrink-0 text-teal"
+                  size={22}
+                  strokeWidth={2}
+                />
+                <span className="text-base text-ink/80 md:text-lg">{punkt}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>
