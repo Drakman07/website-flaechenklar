@@ -1,9 +1,14 @@
 import { ArrowRight } from "lucide-react";
 import { TealUnderline } from "@/components/TealUnderline";
 import { BlueprintGrid } from "@/components/BlueprintGrid";
+import { useCountUp } from "@/hooks/useCountUp";
 import iconUrl from "@/assets/logo-icon.svg";
 
 export function Hero() {
+  const [ref100, n100] = useCountUp<HTMLElement>(100);
+  const [ref0, n0] = useCountUp<HTMLElement>(0);
+  const [ref1, n1] = useCountUp<HTMLElement>(1);
+
   return (
     <section id="top" className="relative overflow-hidden bg-navy text-white">
       <BlueprintGrid />
@@ -27,9 +32,13 @@ export function Hero() {
           <div className="mt-8 flex flex-wrap gap-3">
             <a
               href="#kontakt"
-              className="inline-flex items-center gap-2 rounded bg-teal px-5 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-teal/90"
+              className="group inline-flex items-center gap-2 rounded bg-teal px-5 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-teal/90"
             >
-              Kostenlose Demo anfragen <ArrowRight size={16} />
+              Kostenlose Demo anfragen
+              <ArrowRight
+                size={16}
+                className="transition-transform group-hover:translate-x-1 motion-reduce:transform-none"
+              />
             </a>
             <a
               href="#funktionen"
@@ -41,17 +50,30 @@ export function Hero() {
 
           <dl className="mt-14 grid max-w-xl grid-cols-3 gap-8 text-sm">
             <div>
-              <dt className="text-2xl font-bold text-teal md:text-3xl">
-                100 <span className="text-xl md:text-2xl">%</span>
+              <dt
+                ref={ref100}
+                className="text-2xl font-bold text-teal md:text-3xl tabular-nums"
+              >
+                {n100} <span className="text-xl md:text-2xl">%</span>
               </dt>
               <dd className="mt-1 text-white/70">offline</dd>
             </div>
             <div>
-              <dt className="text-2xl font-bold text-teal md:text-3xl">0</dt>
+              <dt
+                ref={ref0}
+                className="text-2xl font-bold text-teal md:text-3xl tabular-nums"
+              >
+                {n0}
+              </dt>
               <dd className="mt-1 text-white/70">Cloud-Calls</dd>
             </div>
             <div>
-              <dt className="text-2xl font-bold text-teal md:text-3xl">1</dt>
+              <dt
+                ref={ref1}
+                className="text-2xl font-bold text-teal md:text-3xl tabular-nums"
+              >
+                {n1}
+              </dt>
               <dd className="mt-1 text-white/70">Doppelklick</dd>
             </div>
           </dl>
