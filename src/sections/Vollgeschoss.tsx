@@ -1,5 +1,6 @@
 import { Triangle, CircleCheck } from "lucide-react";
 import { BlueprintGrid } from "@/components/BlueprintGrid";
+import { Reveal } from "@/components/Reveal";
 
 const bullets = [
   "SVG-Diagramme: Grundriss, Aufrisse, Querschnitt — live mitwachsend",
@@ -29,6 +30,7 @@ export function Vollgeschoss() {
     >
       <BlueprintGrid />
       <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-24 lg:grid-cols-2 lg:gap-16">
+        <Reveal>
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-teal">
             Spezial · Dachgeschoss
@@ -56,7 +58,9 @@ export function Vollgeschoss() {
             ))}
           </ul>
         </div>
+        </Reveal>
 
+        <Reveal delay={120}>
         <div className="rounded-lg border border-white/15 bg-white/5 p-6 md:p-8">
           <p className="text-xs font-semibold uppercase tracking-wider text-teal">
             Beispiel-Berechnung
@@ -101,6 +105,7 @@ export function Vollgeschoss() {
             Beispieldaten zur Veranschaulichung.
           </p>
         </div>
+        </Reveal>
       </div>
     </section>
   );

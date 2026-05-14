@@ -1,4 +1,5 @@
 import { CheckCircle2 } from "lucide-react";
+import { Reveal } from "@/components/Reveal";
 
 const chancePunkte = [
   "Maße direkt aus dem digitalen Bauantrag",
@@ -12,7 +13,7 @@ export function ProblemChance() {
   return (
     <section className="bg-white py-20">
       <div className="mx-auto grid max-w-6xl gap-12 px-6 lg:grid-cols-2 lg:gap-16">
-        <div>
+        <Reveal>
           <p className="text-xs font-semibold uppercase tracking-wider text-teal">
             Das Problem
           </p>
@@ -34,9 +35,9 @@ export function ProblemChance() {
             Ausdrucken, kein Abgreifen, kein Abtippen — und bei Planänderungen
             einfach neu zeichnen, nicht neu anfangen.
           </p>
-        </div>
+        </Reveal>
 
-        <div>
+        <Reveal delay={120}>
           <p className="text-xs font-semibold uppercase tracking-wider text-teal">
             Mit FlächenKlar
           </p>
@@ -55,7 +56,7 @@ export function ProblemChance() {
               </li>
             ))}
           </ul>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

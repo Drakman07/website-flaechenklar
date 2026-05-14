@@ -1,5 +1,6 @@
 import { useState, type FormEvent, type ChangeEvent } from "react";
 import { BlueprintGrid } from "@/components/BlueprintGrid";
+import { Reveal } from "@/components/Reveal";
 
 type FormState = {
   behoerde: string;
@@ -64,17 +65,20 @@ export function Kontakt() {
     >
       <BlueprintGrid />
       <div className="relative mx-auto max-w-3xl px-6">
-        <p className="text-xs font-semibold uppercase tracking-wider text-teal">
-          Kontakt
-        </p>
-        <h2 className="mt-3 text-3xl font-bold md:text-4xl">
-          Demo, Pilot oder einfach Fragen.
-        </h2>
-        <p className="mt-4 text-white/70 md:text-lg">
-          Formular ausfüllen, abschicken — Ihr E-Mail-Programm öffnet sich mit
-          der fertigen Nachricht an info@flaechenklar.de.
-        </p>
+        <Reveal>
+          <p className="text-xs font-semibold uppercase tracking-wider text-teal">
+            Kontakt
+          </p>
+          <h2 className="mt-3 text-3xl font-bold md:text-4xl">
+            Demo, Pilot oder einfach Fragen.
+          </h2>
+          <p className="mt-4 text-white/70 md:text-lg">
+            Formular ausfüllen, abschicken — Ihr E-Mail-Programm öffnet sich mit
+            der fertigen Nachricht an info@flaechenklar.de.
+          </p>
+        </Reveal>
 
+        <Reveal delay={120}>
         <form
           onSubmit={onSubmit}
           className="mt-10 grid gap-4 md:grid-cols-2"
@@ -169,6 +173,7 @@ export function Kontakt() {
             Nachricht im E-Mail-Programm öffnen
           </button>
         </form>
+        </Reveal>
       </div>
     </section>
   );
