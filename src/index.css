@@ -25,6 +25,12 @@
   .teal-underline::after {
     content: "";
     @apply absolute left-0 right-0 -bottom-1.5 h-1 bg-teal rounded-sm;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1) 300ms;
+  }
+  .teal-underline.is-drawn::after {
+    transform: scaleX(1);
   }
   .grid-blueprint-dark {
     background-image:
@@ -41,4 +47,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .grid-blueprint-dark { animation: none; }
+  .teal-underline::after {
+    transform: scaleX(1);
+    transition: none;
+  }
 }
