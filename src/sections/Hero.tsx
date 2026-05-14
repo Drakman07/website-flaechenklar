@@ -1,8 +1,8 @@
 import { ArrowRight } from "lucide-react";
 import { TealUnderline } from "@/components/TealUnderline";
 import { BlueprintGrid } from "@/components/BlueprintGrid";
+import { PolygonDemo } from "@/components/PolygonDemo";
 import { useCountUp } from "@/hooks/useCountUp";
-import iconUrl from "@/assets/logo-icon.svg";
 
 export function Hero() {
   const [ref100, n100] = useCountUp<HTMLElement>(100);
@@ -80,17 +80,7 @@ export function Hero() {
         </div>
 
         <div className="relative hidden items-center justify-center lg:flex">
-          <div className="relative h-[420px] w-[420px] rounded-2xl border border-white/10 bg-white/[0.02]">
-            <BlueprintGrid className="rounded-2xl" />
-            <div className="absolute inset-12 flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">
-              <img
-                src={iconUrl}
-                alt=""
-                aria-hidden="true"
-                className="h-40 w-40"
-              />
-            </div>
-          </div>
+          <PolygonDemo />
         </div>
       </div>
     </section>
