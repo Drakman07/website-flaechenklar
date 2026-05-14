@@ -1,4 +1,5 @@
 import { Menu } from "lucide-react";
+import type { MouseEvent } from "react";
 
 const links = [
   { href: "#funktionen", label: "Funktionen" },
@@ -7,6 +8,10 @@ const links = [
   { href: "#preise", label: "Preise" },
   { href: "#kontakt", label: "Kontakt" },
 ];
+
+function closeBurger(e: MouseEvent<HTMLAnchorElement>) {
+  e.currentTarget.closest("details")?.removeAttribute("open");
+}
 
 export function Nav() {
   return (
@@ -35,22 +40,27 @@ export function Nav() {
         </nav>
 
         <details className="relative md:hidden">
-          <summary className="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded text-navy hover:bg-outline/40">
-            <Menu size={20} />
+          <summary
+            aria-label="Menü öffnen"
+            className="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded text-navy hover:bg-outline/40"
+          >
+            <Menu size={22} />
           </summary>
           <div className="absolute right-0 top-12 w-56 rounded border border-outline bg-white p-2 shadow-lg">
             {links.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
-                className="block rounded px-3 py-2 text-sm text-ink hover:bg-outline/40"
+                onClick={closeBurger}
+                className="block rounded px-3 py-3 text-sm text-ink hover:bg-outline/40"
               >
                 {l.label}
               </a>
             ))}
             <a
               href="#kontakt"
-              className="mt-2 block rounded bg-teal px-3 py-2 text-center text-sm font-semibold text-white"
+              onClick={closeBurger}
+              className="mt-2 block rounded bg-teal px-3 py-3 text-center text-sm font-semibold text-white"
             >
               Demo anfragen
             </a>

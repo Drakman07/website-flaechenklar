@@ -22,7 +22,9 @@ const initial: FormState = {
 };
 
 const inputCls =
-  "w-full rounded border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/40";
+  "w-full rounded border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/60 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/40";
+
+const stripNewlines = (s: string) => s.replace(/[\r\n]+/g, " ").trim();
 
 export function Kontakt() {
   const [form, setForm] = useState<FormState>(initial);
@@ -38,7 +40,9 @@ export function Kontakt() {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const subject = `FlächenKlar — ${form.anliegen || "Anfrage"} (${form.behoerde})`;
+    const subject = stripNewlines(
+      `FlächenKlar — ${form.anliegen || "Anfrage"} (${form.behoerde})`,
+    );
     const body = [
       `Behörde: ${form.behoerde}`,
       `Einwohnerzahl: ${form.einwohner}`,

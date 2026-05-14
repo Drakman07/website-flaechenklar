@@ -25,13 +25,13 @@ export function Hero() {
           <div className="mt-8 flex flex-wrap gap-3">
             <a
               href="#kontakt"
-              className="rounded bg-teal px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal/90"
+              className="rounded bg-teal px-5 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-teal/90"
             >
               Demo anfragen
             </a>
             <a
               href="#funktionen"
-              className="inline-flex items-center gap-2 rounded border border-white/20 px-5 py-3 text-sm font-semibold text-white/90 hover:bg-white/5"
+              className="inline-flex items-center gap-2 rounded border border-white/20 px-5 py-3.5 text-sm font-semibold text-white/90 hover:bg-white/5"
             >
               Funktionen ansehen <ArrowDown size={16} />
             </a>
@@ -39,19 +39,19 @@ export function Hero() {
 
           <dl className="mt-12 grid gap-6 text-sm sm:grid-cols-3">
             <div>
-              <dt className="text-white/50">Plattform</dt>
+              <dt className="text-white/70">Plattform</dt>
               <dd className="mt-1 text-lg font-semibold text-white">
                 Browser, offline
               </dd>
             </div>
             <div>
-              <dt className="text-white/50">Installation</dt>
+              <dt className="text-white/70">Installation</dt>
               <dd className="mt-1 text-lg font-semibold text-white">
                 Doppelklick
               </dd>
             </div>
             <div>
-              <dt className="text-white/50">Rechtsgrundlage</dt>
+              <dt className="text-white/70">Rechtsgrundlage</dt>
               <dd className="mt-1 text-lg font-semibold text-white">
                 Art. 5 KAG
               </dd>
