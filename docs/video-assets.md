@@ -5,7 +5,7 @@ einem R2-Bucket mit Custom-Domain.
 
 ## Bucket-Setup (einmalig)
 
-1. R2-Bucket `flaechenklar-videos` über Cloudflare-Dashboard anlegen
+1. R2-Bucket `flaechenklarvideos` über Cloudflare-Dashboard anlegen
 2. Custom-Domain `videos.flaechenklar.de` mit dem Bucket verknüpfen
    (Cloudflare → R2 → Bucket → Settings → Custom Domains)
 3. CORS-Regel hinzufügen, damit VTT-Captions vom Browser geladen werden:
@@ -31,15 +31,15 @@ Jedes fertig produzierte Video besteht aus drei Dateien:
 Upload per Wrangler:
 
 ```bash
-wrangler r2 object put flaechenklar-videos/teaser.mp4 \
+wrangler r2 object put flaechenklarvideos/teaser.mp4 \
   --file=./produktion/teaser.mp4 \
   --content-type=video/mp4
 
-wrangler r2 object put flaechenklar-videos/teaser.de.vtt \
+wrangler r2 object put flaechenklarvideos/teaser.de.vtt \
   --file=./produktion/teaser.de.vtt \
   --content-type=text/vtt
 
-wrangler r2 object put flaechenklar-videos/teaser-poster.webp \
+wrangler r2 object put flaechenklarvideos/teaser-poster.webp \
   --file=./produktion/teaser-poster.webp \
   --content-type=image/webp
 ```
