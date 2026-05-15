@@ -20,7 +20,7 @@ export function Hero() {
           </div>
           <h1 className="mt-6 text-4xl font-bold leading-[1.1] md:text-6xl lg:text-7xl">
             Das Lineal bleibt in der{" "}
-            <TealUnderline>Schublade</TealUnderline>.
+            <TealUnderline>Schublade</TealUnderline>
           </h1>
           <p className="mt-6 max-w-2xl text-base text-white/70 md:text-lg">
             FlächenKlar ist das Aufmaß-Werkzeug für bayerische Bauämter. PDF
