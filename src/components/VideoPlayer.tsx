@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type VideoSource = {
   src: string;
@@ -13,6 +13,7 @@ type Props = {
   muted?: boolean;
   captionsDefaultOn?: boolean;
   className?: string;
+  onChapterChange?: (index: number) => void;
 };
 
 export function VideoPlayer({
@@ -21,35 +22,97 @@ export function VideoPlayer({
   muted = false,
   captionsDefaultOn = true,
   className = "",
+  onChapterChange,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const current = sources[0];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const current = sources[activeIndex];
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    // Source-Wechsel: explizit load() um Poster neu zu rendern
+    video.load();
+    if (autoplay || activeIndex > 0) {
+      void video.play().catch(() => {
+        // Autoplay durch Browser blockiert — ignorieren, User klickt selbst
+      });
+    }
+  }, [activeIndex, autoplay]);
+
+  function selectChapter(index: number): void {
+    if (index === activeIndex) return;
+    setActiveIndex(index);
+    onChapterChange?.(index);
+  }
 
   if (!current) {
     return null;
   }
 
+  const hasChapters = sources.length > 1;
+
   return (
-    <div className={`relative overflow-hidden rounded-lg bg-black ${className}`}>
-      <video
-        ref={videoRef}
-        src={current.src}
-        poster={current.poster}
-        autoPlay={autoplay}
-        muted={muted}
-        controls
-        playsInline
-        preload="metadata"
-        className="block w-full"
-      >
-        <track
-          kind="subtitles"
-          src={current.captions}
-          srcLang="de"
-          label="Deutsch"
-          default={captionsDefaultOn}
-        />
-      </video>
+    <div
+      className={`overflow-hidden rounded-lg bg-black ${
+        hasChapters ? "grid gap-0 md:grid-cols-[1fr_280px]" : ""
+      } ${className}`}
+    >
+      <div className="relative bg-black">
+        <video
+          ref={videoRef}
+          src={current.src}
+          poster={current.poster}
+          autoPlay={autoplay}
+          muted={muted}
+          controls
+          playsInline
+          preload="metadata"
+          className="block w-full"
+        >
+          <track
+            kind="subtitles"
+            src={current.captions}
+            srcLang="de"
+            label="Deutsch"
+            default={captionsDefaultOn}
+          />
+        </video>
+      </div>
+
+      {hasChapters && (
+        <aside className="bg-navy text-white">
+          <div className="border-b border-white/10 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-teal">
+            Kapitel
+          </div>
+          <ol className="divide-y divide-white/10">
+            {sources.map((s, i) => (
+              <li key={s.src}>
+                <button
+                  type="button"
+                  onClick={() => selectChapter(i)}
+                  className={`flex w-full items-center gap-3 px-4 py-3 text-left text-sm transition-colors ${
+                    i === activeIndex
+                      ? "bg-teal/15 text-white"
+                      : "text-white/70 hover:bg-white/5 hover:text-white"
+                  }`}
+                >
+                  <span
+                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded text-xs font-bold ${
+                      i === activeIndex
+                        ? "bg-teal text-white"
+                        : "bg-white/10 text-white/60"
+                    }`}
+                  >
+                    {i + 1}
+                  </span>
+                  <span className="flex-1 leading-snug">{s.title}</span>
+                </button>
+              </li>
+            ))}
+          </ol>
+        </aside>
+      )}
     </div>
   );
 }
