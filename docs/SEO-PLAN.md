@@ -110,6 +110,17 @@ verbliebenen Lücken geschlossen:
 Nach Stufe 1+2 sind die technischen Voraussetzungen für organisches Wachstum
 gegeben. Stufe 3 ist Marketing-Arbeit, keine Code-Änderung:
 
+**Bekanntes nicht-kritisches Warning (bewusst offen):**
+- Google Rich-Results-Test meldet beim `SoftwareApplication`-Schema:
+  „Feld 'aggregateRating' fehlt (optional)". **Wird bewusst nicht gefixt**,
+  bis echte Pilot-Kunden-Bewertungen vorliegen — erfundene/Fake-Bewertungen
+  sind ein Verstoß gegen Google's Spam-Policy (führt zu Manual Action). Das
+  Warning blockiert die Rich-Snippet-Anzeige nicht.
+- **Wenn 3–5 echte Bewertungen mit schriftlichem Einverständnis vorliegen:**
+  - `aggregateRating` (Durchschnitt + ratingCount) ins SoftwareApplication-Schema
+  - Einzelne `Review`-Objekte mit `author` + `reviewBody` + `reviewRating`
+  - Optional: Testimonials-Sektion auf der Site mit Zitaten + Logo der Kommune
+
 **Content-Bausteine (priorisiert):**
 1. Blog-Artikel „Was ist eine Geschossfläche?" (Glossar/Erklär-Artikel, ~1500 Wörter)
 2. Glossar/FAQ-Seite: KAG Bayern Art. 5, Art. 83 Abs. 7 BayBO, GFZ-Berechnung
