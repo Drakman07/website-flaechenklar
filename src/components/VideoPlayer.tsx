@@ -5,7 +5,7 @@ import { useInView } from "@/hooks/useInView";
 export type VideoSource = {
   src: string;
   poster: string;
-  captions: string;
+  captions?: string;
   title: string;
 };
 
@@ -121,13 +121,15 @@ export function VideoPlayer({
           onClick={handleVideoTap}
           className="block w-full"
         >
-          <track
-            kind="subtitles"
-            src={current.captions}
-            srcLang="de"
-            label="Deutsch"
-            default={captionsDefaultOn}
-          />
+          {current.captions && (
+            <track
+              kind="subtitles"
+              src={current.captions}
+              srcLang="de"
+              label="Deutsch"
+              default={captionsDefaultOn}
+            />
+          )}
         </video>
         {showMuteOverlay && (
           <button

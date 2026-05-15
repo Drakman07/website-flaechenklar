@@ -7,7 +7,6 @@ import { navigate } from "@/router";
 const TEASER: VideoSource = {
   src: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
   poster: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4#t=0.1",
-  captions: "",
   title: "FlächenKlar in 60 Sekunden",
 };
 
