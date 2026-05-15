@@ -1,30 +1,15 @@
 import { Nav } from "./components/Nav";
 import { Footer } from "./components/Footer";
-import { Hero } from "./sections/Hero";
-import { ProblemChance } from "./sections/ProblemChance";
-import { Funktionen } from "./sections/Funktionen";
-import { Vollgeschoss } from "./sections/Vollgeschoss";
-import { Sicherheit } from "./sections/Sicherheit";
-import { DemoBanner } from "./sections/DemoBanner";
-import { Preise } from "./sections/Preise";
-import { FAQ } from "./sections/FAQ";
-import { Kontakt } from "./sections/Kontakt";
+import { Home } from "./pages/Home";
+import { Tour } from "./pages/Tour";
+import { useRoute } from "./router";
 
 export function App() {
+  const route = useRoute();
   return (
     <>
       <Nav />
-      <main>
-        <Hero />
-        <ProblemChance />
-        <Funktionen />
-        <Vollgeschoss />
-        <Sicherheit />
-        <DemoBanner />
-        <Preise />
-        <FAQ />
-        <Kontakt />
-      </main>
+      <main>{route === "tour" ? <Tour /> : <Home />}</main>
       <Footer />
     </>
   );
