@@ -77,6 +77,23 @@ export function VideoPlayer({
     }
   }
 
+  function handleVideoTap(): void {
+    if (window.innerWidth >= 768) return; // nur Mobile
+    const video = videoRef.current;
+    if (!video) return;
+    const target = video as HTMLVideoElement & {
+      webkitEnterFullscreen?: () => void;
+    };
+    if (target.requestFullscreen) {
+      void target.requestFullscreen().catch(() => {
+        /* Browser unterstützt nicht — ignorieren */
+      });
+    } else if (typeof target.webkitEnterFullscreen === "function") {
+      // iOS Safari benötigt webkitEnterFullscreen auf dem Video-Element
+      target.webkitEnterFullscreen();
+    }
+  }
+
   if (!current) {
     return null;
   }
@@ -101,6 +118,7 @@ export function VideoPlayer({
           controls
           playsInline
           preload="metadata"
+          onClick={handleVideoTap}
           className="block w-full"
         >
           <track
