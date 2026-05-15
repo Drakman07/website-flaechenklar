@@ -1,6 +1,6 @@
 # FlächenKlar-Website — Session-Memory für Claude
 
-Letzter Stand: 2026-05-15, nach Live-Schalten des Teaser-Videos.
+Letzter Stand: 2026-05-16, nach Live-Schalten der 4 Walkthrough-Kapitel.
 
 ## Projekt-Kurzbeschreibung
 
@@ -17,7 +17,7 @@ führt zur Demo-Anfrage.
 
 ## Aktueller Stand (Mai 2026)
 
-**Letzter Major-Schritt:** 60-Sek-Teaser-Video integriert und live.
+**Letzter Major-Schritt:** Alle 4 Walkthrough-Kapitel produziert, in R2 hochgeladen, `KAPITEL`-Array in `src/pages/Tour.tsx` auf echte URLs umgestellt — Commit `2f509d5` auf main gepusht, GitHub Actions deployt.
 
 | Bereich | Status |
 |---|---|
@@ -116,16 +116,22 @@ Es gibt einen Cloudflare-MCP-Server der R2-Verwaltung kann
 
 ## Offene Punkte / Roadmap
 
-1. **Walkthrough-Kapitel produzieren** (4 × 60 Sek)
-   - Themen: Schnellstart / Vollgeschosse nach KAG / Mehrere Geschosse + Maßstab / Export + Aufmaßprotokoll
-   - Plan-Doc hat Skript-Skizzen für jedes Kapitel
-2. **Echte Tour-URLs einsetzen** in `src/pages/Tour.tsx` (`KAPITEL`-Array)
-   sobald Videos produziert
-3. **GitHub-Actions-Refresh** — Node 20 → 24, actions/{checkout,setup-node}
+1. **Live-Smoke nach Deploy** — `/tour` im Browser, alle 4 Kapitel klicken,
+   Captions togglen, DevTools-Network ohne 404/CORS, Mobile-Vollbild-Tap
+2. **GitHub-Actions-Refresh** — Node 20 → 24, actions/{checkout,setup-node}
    auf v5, wrangler-action prüfen
-4. **VTT-Captions** für Walkthrough-Kapitel — Workflow steht
-5. **Lighthouse-Performance-Audit** auf der Produktiv-Seite einmal laufen
+3. **Lighthouse-Performance-Audit** auf der Produktiv-Seite einmal laufen
    lassen (Ziel > 90 für `/` und `/tour`)
+4. **Remote-Feature-Branch `feature/vorstellungsvideos`** existiert noch auf
+   GitHub (aus Initial-PR #1) — kann gelöscht werden, braucht aber explizite
+   User-Wort-Bestätigung (Classifier blockt Remote-Branch-Löschung)
+
+_Erledigt 2026-05-16:_
+- _Alle 4 Walkthrough-Kapitel produziert, MP4+VTT+WebP-Poster in R2 hochgeladen
+  (Naming: `tour-kapitel-{1..4}.{mp4,vtt}` und `-poster.webp` — Untertitel
+  ohne `.de.`-Infix, abweichend vom Teaser)._
+- _`KAPITEL`-Array in `Tour.tsx` auf echte R2-URLs umgestellt, deployt._
+- _`docs/video-assets.md` auf das tatsächliche Naming nachgezogen._
 
 ## Bei nächster Session-Aufnahme
 
