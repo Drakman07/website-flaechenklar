@@ -8,23 +8,14 @@ export interface Env {
  */
 const CANONICAL_HOST = "flaechenklar.de";
 
-/**
- * Routen, die auf statische Sub-Dateien gemappt werden.
- * Reihenfolge: laenger-spezifischer Pfad zuerst, falls noetig.
- */
-const STATIC_REWRITES: Readonly<Record<string, string>> = {
-  "/impressum": "/impressum.html",
-  "/datenschutz": "/datenschutz.html",
-};
-
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
 
-    // 1) Canonical-Redirects: HTTPS erzwingen + www. entfernen.
-    //    Cloudflare hat zwar haeufig "Always Use HTTPS" aktiv und proxyt www. mit,
-    //    aber ein expliziter 301 hier macht das versioniert und unabhaengig vom
-    //    Dashboard-Setting. Wirkt auch lokal in wrangler dev.
+    // Canonical-Redirects: HTTPS erzwingen + www. entfernen.
+    // Cloudflare hat zwar haeufig "Always Use HTTPS" aktiv und proxyt www. mit,
+    // aber ein expliziter 301 hier macht das versioniert und unabhaengig vom
+    // Dashboard-Setting. Wirkt auch lokal in wrangler dev.
     const needsHttps = url.protocol === "http:";
     const needsBareHost = url.hostname.toLowerCase() === `www.${CANONICAL_HOST}`;
     if (needsHttps || needsBareHost) {
@@ -34,15 +25,11 @@ export default {
       return Response.redirect(target.toString(), 301);
     }
 
-    // 2) Statische Rewrites fuer Legal-Pages (saubere URLs ohne .html-Endung).
-    const rewriteTo = STATIC_REWRITES[url.pathname];
-    if (rewriteTo) {
-      return env.ASSETS.fetch(
-        new Request(new URL(rewriteTo, url), request),
-      );
-    }
-
-    // 3) Default: statische Assets ausliefern (mit SPA-Fallback aus wrangler.toml).
+    // Default: statische Assets ausliefern (mit SPA-Fallback aus wrangler.toml).
+    // Cloudflare uebernimmt selbst:
+    //  - .html-Stripping: /impressum  -> dist/impressum.html
+    //  - SPA-Fallback: alle unbekannten Pfade -> dist/index.html
+    //  - Content-Type-Header passend zur Extension
     return env.ASSETS.fetch(request);
   },
 } satisfies ExportedHandler<Env>;
