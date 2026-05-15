@@ -1,4 +1,5 @@
 import { Hero } from "@/sections/Hero";
+import { TeaserSection } from "@/sections/TeaserSection";
 import { ProblemChance } from "@/sections/ProblemChance";
 import { Funktionen } from "@/sections/Funktionen";
 import { Vollgeschoss } from "@/sections/Vollgeschoss";
@@ -12,6 +13,7 @@ export function Home() {
   return (
     <>
       <Hero />
+      <TeaserSection />
       <ProblemChance />
       <Funktionen />
       <Vollgeschoss />
