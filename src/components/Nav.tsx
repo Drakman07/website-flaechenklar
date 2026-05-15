@@ -1,6 +1,7 @@
 import { Menu } from "lucide-react";
 import type { MouseEvent } from "react";
 import logoUrl from "@/assets/logo.svg";
+import { navigate } from "@/router";
 
 const links = [
   { href: "#funktionen", label: "Funktionen" },
@@ -11,7 +12,18 @@ const links = [
   { href: "#kontakt", label: "Kontakt" },
 ];
 
-function closeBurger(e: MouseEvent<HTMLAnchorElement>) {
+function handleAnchorClick(e: MouseEvent<HTMLAnchorElement>): void {
+  const href = e.currentTarget.getAttribute("href") ?? "";
+  // Wenn auf /tour, dann erst zur Home navigieren und dann scrollen
+  if (href.startsWith("#") && window.location.pathname !== "/") {
+    e.preventDefault();
+    const hash = href.slice(1);
+    navigate("/");
+    window.setTimeout(() => {
+      document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
+    }, 50);
+  }
+  // Burger-Menü schließen falls offen (no-op auf Desktop)
   e.currentTarget.closest("details")?.removeAttribute("open");
 }
 
@@ -19,7 +31,7 @@ export function Nav() {
   return (
     <header className="sticky top-0 z-50 border-b border-outline bg-white/90 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        <a href="#top" className="flex items-center" aria-label="FlächenKlar — Startseite">
+        <a href="#top" onClick={handleAnchorClick} className="flex items-center" aria-label="FlächenKlar — Startseite">
           <img src={logoUrl} alt="FlächenKlar" className="h-9 w-auto" />
         </a>
 
@@ -28,6 +40,7 @@ export function Nav() {
             <a
               key={l.href}
               href={l.href}
+              onClick={handleAnchorClick}
               className="text-sm text-ink/70 hover:text-navy"
             >
               {l.label}
@@ -35,6 +48,7 @@ export function Nav() {
           ))}
           <a
             href="#kontakt"
+            onClick={handleAnchorClick}
             className="rounded bg-teal px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal/90"
           >
             Demo anfragen
@@ -53,7 +67,7 @@ export function Nav() {
               <a
                 key={l.href}
                 href={l.href}
-                onClick={closeBurger}
+                onClick={handleAnchorClick}
                 className="block rounded px-3 py-3 text-sm text-ink hover:bg-outline/40"
               >
                 {l.label}
@@ -61,7 +75,7 @@ export function Nav() {
             ))}
             <a
               href="#kontakt"
-              onClick={closeBurger}
+              onClick={handleAnchorClick}
               className="mt-2 block rounded bg-teal px-3 py-3 text-center text-sm font-semibold text-white"
             >
               Demo anfragen
