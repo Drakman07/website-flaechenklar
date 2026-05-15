@@ -6,3 +6,7 @@ compatibility_date = "2025-09-01"
 directory = "./dist"
 not_found_handling = "single-page-application"
 binding = "ASSETS"
+# Worker laeuft vor dem Asset-Resolver — sonst wuerden Redirects (www -> bare,
+# http -> https) und Rewrites (/impressum -> /impressum.html) nicht greifen,
+# weil Cloudflare statische Treffer direkt aus dem Edge ausliefert.
+run_worker_first = true
