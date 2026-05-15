@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 export type Route = "home" | "tour";
 
+export type RoutePath = "/" | "/tour";
+
 const TITLES: Record<Route, string> = {
   home: "FlächenKlar — Aufmaß für bayerische Bauämter",
   tour: "FlächenKlar — Komplette Tour",
@@ -40,7 +42,7 @@ export function useRoute(): Route {
   return route;
 }
 
-export function navigate(to: string): void {
+export function navigate(to: RoutePath): void {
   if (window.location.pathname === to) return;
   window.history.pushState({}, "", to);
   window.dispatchEvent(new PopStateEvent("popstate"));
