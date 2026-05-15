@@ -69,19 +69,41 @@ Bing als Default:
 2. Property hinzufügen → kann Search-Console-Property importieren (1 Klick)
 3. Sitemap einreichen
 
-## Stufe 2 — Marketing-Layer (✅ größtenteils erledigt)
+## Stufe 2 — Marketing-Layer (✅ erledigt mit Commit `f4dcd5f`)
 
-Stufe 2 war im Plan vorgesehen, ist aber im Repo schon umgesetzt:
-- `src/sections/` mit Hero, ProblemChance, Funktionen, Sicherheit, Vollgeschoss,
-  Preise, Kontakt, DemoBanner
+Stufe 2 war zu großen Teilen schon im Repo. Diese Session hat die wichtigsten
+verbliebenen Lücken geschlossen:
+
+**Neu in Commit `f4dcd5f`:**
+- `src/content/faq.ts` + `src/sections/FAQ.tsx`: Accordion-FAQ mit 8 Bauamt-
+  Long-Tail-Q&A (Geschossfläche, Vollgeschoss-Berechnung, Installation, DSGVO,
+  Browser-Support, Preise, PDF-Protokoll, Auto-Recovery). In `App.tsx` zwischen
+  Preise und Kontakt eingehängt, mit Nav-Anker.
+- `index.html`: zweites + drittes JSON-LD-Schema ergänzt:
+  - `Organization` (Anschrift Berngau, Telefon, E-Mail) → Brand-Search-Boost
+  - `FAQPage` (8 Q&A) → Rich-Snippet-Kandidat in Google
+- `index.html` noscript-Fallback um kompakte FAQ-Sektion (dl/dt/dd) erweitert
+- Email-Inkonsistenz behoben: `geitner97@gmail.com` → `info@flaechenklar.de`
+  (Konsistenz mit Impressum), Telefon ergänzt.
+- `public/impressum.html` + `public/datenschutz.html`:
+  - `meta robots="noindex"` entfernt (konfligierte mit sitemap.xml-Einträgen)
+  - `meta robots="index,follow"` gesetzt
+  - `link rel="canonical"` ergänzt
+  - `meta description` ergänzt
+
+**Was Stufe 2 abdeckt (im Repo davor schon vorhanden):**
+- `src/sections/` mit Hero, ProblemChance, Funktionen, Vollgeschoss, Sicherheit,
+  DemoBanner, Preise, Kontakt (struktur. mailto-Formular)
 - `public/impressum.html` + `public/datenschutz.html` mit Worker-Routing
 - Cloudflare-Pages-Deploy via GitHub Actions
 
-**Offene Restpunkte aus Stufe 2 (TODO bei Bedarf):**
-- [ ] Impressum/Datenschutz inhaltlich review (Anschrift korrekt? USt-ID? DSGVO vollständig?)
-- [ ] Kontaktformular statt nur mailto-Link (optional — Cloudflare Workers + KV oder Email-Worker)
+**Optionale Restpunkte (TODO bei Bedarf, nicht blockierend):**
 - [ ] Referenz-Sektion mit Markt Postbauer-Heng (Einverständnis vorausgesetzt)
-- [ ] Logo-Verfeinerung für Mobile-Header
+- [ ] Echtes Backend-Kontaktformular statt strukturierter mailto
+  (Cloudflare Workers + KV oder Email-Worker — falls Mail-Programm-Öffnung
+  bei Behörden-Workstations Probleme macht)
+- [ ] noscript-Fallback aus `src/content/`-Listen automatisch generieren
+  (Build-Step), damit der Fallback nie veraltet
 
 ## Stufe 3 — Content + Off-Page (Roadmap, kontinuierlich)
 
