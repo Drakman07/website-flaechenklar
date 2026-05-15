@@ -3,10 +3,10 @@ import { Reveal } from "@/components/Reveal";
 import { VideoPlayer, type VideoSource } from "@/components/VideoPlayer";
 import { navigate } from "@/router";
 
-// Platzhalter — wird in Task 8 durch echte R2-URLs ersetzt
 const TEASER: VideoSource = {
-  src: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
-  poster: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4#t=0.1",
+  src: "https://videos.flaechenklar.de/teaser.mp4",
+  poster: "https://videos.flaechenklar.de/teaser-poster.webp",
+  captions: "https://videos.flaechenklar.de/teaser.de.vtt",
   title: "FlächenKlar in 60 Sekunden",
 };
 
