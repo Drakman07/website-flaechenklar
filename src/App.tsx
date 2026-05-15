@@ -7,6 +7,7 @@ import { Vollgeschoss } from "./sections/Vollgeschoss";
 import { Sicherheit } from "./sections/Sicherheit";
 import { DemoBanner } from "./sections/DemoBanner";
 import { Preise } from "./sections/Preise";
+import { FAQ } from "./sections/FAQ";
 import { Kontakt } from "./sections/Kontakt";
 
 export function App() {
@@ -21,6 +22,7 @@ export function App() {
         <Sicherheit />
         <DemoBanner />
         <Preise />
+        <FAQ />
         <Kontakt />
       </main>
       <Footer />

@@ -90,6 +90,110 @@
       }
     </script>
 
+    <!-- JSON-LD: Organization (verstaerkt Brand-Search, Knowledge-Panel) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "FlächenKlar",
+        "url": "https://flaechenklar.de/",
+        "logo": "https://flaechenklar.de/og-image.png",
+        "founder": {
+          "@type": "Person",
+          "name": "Alexander Geitner"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Lärchenstraße 18",
+          "postalCode": "92361",
+          "addressLocality": "Berngau",
+          "addressCountry": "DE"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "email": "info@flaechenklar.de",
+          "telephone": "+49-151-61481639",
+          "areaServed": "DE",
+          "availableLanguage": "de"
+        }
+      }
+    </script>
+
+    <!-- JSON-LD: FAQPage (Rich-Result-Kandidat fuer Bauamt-Long-Tail-Fragen) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Was ist die Geschossfläche und wofür brauche ich sie?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Die Geschossfläche ist die Summe aller Vollgeschoss-Flächen eines Gebäudes. In Bayern wird sie unter anderem als Bemessungsgrundlage für den Herstellungsbeitrag nach Art. 5 KAG verwendet. Bauämter ermitteln sie aus den Bauantrags-Plänen — bei FlächenKlar geht das in wenigen Minuten ohne Lineal direkt aus dem digitalen PDF."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Wie funktioniert die Vollgeschoss-Berechnung nach Art. 83 Abs. 7 BayBO?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ein Dachgeschoss zählt als Vollgeschoss, wenn die Fläche mit lichter Höhe ab 2,30 m mehr als zwei Drittel der darunterliegenden Geschossfläche ausmacht. FlächenKlar berechnet das aus Gebäudemaßen, Kniestockhöhen, Dachneigungen und Gauben — inklusive SVG-Diagrammen zur Plausibilitätsprüfung gegen das gezeichnete Polygon."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Muss FlächenKlar installiert werden?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nein. FlächenKlar läuft komplett im Browser, ohne Installation, ohne Admin-Rechte, ohne Server-Komponente. Ein Doppelklick auf die index.html-Datei reicht — auch von einem USB-Stick oder einem freigegebenen Laufwerk."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Ist FlächenKlar DSGVO-konform?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ja. Das Tool läuft zu 100 Prozent offline im Browser: keine Cloud-Calls, keine Datenübertragung an Dritte, keine Cookies, kein Tracking. Bauantrags-Daten verlassen nie den Rechner des Sachbearbeiters. Damit ist die Datenschutz-Frage für sensible Behörden-Daten ohne weitere Vereinbarung gelöst."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Welche Browser unterstützt FlächenKlar?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Alle aktuellen Versionen von Microsoft Edge, Google Chrome und Mozilla Firefox auf Windows, macOS und Linux. Internet Explorer wird nicht unterstützt."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Was kostet FlächenKlar für eine Kommune?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Einmalkauf gestaffelt nach Einwohnerklasse: 1.600 Euro netto für Kommunen bis 3.000 Einwohner, 3.100 Euro netto für 3.000 bis 8.000 Einwohner, 5.800 Euro netto für 8.000 bis 15.000 Einwohner, 10.500 Euro netto für 15.000 bis 30.000 Einwohner und 14.500 Euro netto über 30.000 Einwohner. Die Wartung im ersten Jahr ist enthalten, ab dem zweiten Jahr 10 Prozent pro Jahr, jährlich kündbar. Pilot-Kunden erhalten 50 Prozent Rabatt."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Kann ich das Aufmaßprotokoll als PDF an die Akte hängen?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ja, genau dafür ist das Aufmaßprotokoll gedacht: ein druckreifes PDF mit Deckblatt, Geschossaufstellung, Plan-Ausschnitten und vollständigem Berechnungsanhang. Akten-fertig und nachvollziehbar."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Was passiert mit meinen Daten, wenn der Browser abstürzt?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "FlächenKlar legt alle 30 Sekunden einen IndexedDB-Snapshot des aktuellen Standes an. Nach einem Browser-Absturz wird beim nächsten Start automatisch der letzte gespeicherte Zustand angeboten — kein Datenverlust."
+            }
+          }
+        ]
+      }
+    </script>
+
     <!-- SEO-Fallback only visible without JS (Googlebot reads it anyway) -->
     <style>
       #seo-fallback {
@@ -226,11 +330,59 @@
       </section>
 
       <section>
+        <h2>Häufige Fragen</h2>
+        <dl>
+          <dt>
+            <strong
+              >Was ist die Geschossfläche und wofür brauche ich sie?</strong
+            >
+          </dt>
+          <dd>
+            Die Geschossfläche ist die Summe aller Vollgeschoss-Flächen eines
+            Gebäudes. In Bayern dient sie als Bemessungsgrundlage für den
+            Herstellungsbeitrag nach Art. 5 KAG.
+          </dd>
+
+          <dt>
+            <strong>Wie funktioniert die Vollgeschoss-Berechnung nach Art. 83 Abs. 7 BayBO?</strong>
+          </dt>
+          <dd>
+            Ein Dachgeschoss zählt als Vollgeschoss, wenn die Fläche mit lichter
+            Höhe ab 2,30 m mehr als zwei Drittel der darunterliegenden
+            Geschossfläche ausmacht. FlächenKlar berechnet das aus Maßen,
+            Kniestock, Dachneigung und Gauben.
+          </dd>
+
+          <dt><strong>Muss FlächenKlar installiert werden?</strong></dt>
+          <dd>
+            Nein. Das Tool läuft komplett im Browser, ohne Installation, ohne
+            Admin-Rechte, ohne Server-Komponente.
+          </dd>
+
+          <dt><strong>Ist FlächenKlar DSGVO-konform?</strong></dt>
+          <dd>
+            Ja. Tool läuft 100 % offline: keine Cloud-Calls, keine Cookies, kein
+            Tracking. Bauantrags-Daten verlassen nie den Rechner.
+          </dd>
+
+          <dt>
+            <strong>Was kostet FlächenKlar für eine Kommune?</strong>
+          </dt>
+          <dd>
+            Einmalkauf gestaffelt nach Einwohnerklasse: 1.600 € (bis 3.000 EW)
+            bis 14.500 € (über 30.000 EW), Wartung Jahr 1 inklusive.
+            Pilot-Kunden 50 % Rabatt.
+          </dd>
+        </dl>
+      </section>
+
+      <section>
         <h2>Kontakt</h2>
         <p>
           Für eine kostenlose Demo oder Fragen zur Lizenzierung schreiben Sie
           bitte an
-          <a href="mailto:geitner97@gmail.com">geitner97@gmail.com</a>.
+          <a href="mailto:info@flaechenklar.de">info@flaechenklar.de</a> oder
+          rufen unter <a href="tel:+4915161481639">0151 614 816 39</a> an.
         </p>
       </section>
 

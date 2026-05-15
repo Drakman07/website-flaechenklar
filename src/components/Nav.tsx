@@ -7,6 +7,7 @@ const links = [
   { href: "#vollgeschoss", label: "Vollgeschoss" },
   { href: "#sicherheit", label: "Sicherheit" },
   { href: "#preise", label: "Preise" },
+  { href: "#faq", label: "FAQ" },
   { href: "#kontakt", label: "Kontakt" },
 ];
 
