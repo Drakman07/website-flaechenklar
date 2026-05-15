@@ -10,7 +10,7 @@ const punkte = [
   {
     icon: UserX,
     title: "Kein Account",
-    text: "Keine Registrierung, keine E-Mail, keine Kreditkarte.",
+    text: "Keine Registrierung, keine Aktivierung, keine Verpflichtung.",
   },
   {
     icon: Droplet,
@@ -34,7 +34,7 @@ export function DemoBanner() {
             <p className="mt-4 text-base text-ink/70 md:text-lg">
               Der Demo-Modus läuft 14 Tage — mit vollem Funktionsumfang. Einziger
               Unterschied: das Aufmaßprotokoll trägt ein Wasserzeichen. Kein
-              Account, keine Kreditkarte, keine Cloud.
+              Account, keine Installation, keine Cloud.
             </p>
           </div>
         </Reveal>
