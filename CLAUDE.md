@@ -25,8 +25,8 @@ führt zur Demo-Anfrage.
 | Kontaktformular via Formspree | ✅ aktiv |
 | Impressum, Datenschutz | ✅ separate Cloudflare-served HTML-Seiten |
 | 60-Sek-Teaser auf Homepage | ✅ live mit echten R2-URLs |
-| `/tour`-Route mit Walkthrough-Player | ✅ live, ABER zeigt noch Platzhalter-Videos |
-| 4 Walkthrough-Kapitel produziert | ⏳ offen |
+| `/tour`-Route mit Walkthrough-Player | ✅ live mit echten R2-URLs |
+| 4 Walkthrough-Kapitel produziert | ✅ alle 4 hochgeladen + Tour.tsx aktualisiert |
 
 ## Architektur-Eckpunkte
 
@@ -57,9 +57,9 @@ Asset-Konventionen (siehe `docs/video-assets.md`):
 teaser.mp4              (60 Sek, H.264 1080p)       ✅ hochgeladen
 teaser.de.vtt           (deutsche Untertitel)        ✅ hochgeladen
 teaser-poster.webp      (Standbild)                  ✅ hochgeladen
-tour-kapitel-{1..4}.mp4 (à 60 Sek)                   ⏳ offen
-tour-kapitel-{1..4}.de.vtt                           ⏳ offen
-tour-kapitel-{1..4}-poster.webp                      ⏳ offen
+tour-kapitel-{1..4}.mp4 (à 60 Sek)                   ✅ hochgeladen
+tour-kapitel-{1..4}.vtt (Untertitel)                 ✅ hochgeladen (ohne .de.-Infix)
+tour-kapitel-{1..4}-poster.webp                      ✅ hochgeladen
 ```
 
 Upload-Workflow: Dashboard-Drag&Drop oder Wrangler CLI (`wrangler login`

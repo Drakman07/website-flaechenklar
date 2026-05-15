@@ -54,18 +54,24 @@ videos.flaechenklar.de/teaser.mp4
 videos.flaechenklar.de/teaser.de.vtt
 videos.flaechenklar.de/teaser-poster.webp
 videos.flaechenklar.de/tour-kapitel-1.mp4
-videos.flaechenklar.de/tour-kapitel-1.de.vtt
+videos.flaechenklar.de/tour-kapitel-1.vtt
 videos.flaechenklar.de/tour-kapitel-1-poster.webp
 videos.flaechenklar.de/tour-kapitel-2.mp4
-videos.flaechenklar.de/tour-kapitel-2.de.vtt
+videos.flaechenklar.de/tour-kapitel-2.vtt
 videos.flaechenklar.de/tour-kapitel-2-poster.webp
 videos.flaechenklar.de/tour-kapitel-3.mp4
-videos.flaechenklar.de/tour-kapitel-3.de.vtt
+videos.flaechenklar.de/tour-kapitel-3.vtt
 videos.flaechenklar.de/tour-kapitel-3-poster.webp
 videos.flaechenklar.de/tour-kapitel-4.mp4
-videos.flaechenklar.de/tour-kapitel-4.de.vtt
+videos.flaechenklar.de/tour-kapitel-4.vtt
 videos.flaechenklar.de/tour-kapitel-4-poster.webp
 ```
+
+> **Naming-Konvention:** Der Teaser verwendet historisch das `.de.vtt`-Suffix,
+> die vier Walkthrough-Kapitel das kürzere `.vtt`-Suffix. Beide Varianten
+> funktionieren — das Tool gibt im `<track>`-Element ohnehin explizit
+> `srcLang="de"` an. Beim Hochladen weiterer Assets bitte das jeweilige
+> Schema beibehalten.
 
 ## Echte URLs einsetzen (nach Video-Produktion)
 

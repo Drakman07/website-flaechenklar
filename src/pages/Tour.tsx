@@ -3,30 +3,29 @@ import { Reveal } from "@/components/Reveal";
 import { VideoPlayer, type VideoSource } from "@/components/VideoPlayer";
 import { navigate } from "@/router";
 
-// Platzhalter — werden durch echte R2-URLs ersetzt sobald Videos produziert
 const KAPITEL: VideoSource[] = [
   {
-    src: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
-    poster:
-      "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4#t=0.1",
+    src: "https://videos.flaechenklar.de/tour-kapitel-1.mp4",
+    poster: "https://videos.flaechenklar.de/tour-kapitel-1-poster.webp",
+    captions: "https://videos.flaechenklar.de/tour-kapitel-1.vtt",
     title: "Schnellstart — vom PDF zum Protokoll",
   },
   {
-    src: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
-    poster:
-      "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4#t=0.1",
+    src: "https://videos.flaechenklar.de/tour-kapitel-2.mp4",
+    poster: "https://videos.flaechenklar.de/tour-kapitel-2-poster.webp",
+    captions: "https://videos.flaechenklar.de/tour-kapitel-2.vtt",
     title: "Vollgeschosse nach KAG Bayern",
   },
   {
-    src: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
-    poster:
-      "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4#t=0.1",
+    src: "https://videos.flaechenklar.de/tour-kapitel-3.mp4",
+    poster: "https://videos.flaechenklar.de/tour-kapitel-3-poster.webp",
+    captions: "https://videos.flaechenklar.de/tour-kapitel-3.vtt",
     title: "Mehrere Geschosse & Maßstab",
   },
   {
-    src: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4",
-    poster:
-      "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_1MB.mp4#t=0.1",
+    src: "https://videos.flaechenklar.de/tour-kapitel-4.mp4",
+    poster: "https://videos.flaechenklar.de/tour-kapitel-4-poster.webp",
+    captions: "https://videos.flaechenklar.de/tour-kapitel-4.vtt",
     title: "Export & Aufmaßprotokoll",
   },
 ];
