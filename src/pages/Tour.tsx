@@ -68,8 +68,9 @@ export function Tour() {
               FlächenKlar im Detail.
             </h1>
             <p className="mt-4 text-base text-ink/70 md:text-lg">
-              Vier Kapitel à 60 Sekunden. Springen Sie zum gewünschten Thema —
-              jedes Kapitel ist eigenständig verständlich.
+              Vier kompakte Kapitel zu den wichtigsten Funktionen. Springen Sie
+              zum gewünschten Thema — jedes Kapitel ist eigenständig
+              verständlich.
             </p>
           </div>
         </Reveal>
