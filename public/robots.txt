@@ -1,0 +1,7 @@
+# robots.txt fuer flaechenklar.de
+# Alle Crawler duerfen alles indexieren — kein Login, keine sensiblen Pfade.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://flaechenklar.de/sitemap.xml

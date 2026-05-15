@@ -2,12 +2,247 @@
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary -->
     <title>FlächenKlar — Aufmaß-Werkzeug für bayerische Bauämter</title>
-    <meta name="description" content="PDF laden, Polygon zeichnen, druckreifes Aufmaßprotokoll als Grundlage für den Herstellungsbeitrag nach Art. 5 KAG Bayern. Komplett offline, ohne Cloud, ohne Installation." />
+    <meta
+      name="description"
+      content="PDF laden, Polygon zeichnen, druckreifes Aufmaßprotokoll als Grundlage für den Herstellungsbeitrag nach Art. 5 KAG Bayern. Komplett offline, ohne Cloud, ohne Installation."
+    />
+    <meta name="robots" content="index,follow" />
+    <meta name="author" content="Alexander Geitner" />
+    <link rel="canonical" href="https://flaechenklar.de/" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- OpenGraph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FlächenKlar" />
+    <meta
+      property="og:title"
+      content="FlächenKlar — Aufmaß-Werkzeug für bayerische Bauämter"
+    />
+    <meta
+      property="og:description"
+      content="PDF laden, Polygon zeichnen, druckreifes Aufmaßprotokoll als Grundlage für den Herstellungsbeitrag nach Art. 5 KAG Bayern. Komplett offline, ohne Cloud, ohne Installation."
+    />
+    <meta property="og:url" content="https://flaechenklar.de/" />
+    <meta property="og:image" content="https://flaechenklar.de/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="FlächenKlar — Aufmaß-Werkzeug für bayerische Bauämter"
+    />
+    <meta property="og:locale" content="de_DE" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="FlächenKlar — Aufmaß-Werkzeug für bayerische Bauämter"
+    />
+    <meta
+      name="twitter:description"
+      content="PDF laden, Polygon zeichnen, druckreifes Aufmaßprotokoll. Offline, ohne Cloud, ohne Installation."
+    />
+    <meta name="twitter:image" content="https://flaechenklar.de/og-image.png" />
+    <meta
+      name="twitter:image:alt"
+      content="FlächenKlar — Aufmaß-Werkzeug für bayerische Bauämter"
+    />
+
+    <!-- JSON-LD: SoftwareApplication -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "FlächenKlar",
+        "operatingSystem": "Windows, macOS, Linux (Browser)",
+        "applicationCategory": "BusinessApplication",
+        "applicationSubCategory": "Bauamt-Aufmaß-Software",
+        "description": "Offline-Browser-Werkzeug für bayerische Bauämter zur Ermittlung von Geschossflächen aus Bauantrags-PDFs. Erzeugt druckreifes Aufmaßprotokoll als Grundlage für den Herstellungsbeitrag nach Art. 5 KAG Bayern und unterstützt Vollgeschoss-Berechnung nach Art. 83 Abs. 7 BayBO.",
+        "url": "https://flaechenklar.de/",
+        "image": "https://flaechenklar.de/og-image.png",
+        "inLanguage": "de-DE",
+        "author": {
+          "@type": "Person",
+          "name": "Alexander Geitner"
+        },
+        "offers": {
+          "@type": "AggregateOffer",
+          "priceCurrency": "EUR",
+          "lowPrice": "1600",
+          "highPrice": "14500",
+          "offerCount": "5",
+          "description": "Einmalkauf gestaffelt nach Einwohnerklasse der Kommune. Wartung im ersten Jahr inklusive."
+        },
+        "featureList": [
+          "Bauantrags-PDFs direkt im Browser laden",
+          "Maßstab pro Plan-Region kalibrieren",
+          "Polygone mit Snap und Bemaßung zeichnen",
+          "Geschosse separat verwalten (EG, OG, DG)",
+          "Vollgeschoss-Berechnung nach Art. 83 Abs. 7 BayBO",
+          "Druckreifes Aufmaßprotokoll als PDF",
+          ".gfproj-Projektdatei zur Archivierung",
+          "Auto-Recovery via IndexedDB-Snapshot"
+        ]
+      }
+    </script>
+
+    <!-- SEO-Fallback only visible without JS (Googlebot reads it anyway) -->
+    <style>
+      #seo-fallback {
+        display: none;
+      }
+    </style>
+    <noscript>
+      <style>
+        #seo-fallback {
+          display: block !important;
+          max-width: 760px;
+          margin: 2rem auto;
+          padding: 1rem;
+          font-family:
+            ui-sans-serif,
+            system-ui,
+            sans-serif;
+          line-height: 1.6;
+          color: #1f2937;
+        }
+        #seo-fallback h1 {
+          font-size: 2rem;
+          color: #1e2a4a;
+        }
+        #seo-fallback h2 {
+          font-size: 1.4rem;
+          color: #1e2a4a;
+          margin-top: 1.5rem;
+        }
+        #seo-fallback ul {
+          padding-left: 1.5rem;
+        }
+        #root {
+          display: none;
+        }
+      </style>
+    </noscript>
   </head>
   <body>
+    <!--
+      SEO-Fallback: Damit Crawler (Googlebot, Bingbot, Social-Media-Bots) den
+      Inhalt der Seite auch ohne JavaScript indexieren können. Im normalen
+      Browser ist dieser Block per CSS ausgeblendet — React mountet in #root
+      und ersetzt die sichtbare Darstellung vollständig. Inhaltlich spiegelt
+      der Fallback die Sektionen Hero, Funktionen, Preise wider.
+    -->
+    <div id="seo-fallback">
+      <header>
+        <h1>FlächenKlar — Aufmaß-Werkzeug für bayerische Bauämter</h1>
+        <p>
+          PDF laden, Polygon zeichnen, druckreifes Aufmaßprotokoll als Grundlage
+          für den <strong>Herstellungsbeitrag nach Art. 5 KAG Bayern</strong>.
+          Komplett offline, ohne Cloud, ohne Installation.
+        </p>
+      </header>
+
+      <section>
+        <h2>Für wen ist FlächenKlar?</h2>
+        <p>
+          FlächenKlar richtet sich an Sachbearbeiterinnen und Sachbearbeiter in
+          bayerischen Bauämtern, die Geschossflächen aus Bauantrags-PDFs
+          ermitteln müssen — als Grundlage für den Herstellungsbeitrag und für
+          die Vollgeschoss-Bewertung nach Art. 83 Abs. 7 BayBO.
+        </p>
+      </section>
+
+      <section>
+        <h2>Funktionen</h2>
+        <ul>
+          <li>
+            <strong>Bauantrags-PDFs direkt laden</strong> — Drag &amp; Drop ins
+            Browser-Fenster, kein Konvertieren, kein Drucken.
+          </li>
+          <li>
+            <strong>Maßstab pro Plan-Region</strong> — zwei Klicks auf eine
+            eingezeichnete Bemaßung, Sollwert eintippen, Region kalibriert.
+            Mehrere Maßstäbe pro Seite möglich.
+          </li>
+          <li>
+            <strong>Polygone mit Snap und Bemaßung</strong> — Außenkontur
+            abklicken, Kanten nachträglich bemaßen, Fläche per Shoelace-Formel.
+          </li>
+          <li>
+            <strong>Geschosse separat verwalten</strong> — EG, OG, DG mit
+            eigenen Polygonen und eigener Berechnung.
+          </li>
+          <li>
+            <strong>Vollgeschoss-Berechnung</strong> — Modul für Art. 83 Abs. 7
+            BayBO: Kniestock, Dachneigung, Gauben, Anteil ≥ 2,30 m.
+          </li>
+          <li>
+            <strong>Druckreifes Aufmaßprotokoll</strong> — PDF mit Deckblatt,
+            Geschossaufstellung, Plan-Ausschnitten, Berechnungsanhang.
+          </li>
+          <li>
+            <strong>.gfproj-Projektdatei</strong> — kompletter Stand in einer
+            Datei, archivier- und weitergebbar.
+          </li>
+          <li>
+            <strong>Auto-Recovery</strong> — IndexedDB-Snapshot alle 30
+            Sekunden, kein Datenverlust bei Browser-Absturz.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Sicherheit und Datenschutz</h2>
+        <p>
+          FlächenKlar läuft zu <strong>100 % offline</strong> im Browser. Es
+          gibt <strong>keine Cloud-Calls</strong>, keine Übertragung von
+          Bauantragsdaten an Dritte und keine Server-Komponente. Damit ist die
+          Datenschutz-Frage für Bauamts-Daten DSGVO-konform gelöst.
+        </p>
+      </section>
+
+      <section>
+        <h2>Preise</h2>
+        <p>
+          Einmalkauf, gestaffelt nach Einwohnerklasse der Kommune. Wartung im
+          ersten Jahr inklusive, ab dem zweiten Jahr 10 % p. a., jährlich
+          kündbar.
+        </p>
+        <ul>
+          <li>Kommunen bis 3.000 Einwohner: 1.600 € (netto)</li>
+          <li>3.000 – 8.000 Einwohner: 3.100 € (netto)</li>
+          <li>8.000 – 15.000 Einwohner: 5.800 € (netto)</li>
+          <li>15.000 – 30.000 Einwohner: 10.500 € (netto)</li>
+          <li>über 30.000 Einwohner: 14.500 € (netto)</li>
+        </ul>
+        <p>
+          <strong>Pilot-Kunden</strong> erhalten 50 % Rabatt und direkten Draht
+          zur Produktentwicklung.
+        </p>
+      </section>
+
+      <section>
+        <h2>Kontakt</h2>
+        <p>
+          Für eine kostenlose Demo oder Fragen zur Lizenzierung schreiben Sie
+          bitte an
+          <a href="mailto:geitner97@gmail.com">geitner97@gmail.com</a>.
+        </p>
+      </section>
+
+      <nav>
+        <h2>Weitere Seiten</h2>
+        <ul>
+          <li><a href="/impressum">Impressum</a></li>
+          <li><a href="/datenschutz">Datenschutz</a></li>
+        </ul>
+      </nav>
+    </div>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
