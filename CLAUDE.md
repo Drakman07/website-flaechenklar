@@ -1,6 +1,6 @@
 # FlächenKlar-Website — Session-Memory für Claude
 
-Letzter Stand: 2026-05-16, nach Live-Schalten der 4 Walkthrough-Kapitel.
+Letzter Stand: 2026-05-16, nach Live-Schalten der 4 Walkthrough-Kapitel + Tour-Subtitel-Fix.
 
 ## Projekt-Kurzbeschreibung
 
@@ -132,6 +132,11 @@ _Erledigt 2026-05-16:_
   ohne `.de.`-Infix, abweichend vom Teaser)._
 - _`KAPITEL`-Array in `Tour.tsx` auf echte R2-URLs umgestellt, deployt._
 - _`docs/video-assets.md` auf das tatsächliche Naming nachgezogen._
+- _**Tour-Subtitel-Fix (Commit `9657447`):** Der Subtitel auf `/tour`
+  enthielt „Vier Kapitel à 60 Sekunden" — die echten Kapitel sind aber
+  unterschiedlich lang, manche > 60 Sek. Neu: „Vier kompakte Kapitel zu
+  den wichtigsten Funktionen." Hält das Brevity-Versprechen ohne falsche
+  Sekundenangabe._
 
 ## Bei nächster Session-Aufnahme
 
@@ -153,7 +158,7 @@ _Erledigt 2026-05-16:_
 
 - Repo: https://github.com/Drakman07/website-flaechenklar (private)
 - Letzter Merge: PR #1 (Vorstellungsvideos) → Merge-Commit `ba74625`
-- Letzter Push auf main: `8b3dc31` (echte R2-URLs einsetzen)
+- Letzter Push auf main: `9657447` (Tour-Subtitel ohne falsche 60-Sek-Angabe)
 
 ## Erkenntnisse aus diesem Projektabschnitt
 
