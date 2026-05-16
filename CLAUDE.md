@@ -132,15 +132,13 @@ Es gibt einen Cloudflare-MCP-Server der R2-Verwaltung kann
 
 ## Offene Punkte / Roadmap
 
-1. **Live-Smoke nach Deploy** — `/tour` im Browser, alle 4 Kapitel klicken,
-   Captions togglen, DevTools-Network ohne 404/CORS, Mobile-Vollbild-Tap
-2. **GitHub-Actions-Refresh** — Node 20 → 24, actions/{checkout,setup-node}
-   auf v5, wrangler-action prüfen
-3. **Lighthouse-Performance-Audit** auf der Produktiv-Seite einmal laufen
-   lassen (Ziel > 90 für `/` und `/tour`)
-4. **Remote-Feature-Branch `feature/vorstellungsvideos`** existiert noch auf
-   GitHub (aus Initial-PR #1) — kann gelöscht werden, braucht aber explizite
-   User-Wort-Bestätigung (Classifier blockt Remote-Branch-Löschung)
+1. **Lighthouse-Audit mit harten Zahlen** — manuelle Schätzung
+   (Performance 88-95 Mobile / 95-100 Desktop, A11y/BP/SEO je 95-100)
+   liegt vor, aber Live-PSI-API hat unauthenticated Rate-Limit (429) auf
+   die Test-IP geworfen. Wenn echte Zahlen gebraucht: entweder
+   `https://pagespeed.web.dev/?url=https://flaechenklar.de/` im Browser
+   (PSI-UI hat eigene Quota pro Browser-Session), Chrome-DevTools-
+   Lighthouse-Tab lokal, oder PSI-API-Key in Google Cloud Console (~2 Min).
 
 _Erledigt 2026-05-16:_
 - _Alle 4 Walkthrough-Kapitel produziert, MP4+VTT+WebP-Poster in R2 hochgeladen
@@ -191,6 +189,17 @@ _Erledigt 2026-05-16:_
   in der Nav (animierte teal Hairline unter dem aktuellen Link),
   `theme-color="#0d1830"` Meta-Tag für mobile Browser-Chrome,
   Tour-Seite auf gleichen Token-Standard gehoben._
+- _**CI auf Node 24 + Actions v5 (Commit `577377b`).**
+  `.github/workflows/deploy.yml`: `actions/checkout@v4`→`v5`,
+  `actions/setup-node@v4`→`v5`, `node-version: 20`→`24`. Deploy nach Bump
+  weiterhin 34s. `cloudflare/wrangler-action` bleibt v3 (v4 noch nicht
+  stable). Live-Smoke der Production-Seite gegen `theme-color` und
+  CSS-Bundle-Hash erfolgreich._
+- _**Branch-Cleanup.** Remote-Branches `claude/optimistic-ptolemy-461bc7`
+  (Design-Upgrade) und `feature/vorstellungsvideos` (PR #1 aus Initial-
+  Walkthrough-Implementation) auf GitHub gelöscht. Klassifizierer-Hinweis
+  bleibt gültig: Remote-Branch-Löschung braucht weiterhin explizite
+  Wort-Bestätigung pro Branch (z.B. „ja, lösche X auf GitHub")._
 
 ## Bei nächster Session-Aufnahme
 
