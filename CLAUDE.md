@@ -1,6 +1,6 @@
 # FlächenKlar-Website — Session-Memory für Claude
 
-Letzter Stand: 2026-05-16, nach Welle 2 (PR #6, Merge `3c9cf99`) — Founder-Story-Block mit Alexander-Foto zwischen ProblemChance und Funktionen, 5-Tier-Preise-Card-Grid mit Pilot-Banner und Counter-Animationen, Hero-H1-Word-Stagger, ScrollProgressBar, Hero-Parallax, Vollgeschoss-Counter, Card-Hover-Glow auf allen Karten.
+Letzter Stand: 2026-05-16, nach Welle 2 (PR #6, Merge `3c9cf99`) — Founder-Story-Block mit Alexander-Foto zwischen ProblemChance und Funktionen, 5-Tier-Preise-Card-Grid mit Pilot-Banner und Counter-Animationen, Hero-H1-Word-Stagger, ScrollProgressBar, Hero-Parallax, Vollgeschoss-Counter, Card-Hover-Glow auf allen Karten. PSI nach Welle 2: Mobile 100/100/96/92, Desktop 100/97/96/92 (Mobile Performance +3, Mobile A11y +3 ggü. Welle 1).
 
 ## Projekt-Kurzbeschreibung
 
@@ -233,6 +233,21 @@ _Erledigt 2026-05-16:_
   `useAnimVariant`-Hook sind weg (waren nur für die Vergleichsphase).
   Build: CSS 31.72 KB (6.31 KB gzipped), JS 262.45 KB (79.59 KB gzipped),
   bleibt unter 90 KB gzip-Budget._
+- _**PSI-Audit nach Welle 2.** Mobile: Performance **100**,
+  Accessibility **100**, Best Practices **96**, SEO **92**. Desktop:
+  Performance **100**, Accessibility **97**, Best Practices **96**,
+  SEO **92**. Gegenüber Welle 1 (Mobile 97/97/96/92, Desktop 100/97/96/92):
+  Mobile Performance **+3** auf 100, Mobile A11y **+3** auf 100, alle
+  anderen Werte identisch. Erstaunlich, weil Welle 2 echt was draufgepackt
+  hat: Hero-Word-Stagger, Parallax-BlueprintGrid (rAF-throttled Scroll-
+  Listener), ScrollProgressBar, useCountUp-Counter in Preise (5×) und
+  Vollgeschoss (4 Zeilen), Card-Hover-Glow. Funktioniert weil alle
+  Animationen GPU-beschleunigt via `transform`/`opacity` laufen
+  (kein Layout-Reflow), Scroll-Handler `passive: true` + rAF-Throttling
+  haben, IntersectionObserver-getriggerte Animationen nur beim Reveal
+  ausführen, und `prefers-reduced-motion: reduce` durchgängig respektiert
+  wird. SEO bleibt bei 92 (Cloudflare `Content-Signal:`, bewusst akzeptiert
+  — siehe SEO-92-Diagnose unten)._
 - _**PSI-Audit nach Design-Upgrade.** Mobile: Performance **97**,
   Accessibility **97**, Best Practices **96**, SEO **92**. Desktop:
   Performance **100**, Accessibility **97**, Best Practices **96**,
