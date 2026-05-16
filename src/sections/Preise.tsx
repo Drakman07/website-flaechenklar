@@ -1,5 +1,12 @@
 import { preise } from "@/content/preise";
 import { Reveal } from "@/components/Reveal";
+import { TealUnderline } from "@/components/TealUnderline";
+import {
+  CARD_ACCENT_BORDER,
+  CARD_HOVER,
+  LABEL,
+  LEAD,
+} from "@/components/ui/tokens";
 
 export function Preise() {
   return (
@@ -7,13 +14,12 @@ export function Preise() {
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
           <div className="max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-wider text-teal">
-              Preise
-            </p>
+            <p className={LABEL}>Preise</p>
             <h2 className="mt-3 text-3xl font-bold text-navy md:text-4xl">
-              Klar gestaffelt nach Einwohnerklasse.
+              Klar gestaffelt nach{" "}
+              <TealUnderline>Einwohnerklasse</TealUnderline>.
             </h2>
-            <p className="mt-4 text-base text-ink/70 md:text-lg">
+            <p className={`mt-4 ${LEAD}`}>
               Einmalkauf nach Einwohnerklasse. Wartung im ersten Jahr inklusive,
               ab dem zweiten Jahr 10 % p. a., jährlich kündbar.
             </p>
@@ -21,7 +27,7 @@ export function Preise() {
         </Reveal>
 
         <Reveal delay={120}>
-        <div className="mt-10 overflow-x-auto rounded-lg border border-outline bg-white">
+        <div className="mt-10 overflow-x-auto rounded-lg border border-outline bg-white shadow-card">
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wider text-ink/60">
               <tr>
@@ -49,16 +55,18 @@ export function Preise() {
 
         <Reveal delay={200}>
         <div className="mt-8 grid gap-6 md:grid-cols-2">
-          <div className="rounded-lg border border-teal/30 bg-teal/5 p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-            <p className="text-xs font-semibold uppercase tracking-wider text-teal">
-              Pilot-Kunde
-            </p>
+          <div
+            className={`rounded-lg border border-teal/30 bg-teal/5 p-6 shadow-card ${CARD_ACCENT_BORDER} ${CARD_HOVER}`}
+          >
+            <p className={LABEL}>Pilot-Kunde</p>
             <p className="mt-2 text-sm text-ink/80">
               50 % Rabatt auf den Listenpreis, Jahr 1 Wartung inklusive. Frühe
               Anwender erhalten direkten Draht zur Produktentwicklung.
             </p>
           </div>
-          <div className="rounded-lg border border-outline bg-white p-6">
+          <div
+            className={`rounded-lg border border-outline bg-white p-6 shadow-card ${CARD_ACCENT_BORDER} ${CARD_HOVER}`}
+          >
             <p className="text-xs font-semibold uppercase tracking-wider text-ink/60">
               Wartung
             </p>

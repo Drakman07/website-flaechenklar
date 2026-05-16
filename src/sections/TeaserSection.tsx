@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { VideoPlayer, type VideoSource } from "@/components/VideoPlayer";
 import { navigate } from "@/router";
+import { BTN_TERTIARY, ICON_SIZE } from "@/components/ui/tokens";
 
 const TEASER: VideoSource = {
   src: "https://videos.flaechenklar.de/teaser.mp4",
@@ -51,11 +52,11 @@ export function TeaserSection() {
             <a
               href="/tour"
               onClick={handleTourClick}
-              className="group inline-flex items-center gap-2 rounded border border-teal/40 bg-teal/5 px-5 py-3 text-sm font-semibold text-teal transition-colors hover:bg-teal/10"
+              className={`group ${BTN_TERTIARY}`}
             >
               Komplette Tour ansehen
               <ArrowRight
-                size={16}
+                size={ICON_SIZE.inline}
                 className="transition-transform group-hover:translate-x-1 motion-reduce:transform-none"
               />
             </a>

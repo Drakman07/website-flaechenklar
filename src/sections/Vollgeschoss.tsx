@@ -1,6 +1,8 @@
 import { Triangle, CircleCheck } from "lucide-react";
 import { BlueprintGrid } from "@/components/BlueprintGrid";
 import { Reveal } from "@/components/Reveal";
+import { TealUnderline } from "@/components/TealUnderline";
+import { ICON_SIZE, LABEL } from "@/components/ui/tokens";
 
 const bullets = [
   "SVG-Diagramme: Grundriss, Aufrisse, Querschnitt — live mitwachsend",
@@ -29,14 +31,13 @@ export function Vollgeschoss() {
       className="relative overflow-hidden bg-navy text-white"
     >
       <BlueprintGrid />
-      <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-24 lg:grid-cols-2 lg:gap-16">
+      <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-24 lg:grid-cols-[5fr_7fr] lg:gap-16">
         <Reveal>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-teal">
-            Spezial · Dachgeschoss
-          </p>
+          <p className={LABEL}>Spezial · Dachgeschoss</p>
           <h2 className="mt-3 text-3xl font-bold md:text-4xl">
-            Vollgeschoss-Modul nach Art. 83 Abs. 7 BayBO.
+            Vollgeschoss-Modul nach{" "}
+            <TealUnderline>Art. 83 Abs. 7 BayBO</TealUnderline>.
           </h2>
           <p className="mt-6 text-white/75 md:text-lg">
             Genau die Berechnung, die bei jedem Dachgeschoss-Bauantrag in
@@ -50,7 +51,7 @@ export function Vollgeschoss() {
               <li key={b} className="flex items-start gap-3">
                 <Triangle
                   className="mt-1 shrink-0 text-teal"
-                  size={16}
+                  size={ICON_SIZE.inline}
                   strokeWidth={2}
                 />
                 <span className="text-sm text-white/80 md:text-base">{b}</span>
@@ -61,10 +62,8 @@ export function Vollgeschoss() {
         </Reveal>
 
         <Reveal delay={120}>
-        <div className="rounded-lg border border-white/15 bg-white/5 p-6 md:p-8">
-          <p className="text-xs font-semibold uppercase tracking-wider text-teal">
-            Beispiel-Berechnung
-          </p>
+        <div className="relative rounded-lg border border-white/15 bg-white/5 p-6 shadow-feature md:p-8">
+          <p className={LABEL}>Beispiel-Berechnung</p>
 
           <dl className="mt-5 space-y-2 text-sm">
             {inputs.map((row) => (
@@ -97,7 +96,7 @@ export function Vollgeschoss() {
           </div>
 
           <div className="mt-5 flex items-center gap-2 rounded border border-teal/40 bg-teal/10 px-4 py-2 text-sm text-teal">
-            <CircleCheck size={16} />
+            <CircleCheck size={ICON_SIZE.body} />
             Vollgeschoss-Eigenschaft erfüllt (&gt; 2/3)
           </div>
 

@@ -3,6 +3,11 @@ import { TealUnderline } from "@/components/TealUnderline";
 import { BlueprintGrid } from "@/components/BlueprintGrid";
 import { PolygonDemo } from "@/components/PolygonDemo";
 import { useCountUp } from "@/hooks/useCountUp";
+import {
+  BTN_PRIMARY,
+  BTN_SECONDARY_ON_DARK,
+  ICON_SIZE,
+} from "@/components/ui/tokens";
 
 export function Hero() {
   const [ref100, n100] = useCountUp<HTMLElement>(100);
@@ -30,26 +35,20 @@ export function Hero() {
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href="#kontakt"
-              className="group inline-flex items-center gap-2 rounded bg-teal px-5 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-teal/90"
-            >
+            <a href="#kontakt" className={`group ${BTN_PRIMARY}`}>
               Kostenlose Demo anfragen
               <ArrowRight
-                size={16}
+                size={ICON_SIZE.inline}
                 className="transition-transform group-hover:translate-x-1 motion-reduce:transform-none"
               />
             </a>
-            <a
-              href="#funktionen"
-              className="rounded border border-white/25 px-5 py-3.5 text-sm font-semibold text-white/90 hover:bg-white/5"
-            >
+            <a href="#funktionen" className={BTN_SECONDARY_ON_DARK}>
               Funktionen ansehen
             </a>
           </div>
 
           <dl className="mt-14 grid max-w-xl grid-cols-3 gap-8 text-sm">
-            <div>
+            <div className="border-l border-white/15 pl-4 first:border-l-0 first:pl-0">
               <dt
                 ref={ref100}
                 className="text-2xl font-bold text-teal md:text-3xl tabular-nums"
@@ -58,7 +57,7 @@ export function Hero() {
               </dt>
               <dd className="mt-1 text-white/70">offline</dd>
             </div>
-            <div>
+            <div className="border-l border-white/15 pl-4">
               <dt
                 ref={ref0}
                 className="text-2xl font-bold text-teal md:text-3xl tabular-nums"
@@ -67,7 +66,7 @@ export function Hero() {
               </dt>
               <dd className="mt-1 text-white/70">Cloud-Calls</dd>
             </div>
-            <div>
+            <div className="border-l border-white/15 pl-4">
               <dt
                 ref={ref1}
                 className="text-2xl font-bold text-teal md:text-3xl tabular-nums"
@@ -80,7 +79,14 @@ export function Hero() {
         </div>
 
         <div className="relative hidden items-center justify-center lg:flex">
-          <PolygonDemo />
+          {/* Ghost-Panel hinter dem Canvas — vermittelt subtile Tiefe */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute h-[420px] w-[420px] translate-x-4 translate-y-3 rounded-2xl border border-white/10 bg-white/[0.025]"
+          />
+          <div className="relative rounded-2xl shadow-feature">
+            <PolygonDemo />
+          </div>
         </div>
       </div>
     </section>

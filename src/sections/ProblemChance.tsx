@@ -1,5 +1,6 @@
 import { CheckCircle2 } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
+import { ICON_SIZE, LABEL } from "@/components/ui/tokens";
 
 const chancePunkte = [
   "Maße direkt aus dem digitalen Bauantrag",
@@ -14,9 +15,7 @@ export function ProblemChance() {
     <section className="bg-white py-20">
       <div className="mx-auto grid max-w-6xl gap-12 px-6 lg:grid-cols-2 lg:gap-16">
         <Reveal>
-          <p className="text-xs font-semibold uppercase tracking-wider text-teal">
-            Das Problem
-          </p>
+          <p className={LABEL}>Das Problem</p>
           <h2 className="mt-3 text-3xl font-bold text-navy md:text-4xl">
             Der digitale Bauantrag ist da. Das Lineal nicht.
           </h2>
@@ -38,9 +37,7 @@ export function ProblemChance() {
         </Reveal>
 
         <Reveal delay={120}>
-          <p className="text-xs font-semibold uppercase tracking-wider text-teal">
-            Mit FlächenKlar
-          </p>
+          <p className={LABEL}>Mit FlächenKlar</p>
           <h2 className="mt-3 text-3xl font-bold text-navy md:text-4xl">
             PDF rein, Aufmaßprotokoll raus.
           </h2>
@@ -49,7 +46,7 @@ export function ProblemChance() {
               <li key={punkt} className="flex items-start gap-3">
                 <CheckCircle2
                   className="mt-0.5 shrink-0 text-teal"
-                  size={22}
+                  size={ICON_SIZE.feature}
                   strokeWidth={2}
                 />
                 <span className="text-base text-ink/80 md:text-lg">{punkt}</span>
