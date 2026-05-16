@@ -5,26 +5,15 @@ import { BlueprintGrid } from "@/components/BlueprintGrid";
 import { PolygonDemo } from "@/components/PolygonDemo";
 import { useCountUp } from "@/hooks/useCountUp";
 import {
-  useAnimVariant,
-  variantAtLeast,
-} from "@/hooks/useAnimVariant";
-import {
   BTN_PRIMARY,
   BTN_SECONDARY_ON_DARK,
   ICON_SIZE,
 } from "@/components/ui/tokens";
 
-/**
- * Liefert die Scroll-Position des Fensters, throttled auf rAF.
- * Aktiv nur wenn `enabled` true ist (Animations-Variante C).
- */
-function useScrollY(enabled: boolean): number {
+/** Liefert die Scroll-Position des Fensters, throttled auf rAF. */
+function useScrollY(): number {
   const [y, setY] = useState(0);
   useEffect(() => {
-    if (!enabled) {
-      setY(0);
-      return;
-    }
     let raf = 0;
     let queued = false;
     const update = () => {
@@ -42,15 +31,12 @@ function useScrollY(enabled: boolean): number {
       window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(raf);
     };
-  }, [enabled]);
+  }, []);
   return y;
 }
 
 export function Hero() {
-  const variant = useAnimVariant();
-  const letterStagger = variantAtLeast(variant, "b");
-  const parallax = variantAtLeast(variant, "c");
-  const scrollY = useScrollY(parallax);
+  const scrollY = useScrollY();
 
   const [ref100, n100] = useCountUp<HTMLElement>(100);
   const [ref0, n0] = useCountUp<HTMLElement>(0);
@@ -58,9 +44,9 @@ export function Hero() {
 
   // Parallax: BlueprintGrid bewegt sich ~30% langsamer als der Content.
   // Positiver translateY = Grid scrollt mit, aber weniger -> Tiefe-Effekt.
-  const parallaxStyle = parallax
-    ? { transform: `translate3d(0, ${scrollY * 0.3}px, 0)` }
-    : undefined;
+  const parallaxStyle = {
+    transform: `translate3d(0, ${scrollY * 0.3}px, 0)`,
+  };
 
   return (
     <section id="top" className="relative overflow-hidden bg-navy text-white">
@@ -72,7 +58,7 @@ export function Hero() {
             Von Praktikern für Praktiker entwickelt
           </div>
           <h1 className="mt-6 text-4xl font-bold leading-[1.1] md:text-6xl lg:text-7xl">
-            <HeroHeadline stagger={letterStagger} />
+            <HeroHeadline />
           </h1>
           <p className="mt-6 max-w-2xl text-base text-white/70 md:text-lg">
             FlächenKlar ist das Aufmaß-Werkzeug für bayerische Bauämter. PDF
@@ -141,23 +127,14 @@ export function Hero() {
 }
 
 /**
- * Hero-Headline mit optionalem Wort-Stagger-Effekt (Animations-Variante B+).
- * Bei deaktiviertem Stagger: identischer Text wie vorher.
- * Das letzte Wort wird mit TealUnderline gerendert.
+ * Hero-Headline mit Wort-Stagger-Effekt — jedes Wort fadet einzeln rein
+ * (60-70ms Stagger, ~600ms total). Das letzte Wort bekommt zusaetzlich
+ * TealUnderline.
  */
 const HEADLINE_WORDS = ["Das", "Lineal", "bleibt", "in", "der"] as const;
 const WORD_STAGGER_MS = 70;
 
-function HeroHeadline({ stagger }: { stagger: boolean }) {
-  if (!stagger) {
-    return (
-      <>
-        Das Lineal bleibt in der{" "}
-        <TealUnderline>Schublade</TealUnderline>
-      </>
-    );
-  }
-
+function HeroHeadline() {
   return (
     <>
       {HEADLINE_WORDS.map((word, i) => (

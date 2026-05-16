@@ -1,25 +1,16 @@
 import { useEffect, useState } from "react";
-import { useAnimVariant, variantAtLeast } from "@/hooks/useAnimVariant";
 
 /**
  * Schmale teal-Progress-Bar fixed am oberen Viewport-Rand.
  * Breite = aktueller Scroll-Prozent (0 -> 100).
- * Aktiv ab Animations-Variante C.
  *
  * Implementierung: requestAnimationFrame-throttled scroll-handler,
  * passive-listener fuer beste Performance.
  */
 export function ScrollProgressBar() {
-  const variant = useAnimVariant();
-  const enabled = variantAtLeast(variant, "c");
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    if (!enabled) {
-      setProgress(0);
-      return;
-    }
-
     let rafId = 0;
     let queued = false;
 
@@ -46,9 +37,7 @@ export function ScrollProgressBar() {
       window.removeEventListener("resize", onScroll);
       cancelAnimationFrame(rafId);
     };
-  }, [enabled]);
-
-  if (!enabled) return null;
+  }, []);
 
   return (
     <div

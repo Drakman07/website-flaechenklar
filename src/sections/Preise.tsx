@@ -5,10 +5,6 @@ import { Reveal } from "@/components/Reveal";
 import { TealUnderline } from "@/components/TealUnderline";
 import { useCountUp } from "@/hooks/useCountUp";
 import {
-  useAnimVariant,
-  variantAtLeast,
-} from "@/hooks/useAnimVariant";
-import {
   BTN_TERTIARY,
   CARD_ACCENT_BORDER,
   CARD_HOVER,
@@ -88,18 +84,14 @@ function PilotBanner() {
 }
 
 function PreisCard({ stufe, delay }: { stufe: Preisstufe; delay: number }) {
-  const variant = useAnimVariant();
-  // Counter-Animation ist Teil von Variante B+ (markante Wow-Momente).
-  const enableCounter = variantAtLeast(variant, "b");
-  const enableGlow = variantAtLeast(variant, "a"); // ab A aktiv
-
+  // Counter-Animation: Preise zaehlen beim Reveal hoch, staggered je Card.
   const [einmaligRef, einmaligValue] = useCountUp<HTMLSpanElement>(
     stufe.einmaligNumeric,
-    { enabled: enableCounter, durationMs: 900, startDelayMs: delay },
+    { durationMs: 900, startDelayMs: delay },
   );
   const [wartungRef, wartungValue] = useCountUp<HTMLSpanElement>(
     stufe.wartungNumeric,
-    { enabled: enableCounter, durationMs: 900, startDelayMs: delay + 150 },
+    { durationMs: 900, startDelayMs: delay + 150 },
   );
 
   const Icon = stufe.icon;
@@ -108,9 +100,7 @@ function PreisCard({ stufe, delay }: { stufe: Preisstufe; delay: number }) {
   return (
     <Reveal delay={delay}>
       <article
-        className={`group flex h-full flex-col rounded-lg border border-outline bg-white p-6 shadow-card ${CARD_ACCENT_BORDER} ${CARD_HOVER} ${
-          enableGlow ? CARD_HOVER_GLOW : ""
-        }`}
+        className={`group flex h-full flex-col rounded-lg border border-outline bg-white p-6 shadow-card ${CARD_ACCENT_BORDER} ${CARD_HOVER} ${CARD_HOVER_GLOW}`}
       >
         <div className="flex h-11 w-11 items-center justify-center rounded bg-teal/10 text-teal transition-colors group-hover:bg-teal/20">
           <Icon size={ICON_SIZE.feature} />

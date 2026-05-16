@@ -3,10 +3,6 @@ import { BlueprintGrid } from "@/components/BlueprintGrid";
 import { Reveal } from "@/components/Reveal";
 import { TealUnderline } from "@/components/TealUnderline";
 import { useCountUp } from "@/hooks/useCountUp";
-import {
-  useAnimVariant,
-  variantAtLeast,
-} from "@/hooks/useAnimVariant";
 import { ICON_SIZE, LABEL } from "@/components/ui/tokens";
 
 const bullets = [
@@ -113,9 +109,9 @@ export function Vollgeschoss() {
 }
 
 /**
- * Eine einzelne Ergebnis-Zeile mit optionaler Counter-Animation.
- * - Variante A: zeigt den Endwert sofort
- * - Variante B/C: zaehlt von 0 hoch (staggered je nach Index)
+ * Eine einzelne Ergebnis-Zeile mit Counter-Animation (staggered je Index).
+ * Die Beispiel-Berechnung „tickt" beim Reveal ein — das Tool rechnet
+ * vor den Augen des Bauamtsleiters.
  */
 function ResultRowDisplay({
   row,
@@ -124,9 +120,6 @@ function ResultRowDisplay({
   row: ResultRow;
   index: number;
 }) {
-  const variant = useAnimVariant();
-  const enableCounter = variantAtLeast(variant, "b");
-
   // Skalieren auf Integer fuer die Animation, dann zurueck-formatieren.
   // (useCountUp hat zwar `decimals`, das gibt aber gerundete Zwischenwerte
   // zurueck. Wir machen die Skalierung selbst fuer volle Kontrolle.)
@@ -134,7 +127,6 @@ function ResultRowDisplay({
   const target = Math.round(row.numeric * factor);
 
   const [ref, intValue] = useCountUp<HTMLSpanElement>(target, {
-    enabled: enableCounter,
     durationMs: 1000,
     startDelayMs: 200 + index * 200,
   });
