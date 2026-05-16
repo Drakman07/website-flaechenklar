@@ -5,7 +5,6 @@ import {
   CARD_ACCENT_BORDER,
   CARD_BASE,
   CARD_HOVER,
-  CARD_HOVER_GLOW,
   ICON_SIZE,
   LABEL,
   LEAD,
@@ -31,7 +30,7 @@ export function Sicherheit() {
           {sicherheit.map(({ icon: Icon, title, text }, i) => (
             <Reveal key={title} delay={i * 70}>
               <article
-                className={`group h-full p-6 ${CARD_BASE} ${CARD_ACCENT_BORDER} ${CARD_HOVER} ${CARD_HOVER_GLOW}`}
+                className={`group h-full p-6 ${CARD_BASE} ${CARD_ACCENT_BORDER} ${CARD_HOVER}`}
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded bg-navy/5 text-navy transition-colors group-hover:bg-teal/15 group-hover:text-teal">
                   <Icon size={ICON_SIZE.feature} />
