@@ -16,14 +16,6 @@ export const CARD_BASE =
 export const CARD_HOVER =
   "transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-l-teal hover:shadow-card-hover";
 
-/**
- * Card-Hover mit zusaetzlichem teal-Glow.
- * Bewusst additive Klasse: kombiniert mit CARD_HOVER (nicht statt).
- * Aktiv ab Animations-Variante A.
- */
-export const CARD_HOVER_GLOW =
-  "hover:shadow-[0_12px_24px_-8px_rgba(15,23,42,0.10),0_0_24px_-8px_rgba(20,184,166,0.25)]";
-
 export const CARD_HOVER_DARK =
   "transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-l-teal hover:bg-white/[0.07]";
 

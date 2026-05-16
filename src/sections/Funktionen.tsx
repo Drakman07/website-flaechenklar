@@ -5,7 +5,6 @@ import {
   CARD_ACCENT_BORDER,
   CARD_BASE,
   CARD_HOVER,
-  CARD_HOVER_GLOW,
   ICON_SIZE,
   LABEL,
   LEAD,
@@ -34,7 +33,7 @@ export function Funktionen() {
           {featured && (
             <Reveal key={featured.title}>
               <article
-                className={`group h-full p-8 lg:col-span-2 ${CARD_BASE} ${CARD_ACCENT_BORDER} ${CARD_HOVER} ${CARD_HOVER_GLOW}`}
+                className={`group h-full p-8 lg:col-span-2 ${CARD_BASE} ${CARD_ACCENT_BORDER} ${CARD_HOVER}`}
               >
                 <div className="flex h-14 w-14 items-center justify-center rounded bg-teal/10 text-teal transition-colors group-hover:bg-teal/20">
                   <featured.icon size={ICON_SIZE.hero} />
@@ -50,7 +49,7 @@ export function Funktionen() {
           {rest.map(({ icon: Icon, title, text }, i) => (
             <Reveal key={title} delay={(i + 1) * 70}>
               <article
-                className={`group h-full p-6 ${CARD_BASE} ${CARD_ACCENT_BORDER} ${CARD_HOVER} ${CARD_HOVER_GLOW}`}
+                className={`group h-full p-6 ${CARD_BASE} ${CARD_ACCENT_BORDER} ${CARD_HOVER}`}
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded bg-teal/10 text-teal transition-colors group-hover:bg-teal/20">
                   <Icon size={ICON_SIZE.feature} />
