@@ -132,13 +132,11 @@ Es gibt einen Cloudflare-MCP-Server der R2-Verwaltung kann
 
 ## Offene Punkte / Roadmap
 
-1. **Lighthouse-Audit mit harten Zahlen** — manuelle Schätzung
-   (Performance 88-95 Mobile / 95-100 Desktop, A11y/BP/SEO je 95-100)
-   liegt vor, aber Live-PSI-API hat unauthenticated Rate-Limit (429) auf
-   die Test-IP geworfen. Wenn echte Zahlen gebraucht: entweder
-   `https://pagespeed.web.dev/?url=https://flaechenklar.de/` im Browser
-   (PSI-UI hat eigene Quota pro Browser-Session), Chrome-DevTools-
-   Lighthouse-Tab lokal, oder PSI-API-Key in Google Cloud Console (~2 Min).
+1. **SEO 92 auf Mobile** — einziger sub-100-Wert im PSI-Audit nach
+   Design-Upgrade. Konkrete Diagnose-Audits aus dem Report noch nicht
+   gezogen — wahrscheinlich tap-targets-too-small oder ein einzelner
+   Meta-Detail-Punkt. Im Zweifel: nächsten PSI-Run mit DevTools-Lighthouse
+   machen und unter „Diagnostics" gucken, welcher Audit rot/orange ist.
 
 _Erledigt 2026-05-16:_
 - _Alle 4 Walkthrough-Kapitel produziert, MP4+VTT+WebP-Poster in R2 hochgeladen
@@ -200,6 +198,14 @@ _Erledigt 2026-05-16:_
   Walkthrough-Implementation) auf GitHub gelöscht. Klassifizierer-Hinweis
   bleibt gültig: Remote-Branch-Löschung braucht weiterhin explizite
   Wort-Bestätigung pro Branch (z.B. „ja, lösche X auf GitHub")._
+- _**PSI-Audit Mobile nach Design-Upgrade
+  (`https://pagespeed.web.dev/analysis/https-www-flaechenklar-de/g8ubyokie3`):**
+  Performance **97**, Accessibility **97**, Best Practices **96**, SEO **92**.
+  Performance 97 auf Mobile ist deutlich über dem 90er-Ziel aus der
+  ursprünglichen Roadmap — Mobile-Lighthouse drosselt CPU 4× und
+  simuliert 3G, was das beachtlich macht. A11y 97 zeigt, dass Skip-Link +
+  Focus-Visible + ARIA-Arbeit messbar zählen. SEO 92 ist der einzige
+  Sub-100-Wert; Detail-Audits noch nicht gezogen._
 
 ## Bei nächster Session-Aufnahme
 
