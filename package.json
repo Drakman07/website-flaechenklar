@@ -10,7 +10,8 @@
     "deploy": "npm run build && wrangler deploy",
     "typecheck": "tsc -b --noEmit",
     "build-og-image": "node scripts/build-og-image.mjs",
-    "build-favicons": "node scripts/build-favicons.mjs"
+    "build-favicons": "node scripts/build-favicons.mjs",
+    "build-portrait": "node scripts/build-portrait.mjs"
   },
   "dependencies": {
     "@fontsource/geist-sans": "^5.1.0",

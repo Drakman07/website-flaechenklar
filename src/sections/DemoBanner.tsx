@@ -3,6 +3,7 @@ import { Reveal } from "@/components/Reveal";
 import {
   CARD_ACCENT_BORDER,
   CARD_HOVER,
+  CARD_HOVER_GLOW,
   ICON_SIZE,
   LABEL,
   LEAD,
@@ -48,7 +49,7 @@ export function DemoBanner() {
           {punkte.map(({ icon: Icon, title, text }, i) => (
             <Reveal key={title} delay={i * 90}>
               <article
-                className={`group h-full rounded-lg border border-teal/20 bg-white p-6 shadow-card ${CARD_ACCENT_BORDER} ${CARD_HOVER}`}
+                className={`group h-full rounded-lg border border-teal/20 bg-white p-6 shadow-card ${CARD_ACCENT_BORDER} ${CARD_HOVER} ${CARD_HOVER_GLOW}`}
               >
                 <div className="flex h-11 w-11 items-center justify-center rounded bg-teal text-white">
                   <Icon size={ICON_SIZE.feature} />

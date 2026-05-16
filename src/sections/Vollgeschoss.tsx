@@ -2,6 +2,7 @@ import { Triangle, CircleCheck } from "lucide-react";
 import { BlueprintGrid } from "@/components/BlueprintGrid";
 import { Reveal } from "@/components/Reveal";
 import { TealUnderline } from "@/components/TealUnderline";
+import { useCountUp } from "@/hooks/useCountUp";
 import { ICON_SIZE, LABEL } from "@/components/ui/tokens";
 
 const bullets = [
@@ -18,10 +19,18 @@ const inputs = [
   { label: "Dachneigung α_L / α_R", value: "38° / 38°" },
 ];
 
-const results = [
-  { label: "Grundfläche A_G", value: "167,42 m²" },
-  { label: "Fläche ≥ 2,30 m", value: "122,30 m²" },
-  { label: "Anteil", value: "73,1 %" },
+type ResultRow = {
+  label: string;
+  numeric: number;
+  decimals: number;
+  unit: string;
+  highlight?: boolean;
+};
+
+const results: ResultRow[] = [
+  { label: "Grundfläche A_G", numeric: 167.42, decimals: 2, unit: " m²" },
+  { label: "Fläche ≥ 2,30 m", numeric: 122.3, decimals: 2, unit: " m²" },
+  { label: "Anteil", numeric: 73.1, decimals: 1, unit: " %", highlight: true },
 ];
 
 export function Vollgeschoss() {
@@ -79,18 +88,7 @@ export function Vollgeschoss() {
           <div className="mt-5 border-t border-white/10 pt-5">
             <dl className="space-y-2 text-sm">
               {results.map((row, i) => (
-                <div key={row.label} className="flex justify-between gap-4">
-                  <dt className="text-white/70">{row.label}</dt>
-                  <dd
-                    className={`font-mono tabular-nums ${
-                      i === results.length - 1
-                        ? "font-semibold text-teal"
-                        : "text-white"
-                    }`}
-                  >
-                    {row.value}
-                  </dd>
-                </div>
+                <ResultRowDisplay key={row.label} row={row} index={i} />
               ))}
             </dl>
           </div>
@@ -107,5 +105,49 @@ export function Vollgeschoss() {
         </Reveal>
       </div>
     </section>
+  );
+}
+
+/**
+ * Eine einzelne Ergebnis-Zeile mit Counter-Animation (staggered je Index).
+ * Die Beispiel-Berechnung „tickt" beim Reveal ein — das Tool rechnet
+ * vor den Augen des Bauamtsleiters.
+ */
+function ResultRowDisplay({
+  row,
+  index,
+}: {
+  row: ResultRow;
+  index: number;
+}) {
+  // Skalieren auf Integer fuer die Animation, dann zurueck-formatieren.
+  // (useCountUp hat zwar `decimals`, das gibt aber gerundete Zwischenwerte
+  // zurueck. Wir machen die Skalierung selbst fuer volle Kontrolle.)
+  const factor = Math.pow(10, row.decimals);
+  const target = Math.round(row.numeric * factor);
+
+  const [ref, intValue] = useCountUp<HTMLSpanElement>(target, {
+    durationMs: 1000,
+    startDelayMs: 200 + index * 200,
+  });
+
+  const display = (intValue / factor).toLocaleString("de-DE", {
+    minimumFractionDigits: row.decimals,
+    maximumFractionDigits: row.decimals,
+  });
+
+  return (
+    <div className="flex justify-between gap-4">
+      <dt className="text-white/70">{row.label}</dt>
+      <dd
+        ref={ref}
+        className={`font-mono tabular-nums ${
+          row.highlight ? "font-semibold text-teal" : "text-white"
+        }`}
+      >
+        {display}
+        {row.unit}
+      </dd>
+    </div>
   );
 }
