@@ -1,6 +1,6 @@
 # FlächenKlar-Website — Session-Memory für Claude
 
-Letzter Stand: 2026-05-16, nach Design-Upgrade (PR #3) — zentrales Token-System, Premium-Visuals (Bento, asymmetrische Layouts, Hero-Layering), Polish (Card-Hover-Konsistenz, Button-System, Focus-Visible), a11y-Essentials (Skip-Link, aktive-Section-Nav, theme-color).
+Letzter Stand: 2026-05-16, nach Welle 2 (PR #6, Merge `3c9cf99`) — Founder-Story-Block mit Alexander-Foto zwischen ProblemChance und Funktionen, 5-Tier-Preise-Card-Grid mit Pilot-Banner und Counter-Animationen, Hero-H1-Word-Stagger, ScrollProgressBar, Hero-Parallax, Vollgeschoss-Counter, Card-Hover-Glow auf allen Karten.
 
 ## Projekt-Kurzbeschreibung
 
@@ -17,7 +17,9 @@ führt zur Demo-Anfrage.
 
 ## Aktueller Stand (Mai 2026)
 
-**Letzter Major-Schritt:** Design-Upgrade (PR #3, Merge-Commit `a803055`) — zentrales Token-System in `src/components/ui/tokens.ts`, Bento-Grid für Funktionen, asymmetrische Layouts (Vollgeschoss 5fr_7fr, Sicherheit Headline-links-Karten-rechts), Hero-PolygonDemo mit Ghost-Panel + `shadow-feature`, strategische TealUnderline-Highlights, animiertes FAQ-Akkordeon, Focus-Visible auf allen interaktiven Elementen, IntersectionObserver-basierte aktive-Section-Highlight in der Nav, Skip-to-Content-Link, theme-color Meta-Tag.
+**Letzter Major-Schritt:** Welle 2 (PR #6 als Restore von PR #4 + Cleanup-Commit, Merge `3c9cf99`) — neuer Founder-Block (`src/sections/Founder.tsx`) zwischen ProblemChance und Funktionen mit Alexander-Portrait in Polaroid-Frame + Ghost-Panel, 5-Tier-Preise-Card-Grid (`Preise.tsx`) mit Pilot-Banner und `useCountUp`-animierten Preisen, Hero-H1-Word-Stagger via `.stagger-word`-CSS-Klasse, ScrollProgressBar (`src/components/animations/ScrollProgressBar.tsx`) fixed top, Hero-Parallax (`BlueprintGrid` bewegt sich 30 % langsamer beim Scrollen), Vollgeschoss-Counter auf Beispiel-Berechnung, Card-Hover-Glow-Token auf allen Card-Grids.
+
+Davor: Design-Upgrade (PR #3, Merge `a803055`) — zentrales Token-System in `src/components/ui/tokens.ts`, Bento-Grid für Funktionen, asymmetrische Layouts, Hero-PolygonDemo mit Ghost-Panel, TealUnderline-Highlights, animiertes FAQ-Akkordeon, Focus-Visible, IntersectionObserver-Active-Section-Nav, Skip-Link, theme-color.
 
 | Bereich | Status |
 |---|---|
@@ -27,8 +29,11 @@ führt zur Demo-Anfrage.
 | 60-Sek-Teaser auf Homepage | ✅ live mit echten R2-URLs |
 | `/tour`-Route mit Walkthrough-Player | ✅ live mit echten R2-URLs |
 | 4 Walkthrough-Kapitel produziert | ✅ alle 4 hochgeladen + Tour.tsx aktualisiert |
-| Zentrales Design-Token-System | ✅ `src/components/ui/tokens.ts` (Cards, Buttons, Focus-Rings, Typo, Icon-Sizes) |
+| Zentrales Design-Token-System | ✅ `src/components/ui/tokens.ts` (Cards, Buttons, Focus-Rings, Typo, Icon-Sizes, Hover-Glow) |
 | Premium-Polish + a11y-Essentials | ✅ PR #3 merged, live |
+| Founder-Story-Block mit Foto | ✅ PR #6 merged, `public/alexander-portrait.webp` (87.9 KB) |
+| 5-Tier-Preise-Card-Grid + Pilot-Banner | ✅ PR #6 merged, mit Counter-Animationen |
+| Premium-Animationen (Stagger / Parallax / ScrollProgress / Counter) | ✅ PR #6 merged, live |
 
 ## Architektur-Eckpunkte
 
@@ -55,6 +60,18 @@ führt zur Demo-Anfrage.
   (~12% Opacity max) — passt zur Bauamts-Tonalität.
 - **Reveal-Motion:** `transition-[opacity,transform]` 700ms + `translate-y-4`,
   `motion-reduce:transition-none` respektiert.
+- **Premium-Animationen (Welle 2):**
+  - `useCountUp` mit Options-Object-Signature (`durationMs`, `enabled`,
+    `startDelayMs`, `decimals`) — staggered Counter auf Preise + Vollgeschoss
+  - `.stagger-word` CSS-Klasse + `stagger-in`-Keyframe für Hero-H1 Word-Stagger
+    (60 ms je Wort, 600 ms total)
+  - `ScrollProgressBar` (`src/components/animations/ScrollProgressBar.tsx`) —
+    rAF-throttled scroll-listener, 0.5 px teal-Bar fixed top
+  - Hero-Parallax: `useScrollY`-Hook im Hero, `transform3d` auf `BlueprintGrid`
+    via neuem `style`-Prop (BlueprintGrid 30 % langsamer als Content)
+  - `CARD_HOVER_GLOW` Token (`shadow-[...]` mit teal-Tint) — auf Cards
+    in Funktionen / Sicherheit / DemoBanner / Preise
+  - Alle Animationen respektieren `prefers-reduced-motion`
 
 ## R2-Asset-Hosting
 
@@ -82,13 +99,19 @@ nötig). Details in `docs/video-assets.md`.
 
 | Pfad | Zweck |
 |---|---|
-| `src/App.tsx` | Layout-Shell mit Router + Skip-to-Content-Link + `<main id="main">` |
+| `src/App.tsx` | Layout-Shell mit Router + Skip-to-Content-Link + `<main id="main">` + `<ScrollProgressBar />` |
 | `src/router.tsx` | Mini-Router (useRoute, navigate, RoutePath) |
-| `src/components/ui/tokens.ts` | Zentrales Design-Token-System (Cards, Buttons, Focus, Typo, Icons) |
+| `src/components/ui/tokens.ts` | Zentrales Design-Token-System (Cards, Buttons, Focus, Typo, Icons, Hover-Glow) |
 | `src/components/VideoPlayer.tsx` | Custom HTML5-Player |
 | `src/components/Nav.tsx` | Route-aware Anchor-Nav + IntersectionObserver-basierte aktive-Section-Highlight |
 | `src/components/Reveal.tsx` | Scroll-triggered Fade-Slide-In, IntersectionObserver-basiert |
 | `src/components/TealUnderline.tsx` | In-View-getriggerte teal Underline-Animation für Headline-Akzente |
+| `src/components/BlueprintGrid.tsx` | Drift-animiertes Hintergrund-Grid, optionaler `style`-Prop für Parallax |
+| `src/components/animations/ScrollProgressBar.tsx` | rAF-throttled Scroll-Progress-Bar fixed top |
+| `src/sections/Founder.tsx` | Founder-Story-Block, Portrait-Foto in Polaroid-Frame + Ghost-Panel |
+| `src/hooks/useCountUp.ts` | Counter-Animation mit Options-Object (enabled, startDelayMs, decimals) |
+| `public/alexander-portrait.webp` | Portrait Alexander Geitner (B&W, 600×800, 87.9 KB) |
+| `scripts/build-portrait.mjs` | sharp-basiertes Optimierungs-Script für das Portrait (`npm run build-portrait`) |
 | `src/pages/Home.tsx` | Homepage mit allen Sektionen |
 | `src/pages/Tour.tsx` | `/tour`-Seite mit 4-Kapitel-Player |
 | `src/sections/TeaserSection.tsx` | Teaser-Block direkt nach Hero (live!) |
@@ -196,6 +219,20 @@ _Erledigt 2026-05-16:_
   Walkthrough-Implementation) auf GitHub gelöscht. Klassifizierer-Hinweis
   bleibt gültig: Remote-Branch-Löschung braucht weiterhin explizite
   Wort-Bestätigung pro Branch (z.B. „ja, lösche X auf GitHub")._
+- _**PR #6 — Welle 2 (Restore + Cleanup).** Saga: PR #4 wurde gemerged
+  in dem Augenblick als nur der erste Welle-2-Commit `e1368d7` auf der
+  Branch war (Mit-Switcher-Version). Mein Cleanup-Commit `6005e85`
+  (Switcher raus, Foto rein, Variant C als Baseline) wurde unmittelbar
+  danach gepusht — kam aber nicht in den Merge. User reverted dann den
+  ganzen Merge via PR #5. Restore via PR #6: `git revert f4327d9`
+  (bringt e1368d7-Inhalt zurück) + cherry-pick `6005e85` (Cleanup).
+  Ergebnis Live: Founder-Block mit Portrait, 5-Tier-Preise-Cards mit
+  Pilot-Banner und Counter-Animationen, Hero-H1 Word-Stagger,
+  ScrollProgressBar, Hero-Parallax, Vollgeschoss-Counter,
+  Card-Hover-Glow auf allen Card-Grids. Variant-Switcher und
+  `useAnimVariant`-Hook sind weg (waren nur für die Vergleichsphase).
+  Build: CSS 31.72 KB (6.31 KB gzipped), JS 262.45 KB (79.59 KB gzipped),
+  bleibt unter 90 KB gzip-Budget._
 - _**PSI-Audit nach Design-Upgrade.** Mobile: Performance **97**,
   Accessibility **97**, Best Practices **96**, SEO **92**. Desktop:
   Performance **100**, Accessibility **97**, Best Practices **96**,
@@ -245,8 +282,9 @@ _Erledigt 2026-05-16:_
 ## GitHub
 
 - Repo: https://github.com/Drakman07/website-flaechenklar (private)
-- Letzter Merge: PR #3 (Design-Upgrade) → Merge-Commit `a803055`
-- Letzter Push auf main: `a7cf725` (Design-Token-System + Premium-Polish + a11y-Essentials)
+- Letzter Merge: PR #6 (Welle 2 Restore) → Merge-Commit `3c9cf99`
+- Letzte Pushes auf main: `e0ba298` (Cleanup) + `693e7ea` (Reapply von revertiertem Welle-2-Inhalt)
+- Davor: PR #5 hatte PR #4 komplett revertiert (siehe Welle-2-Saga in Erkenntnissen)
 
 ## Erkenntnisse aus diesem Projektabschnitt
 
@@ -305,3 +343,27 @@ _Erledigt 2026-05-16:_
   fokussiert sichtbar, dann visuell vorhanden mit `shadow-feature` +
   Focus-Ring. Screen-Reader und Tastatur-User können die Nav überspringen.
   Kosten praktisch null, A11y-Gewinn substantiell.
+- **Don't merge PRs zu früh, wenn noch Folge-Commits pending sind.**
+  Klassische Race-Condition zwischen Welle 2: PR #4 hatte nur den ersten
+  Commit (mit Switcher), Cleanup-Commit lag noch lokal. User merged
+  während Cleanup gepusht wurde — Cleanup landete nicht in main, sondern
+  nur auf der toten Feature-Branch. Lehre: warten bis explizit „ist alles
+  in der Branch" gesagt wird, dann erst mergen. Oder: PR-Beschreibung
+  klar markieren wenn weitere Commits folgen (Draft-PR + readyForReview-
+  Flag). Recovery klappte aber sauber: revert-of-revert + cherry-pick
+  des verlorenen Cleanup-Commits über PR #6.
+- **Welle-2-Animations-Stack:** Hero-Parallax via `useScrollY`-Hook +
+  `transform3d` auf `BlueprintGrid.style` Prop (kein expensive Repaint,
+  GPU-composited). ScrollProgressBar als eigene Komponente in
+  `src/components/animations/`, rAF-throttled, `passive: true`-listener.
+  Hero-H1 Word-Stagger via CSS-Klasse `.stagger-word` + Keyframe (kein JS
+  pro Frame). Counter via `useCountUp` mit Options-Object (`enabled`,
+  `startDelayMs`, `decimals`) — letzteres unterstützt Vollgeschoss-
+  Dezimalwerte ohne externe Lib. Alle Animationen respektieren
+  `prefers-reduced-motion: reduce`.
+- **Portrait-Asset-Pipeline:** Original 117 MB / 4000×6000 PNG aus
+  User-Ablage → optimiertes 87.9 KB / 600×800 WebP via
+  `scripts/build-portrait.mjs` (sharp-basiert, parallel zu
+  `build-favicons.mjs` und `build-og-image.mjs`). Fallback-Initial-Avatar-
+  Platzhalter (`AG`) in Founder.tsx via `onError`-Handler, falls Datei
+  fehlt — Block strukturell trotzdem korrekt.
