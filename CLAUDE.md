@@ -1,6 +1,6 @@
 # FlächenKlar-Website — Session-Memory für Claude
 
-Letzter Stand: 2026-05-16, nach Live-Schalten der 4 Walkthrough-Kapitel + Tour-Subtitel-Fix.
+Letzter Stand: 2026-05-16, nach Design-Upgrade (PR #3) — zentrales Token-System, Premium-Visuals (Bento, asymmetrische Layouts, Hero-Layering), Polish (Card-Hover-Konsistenz, Button-System, Focus-Visible), a11y-Essentials (Skip-Link, aktive-Section-Nav, theme-color).
 
 ## Projekt-Kurzbeschreibung
 
@@ -17,7 +17,7 @@ führt zur Demo-Anfrage.
 
 ## Aktueller Stand (Mai 2026)
 
-**Letzter Major-Schritt:** Alle 4 Walkthrough-Kapitel produziert, in R2 hochgeladen, `KAPITEL`-Array in `src/pages/Tour.tsx` auf echte URLs umgestellt — Commit `2f509d5` auf main gepusht, GitHub Actions deployt.
+**Letzter Major-Schritt:** Design-Upgrade (PR #3, Merge-Commit `a803055`) — zentrales Token-System in `src/components/ui/tokens.ts`, Bento-Grid für Funktionen, asymmetrische Layouts (Vollgeschoss 5fr_7fr, Sicherheit Headline-links-Karten-rechts), Hero-PolygonDemo mit Ghost-Panel + `shadow-feature`, strategische TealUnderline-Highlights, animiertes FAQ-Akkordeon, Focus-Visible auf allen interaktiven Elementen, IntersectionObserver-basierte aktive-Section-Highlight in der Nav, Skip-to-Content-Link, theme-color Meta-Tag.
 
 | Bereich | Status |
 |---|---|
@@ -27,6 +27,8 @@ führt zur Demo-Anfrage.
 | 60-Sek-Teaser auf Homepage | ✅ live mit echten R2-URLs |
 | `/tour`-Route mit Walkthrough-Player | ✅ live mit echten R2-URLs |
 | 4 Walkthrough-Kapitel produziert | ✅ alle 4 hochgeladen + Tour.tsx aktualisiert |
+| Zentrales Design-Token-System | ✅ `src/components/ui/tokens.ts` (Cards, Buttons, Focus-Rings, Typo, Icon-Sizes) |
+| Premium-Polish + a11y-Essentials | ✅ PR #3 merged, live |
 
 ## Architektur-Eckpunkte
 
@@ -40,8 +42,19 @@ führt zur Demo-Anfrage.
   Kapitel-Sidebar, optionale VTT-Captions.
 - **Layout:** `App.tsx` = Nav + `<Router />` + Footer. Router-Output ist
   entweder `<Home />` oder `<Tour />`.
-- **Marken-Farben:** `navy` + `teal` (definiert in `tailwind.config.js`).
+- **Marken-Farben:** `navy` + `teal` (HSL-CSS-Custom-Properties in
+  `src/index.css`, gemappt in `tailwind.config.ts`).
 - **Schrift:** Geist Sans (lokal via `@fontsource/geist-sans`).
+- **Design-Tokens:** `src/components/ui/tokens.ts` — wiederverwendbare
+  Tailwind-Klassen-Bundles (`CARD_BASE`, `CARD_HOVER`, `BTN_PRIMARY`,
+  `FOCUS_RING`/`FOCUS_RING_DARK`, `LABEL`, `LEAD`, `INPUT_ON_DARK`,
+  `ICON_SIZE`). Statisch typisierte Strings, keine dynamische Klassen-Concat
+  → Tailwind-Purge-safe.
+- **Shadow-System:** `shadow-card` / `shadow-card-hover` / `shadow-feature`
+  (semantisch in `tailwind.config.ts` ergänzt), bewusst zurückhaltend
+  (~12% Opacity max) — passt zur Bauamts-Tonalität.
+- **Reveal-Motion:** `transition-[opacity,transform]` 700ms + `translate-y-4`,
+  `motion-reduce:transition-none` respektiert.
 
 ## R2-Asset-Hosting
 
@@ -69,10 +82,13 @@ nötig). Details in `docs/video-assets.md`.
 
 | Pfad | Zweck |
 |---|---|
-| `src/App.tsx` | Layout-Shell mit Router |
+| `src/App.tsx` | Layout-Shell mit Router + Skip-to-Content-Link + `<main id="main">` |
 | `src/router.tsx` | Mini-Router (useRoute, navigate, RoutePath) |
+| `src/components/ui/tokens.ts` | Zentrales Design-Token-System (Cards, Buttons, Focus, Typo, Icons) |
 | `src/components/VideoPlayer.tsx` | Custom HTML5-Player |
-| `src/components/Nav.tsx` | Route-aware Anchor-Nav (von `/tour` aus zurück + scroll) |
+| `src/components/Nav.tsx` | Route-aware Anchor-Nav + IntersectionObserver-basierte aktive-Section-Highlight |
+| `src/components/Reveal.tsx` | Scroll-triggered Fade-Slide-In, IntersectionObserver-basiert |
+| `src/components/TealUnderline.tsx` | In-View-getriggerte teal Underline-Animation für Headline-Akzente |
 | `src/pages/Home.tsx` | Homepage mit allen Sektionen |
 | `src/pages/Tour.tsx` | `/tour`-Seite mit 4-Kapitel-Player |
 | `src/sections/TeaserSection.tsx` | Teaser-Block direkt nach Hero (live!) |
@@ -137,6 +153,44 @@ _Erledigt 2026-05-16:_
   unterschiedlich lang, manche > 60 Sek. Neu: „Vier kompakte Kapitel zu
   den wichtigsten Funktionen." Hält das Brevity-Versprechen ohne falsche
   Sekundenangabe._
+- _**PR #2 — Multi-Size-PNG-Favicons + Logo-URL fix.** Google zeigte in
+  der Suche das generische Welt-Icon statt des FlächenKlar-Logos.
+  Zwei Root-Causes: (1) nur SVG-Favicon ohne PNG-Fallback —
+  Google-Crawler liest aber bevorzugt PNG. (2) `Organization`-JSON-LD
+  hatte `logo: og-image.png` (Banner-Format, kein quadratisches Logo).
+  Fix: `scripts/build-favicons.mjs` rendert via `sharp` aus
+  `public/favicon.svg` ein komplettes PNG-Set (16/32/48/96/180/192/512
+  + `logo-512.png` für Schema.org). `index.html`-Favicon-`<link>`s
+  erweitert, `logo`-URL in JSON-LD auf `logo-512.png` korrigiert.
+  Neues npm-script `build-favicons`, `sharp` als explizite
+  devDependency. Anschließend in Google Search Console
+  Indexierung beantragt — alle Checks grün („URL ist auf Google",
+  HTTPS, FAQs erkannt)._
+- _**PR #3 — Design-Upgrade (Commit `a7cf725`, Merge `a803055`).**
+  Aus dem Eindruck „solide Basis aber wirkt etwas flach + uneinheitlich"
+  ein vollständiger Polish-Pass. Foundation: neue Token-Datei
+  `src/components/ui/tokens.ts` + Shadow-System (`shadow-card`,
+  `shadow-card-hover`, `shadow-feature`) in `tailwind.config.ts`.
+  Polish: alle Cards hovern jetzt einheitlich (DemoBanner + Preise hatten
+  vorher abweichende Hover-Patterns), Button-System mit Primary/Secondary/
+  Tertiary/Compact-Varianten, `:focus-visible`-Ring auf jedem
+  interaktiven Element (Behörden-User mit Tab-Nav), Form-Input-Kontrast
+  von `bg-white/5` auf `bg-white/10`, Icon-Größen-System (14/18/22/28)
+  statt 16/20/22-Mix, FAQ nativer `<details>` ersetzt durch state-
+  basiertes Akkordeon mit `grid-template-rows`-Animation.
+  Premium-Visuals: Bento-Grid für Funktionen (erste Card als
+  `lg:col-span-2`-Hero-Card), asymmetrische Layouts in Vollgeschoss
+  (`lg:grid-cols-[5fr_7fr]`) und Sicherheit (Headline links über
+  `lg:col-span-2`, Cards rechts in `sm:grid-cols-2`), Hero-PolygonDemo
+  mit Ghost-Panel + `shadow-feature` für Layered-Composition,
+  strategische TealUnderline-Highlights in Funktionen/Sicherheit/
+  Preise/Vollgeschoss/Tour-Headlines, vertikale Divider zwischen den
+  Hero-Stat-Countern. a11y-Essentials: Skip-to-Content-Link am Anfang
+  von App.tsx (`sr-only` → beim Tab sichtbar), `<main id="main">` als
+  Sprungziel, IntersectionObserver-basierte aktive-Section-Highlight
+  in der Nav (animierte teal Hairline unter dem aktuellen Link),
+  `theme-color="#0d1830"` Meta-Tag für mobile Browser-Chrome,
+  Tour-Seite auf gleichen Token-Standard gehoben._
 
 ## Bei nächster Session-Aufnahme
 
@@ -157,8 +211,8 @@ _Erledigt 2026-05-16:_
 ## GitHub
 
 - Repo: https://github.com/Drakman07/website-flaechenklar (private)
-- Letzter Merge: PR #1 (Vorstellungsvideos) → Merge-Commit `ba74625`
-- Letzter Push auf main: `9657447` (Tour-Subtitel ohne falsche 60-Sek-Angabe)
+- Letzter Merge: PR #3 (Design-Upgrade) → Merge-Commit `a803055`
+- Letzter Push auf main: `a7cf725` (Design-Token-System + Premium-Polish + a11y-Essentials)
 
 ## Erkenntnisse aus diesem Projektabschnitt
 
@@ -180,3 +234,40 @@ _Erledigt 2026-05-16:_
   scroll-on-route-change ersetzen.
 - **GitHub Actions deployt schnell** (~2 Min für Install + Typecheck +
   Build + CF-Deploy) — schnell genug für iterative Smoke-Sessions.
+- **Google-Suche braucht PNG-Favicons, nicht nur SVG.** Auch wenn moderne
+  Browser SVG-Favicons mögen, liest der Googlebot bevorzugt PNG-Varianten
+  in mehreren Größen (16/32/48/96/192). Zusätzlich muss das
+  `Organization`-JSON-LD ein **quadratisches** `logo` referenzieren —
+  ein Open-Graph-Banner taugt da nicht. Sichtbarer Favicon in den
+  Suchergebnissen kann nach Anpassung 1–4 Wochen brauchen
+  (separater Cache als das Knowledge Panel).
+- **Branch-Merge-Reihenfolge:** User merged PR auf GitHub manuell,
+  bestätigt dann im Chat („gemergt") — erst dann lokalen Branch löschen.
+  Vorzeitiges `git branch -d` schlägt als „not yet merged to HEAD" fehl,
+  wenn der Merge auf GitHub noch nicht abgeschlossen ist.
+- **Zentrale Design-Tokens als String-Konstanten** (statt React-Wrapper-
+  Komponenten) bleiben Tailwind-Purge-safe und IntelliSense-freundlich,
+  weil alle Klassennamen als Literale im Source-Code stehen. Dynamische
+  Concat à la `bg-${color}-500` würde Tailwind nicht sehen → Bug-Quelle
+  vermeiden, immer Literale halten.
+- **Worktree-Workflow + Dubious-Ownership auf F:.** Das Repo liegt auf
+  einem Laufwerk ohne Filesystem-Ownership (NTFS auf externer Platte),
+  daher refused git Operations im Worktree mit „dubious ownership".
+  Workaround pro Befehl: `git -c safe.directory='<path>' ...` (modifiziert
+  globale Config nicht). `gh`-Befehle stolpern genauso → `--repo
+  <owner>/<name>` explizit angeben, dann kann gh die Repo-Detection
+  überspringen.
+- **IntersectionObserver für aktive-Section-Nav:** `rootMargin: "-80px
+  0px -55% 0px"` mit `threshold: 0` ergibt das natürlichste Verhalten —
+  Section wird aktiv sobald sie das obere Drittel des Viewports erreicht,
+  bleibt aktiv bis die nächste hochrutscht. Mit `aria-current="true"` auch
+  für Screen-Reader korrekt.
+- **`grid-template-rows: 0fr → 1fr` für FAQ-Akkordeon-Animation** ist die
+  moderne, JS-freie Lösung statt height-Messung. `motion-reduce`-safe,
+  funktioniert auf allen aktuellen Browsern. Kombiniert mit
+  `aria-expanded` und kontrolliertem `useState` für sauberes A11y.
+- **Skip-to-Content-Link** als erstes Element in App.tsx mit
+  `sr-only focus:not-sr-only focus:fixed ...` — beim Tab als allererstes
+  fokussiert sichtbar, dann visuell vorhanden mit `shadow-feature` +
+  Focus-Ring. Screen-Reader und Tastatur-User können die Nav überspringen.
+  Kosten praktisch null, A11y-Gewinn substantiell.
