@@ -2,6 +2,12 @@ import { useState, type FormEvent, type ChangeEvent } from "react";
 import { CircleCheck, CircleAlert } from "lucide-react";
 import { BlueprintGrid } from "@/components/BlueprintGrid";
 import { Reveal } from "@/components/Reveal";
+import {
+  BTN_PRIMARY,
+  FOCUS_RING_DARK,
+  ICON_SIZE,
+  INPUT_ON_DARK,
+} from "@/components/ui/tokens";
 
 /**
  * Formspree-Endpoint fuer das Kontaktformular.
@@ -43,8 +49,7 @@ const initial: FormState = {
   nachricht: "",
 };
 
-const inputCls =
-  "w-full rounded border border-white/15 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/60 focus:border-teal focus:outline-none focus:ring-2 focus:ring-teal/40 disabled:opacity-60";
+const inputCls = INPUT_ON_DARK;
 
 export function Kontakt() {
   const [form, setForm] = useState<FormState>(initial);
@@ -157,7 +162,7 @@ export function Kontakt() {
               <div className="flex items-start gap-3">
                 <CircleCheck
                   className="mt-0.5 shrink-0 text-teal"
-                  size={24}
+                  size={ICON_SIZE.hero}
                   strokeWidth={2}
                 />
                 <div>
@@ -172,7 +177,7 @@ export function Kontakt() {
                   <button
                     type="button"
                     onClick={() => setStatus({ kind: "idle" })}
-                    className="mt-4 text-sm font-semibold text-teal hover:text-teal/80"
+                    className={`mt-4 rounded-sm text-sm font-semibold text-teal transition-colors hover:text-teal/80 ${FOCUS_RING_DARK}`}
                   >
                     Weitere Anfrage senden →
                   </button>
@@ -184,7 +189,7 @@ export function Kontakt() {
           <Reveal delay={120}>
             <form
               onSubmit={onSubmit}
-              className="mt-10 grid gap-4 md:grid-cols-2"
+              className="mt-10 grid gap-5 md:grid-cols-2"
               noValidate
             >
               <label className="md:col-span-2">
@@ -314,7 +319,7 @@ export function Kontakt() {
                 >
                   <CircleAlert
                     className="mt-0.5 shrink-0 text-red-300"
-                    size={20}
+                    size={ICON_SIZE.body}
                     strokeWidth={2}
                   />
                   <span>{status.message}</span>
@@ -326,7 +331,7 @@ export function Kontakt() {
                 gemäß unserer{" "}
                 <a
                   href="/datenschutz"
-                  className="text-teal underline hover:text-teal/80"
+                  className={`rounded-sm text-teal underline transition-colors hover:text-teal/80 ${FOCUS_RING_DARK}`}
                 >
                   Datenschutzerklärung
                 </a>{" "}
@@ -336,7 +341,7 @@ export function Kontakt() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="md:col-span-2 mt-2 rounded bg-teal px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal/90 disabled:cursor-not-allowed disabled:opacity-60"
+                className={`md:col-span-2 mt-2 ${BTN_PRIMARY} disabled:cursor-not-allowed disabled:opacity-60`}
               >
                 {submitting ? "Wird gesendet …" : "Nachricht senden"}
               </button>
