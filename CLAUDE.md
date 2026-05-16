@@ -132,11 +132,9 @@ Es gibt einen Cloudflare-MCP-Server der R2-Verwaltung kann
 
 ## Offene Punkte / Roadmap
 
-1. **SEO 92 auf Mobile** — einziger sub-100-Wert im PSI-Audit nach
-   Design-Upgrade. Konkrete Diagnose-Audits aus dem Report noch nicht
-   gezogen — wahrscheinlich tap-targets-too-small oder ein einzelner
-   Meta-Detail-Punkt. Im Zweifel: nächsten PSI-Run mit DevTools-Lighthouse
-   machen und unter „Diagnostics" gucken, welcher Audit rot/orange ist.
+_Aktuell keine offenen Punkte. Letzter Diskussionsstand 2026-05-16:
+SEO 92 (Mobile + Desktop) ist **bewusst so akzeptiert** — siehe
+„Erkenntnisse" unten. Nicht versuchen zu „fixen"._
 
 _Erledigt 2026-05-16:_
 - _Alle 4 Walkthrough-Kapitel produziert, MP4+VTT+WebP-Poster in R2 hochgeladen
@@ -206,17 +204,27 @@ _Erledigt 2026-05-16:_
   das beachtlich macht. A11y 97 zeigt, dass Skip-Link + Focus-Visible +
   ARIA-Arbeit messbar zählen. SEO 92 ist auf beiden Strategien identisch
   — siehe nächster Punkt._
-- _**SEO-92-Diagnose: doppelter `User-agent: *` in robots.txt (Commit
-  `54a405f`).** Cloudflare injiziert seit dem AI-Crawl-Control-Feature
-  einen „Cloudflare Managed Content"-Block in jede robots.txt mit
-  eigenem `User-agent: *` + non-standard `Content-Signal:`-Direktive.
+- _**SEO-92-Diagnose + Entscheidung (Commit `54a405f` + Diskussion).**
+  Cloudflare injiziert seit dem AI-Crawl-Control-Feature einen
+  „Cloudflare Managed Content"-Block in jede robots.txt mit eigenem
+  `User-agent: *` + non-standard `Content-Signal:`-Direktive.
   Unser `public/robots.txt` hatte zusätzlich noch einen eigenen
-  `User-agent: *` Block — Lighthouse meldete „robots.txt ist ungültig
-  — 1 Fehler gefunden". Fix: eigenen User-agent-Block entfernt, nur
-  Sitemap-Verweis behalten. Falls SEO trotzdem auf 92 bleibt, ist es
-  die `Content-Signal:`-Zeile — die kann nur im CF-Dashboard unter
-  Settings → Bots → AI Crawl Control → Content Signals deaktiviert
-  werden (kein Code-Fix möglich)._
+  `User-agent: *` Block — Lighthouse meldete „robots.txt ist ungültig".
+  Fix `54a405f`: eigenen User-agent-Block entfernt, nur Sitemap-Verweis
+  behalten. SEO blieb trotzdem auf 92 — Trigger war die `Content-Signal:`
+  Zeile selbst, die als non-standard gilt. Theoretisch deaktivierbar im
+  CF-Dashboard unter AI Crawl Control → Managed robots.txt → toggle off
+  (radikal) oder Zone Overview → Control AI Crawlers → Display Content
+  Signals Policy → uncheck (chirurgisch, falls UI das anbietet).
+  **Bewusst nicht umgesetzt**, weil:
+  (1) 92 ist im Lighthouse-grünen Bereich, Google indexiert problemlos
+  (Search Console „URL ist auf Google", FAQs erkannt);
+  (2) Cloudflare-Docs bestätigen selbst „no impact on crawling rates
+  or SEO" — Lighthouse-Validator-Tick, kein echtes Ranking-Problem;
+  (3) die `Content-Signal: ai-train=no`-Zeile schützt aktiv vor
+  AI-Training auf unseren Bauamts-/KAG-Bayern-Texten, das wegen 8
+  Punkten im Dev-Tool aufzugeben wäre ein echter Verlust.
+  Score 92 ist **intentional, nicht open todo**._
 
 ## Bei nächster Session-Aufnahme
 
