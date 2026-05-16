@@ -1,22 +1,70 @@
+import { Fragment, useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { TealUnderline } from "@/components/TealUnderline";
 import { BlueprintGrid } from "@/components/BlueprintGrid";
 import { PolygonDemo } from "@/components/PolygonDemo";
 import { useCountUp } from "@/hooks/useCountUp";
 import {
+  useAnimVariant,
+  variantAtLeast,
+} from "@/hooks/useAnimVariant";
+import {
   BTN_PRIMARY,
   BTN_SECONDARY_ON_DARK,
   ICON_SIZE,
 } from "@/components/ui/tokens";
 
+/**
+ * Liefert die Scroll-Position des Fensters, throttled auf rAF.
+ * Aktiv nur wenn `enabled` true ist (Animations-Variante C).
+ */
+function useScrollY(enabled: boolean): number {
+  const [y, setY] = useState(0);
+  useEffect(() => {
+    if (!enabled) {
+      setY(0);
+      return;
+    }
+    let raf = 0;
+    let queued = false;
+    const update = () => {
+      setY(window.scrollY);
+      queued = false;
+    };
+    const onScroll = () => {
+      if (queued) return;
+      queued = true;
+      raf = requestAnimationFrame(update);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [enabled]);
+  return y;
+}
+
 export function Hero() {
+  const variant = useAnimVariant();
+  const letterStagger = variantAtLeast(variant, "b");
+  const parallax = variantAtLeast(variant, "c");
+  const scrollY = useScrollY(parallax);
+
   const [ref100, n100] = useCountUp<HTMLElement>(100);
   const [ref0, n0] = useCountUp<HTMLElement>(0);
   const [ref1, n1] = useCountUp<HTMLElement>(1);
 
+  // Parallax: BlueprintGrid bewegt sich ~30% langsamer als der Content.
+  // Positiver translateY = Grid scrollt mit, aber weniger -> Tiefe-Effekt.
+  const parallaxStyle = parallax
+    ? { transform: `translate3d(0, ${scrollY * 0.3}px, 0)` }
+    : undefined;
+
   return (
     <section id="top" className="relative overflow-hidden bg-navy text-white">
-      <BlueprintGrid />
+      <BlueprintGrid style={parallaxStyle} />
       <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-20 lg:grid-cols-[1.2fr_1fr] lg:py-28">
         <div>
           <div className="inline-flex items-center gap-2 rounded-full border border-teal/40 bg-teal/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-teal">
@@ -24,8 +72,7 @@ export function Hero() {
             Von Praktikern für Praktiker entwickelt
           </div>
           <h1 className="mt-6 text-4xl font-bold leading-[1.1] md:text-6xl lg:text-7xl">
-            Das Lineal bleibt in der{" "}
-            <TealUnderline>Schublade</TealUnderline>
+            <HeroHeadline stagger={letterStagger} />
           </h1>
           <p className="mt-6 max-w-2xl text-base text-white/70 md:text-lg">
             FlächenKlar ist das Aufmaß-Werkzeug für bayerische Bauämter. PDF
@@ -90,5 +137,47 @@ export function Hero() {
         </div>
       </div>
     </section>
+  );
+}
+
+/**
+ * Hero-Headline mit optionalem Wort-Stagger-Effekt (Animations-Variante B+).
+ * Bei deaktiviertem Stagger: identischer Text wie vorher.
+ * Das letzte Wort wird mit TealUnderline gerendert.
+ */
+const HEADLINE_WORDS = ["Das", "Lineal", "bleibt", "in", "der"] as const;
+const WORD_STAGGER_MS = 70;
+
+function HeroHeadline({ stagger }: { stagger: boolean }) {
+  if (!stagger) {
+    return (
+      <>
+        Das Lineal bleibt in der{" "}
+        <TealUnderline>Schublade</TealUnderline>
+      </>
+    );
+  }
+
+  return (
+    <>
+      {HEADLINE_WORDS.map((word, i) => (
+        <Fragment key={i}>
+          <span
+            className="stagger-word"
+            style={{ animationDelay: `${i * WORD_STAGGER_MS}ms` }}
+          >
+            {word}
+          </span>{" "}
+        </Fragment>
+      ))}
+      <span
+        className="stagger-word"
+        style={{
+          animationDelay: `${HEADLINE_WORDS.length * WORD_STAGGER_MS}ms`,
+        }}
+      >
+        <TealUnderline>Schublade</TealUnderline>
+      </span>
+    </>
   );
 }
