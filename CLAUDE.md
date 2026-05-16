@@ -198,14 +198,25 @@ _Erledigt 2026-05-16:_
   Walkthrough-Implementation) auf GitHub gelöscht. Klassifizierer-Hinweis
   bleibt gültig: Remote-Branch-Löschung braucht weiterhin explizite
   Wort-Bestätigung pro Branch (z.B. „ja, lösche X auf GitHub")._
-- _**PSI-Audit Mobile nach Design-Upgrade
-  (`https://pagespeed.web.dev/analysis/https-www-flaechenklar-de/g8ubyokie3`):**
-  Performance **97**, Accessibility **97**, Best Practices **96**, SEO **92**.
-  Performance 97 auf Mobile ist deutlich über dem 90er-Ziel aus der
-  ursprünglichen Roadmap — Mobile-Lighthouse drosselt CPU 4× und
-  simuliert 3G, was das beachtlich macht. A11y 97 zeigt, dass Skip-Link +
-  Focus-Visible + ARIA-Arbeit messbar zählen. SEO 92 ist der einzige
-  Sub-100-Wert; Detail-Audits noch nicht gezogen._
+- _**PSI-Audit nach Design-Upgrade.** Mobile: Performance **97**,
+  Accessibility **97**, Best Practices **96**, SEO **92**. Desktop:
+  Performance **100**, Accessibility **97**, Best Practices **96**,
+  SEO **92**. Performance 100 Desktop / 97 Mobile ist deutlich über dem
+  90er-Ziel — Mobile-Lighthouse drosselt CPU 4× und simuliert 3G, was
+  das beachtlich macht. A11y 97 zeigt, dass Skip-Link + Focus-Visible +
+  ARIA-Arbeit messbar zählen. SEO 92 ist auf beiden Strategien identisch
+  — siehe nächster Punkt._
+- _**SEO-92-Diagnose: doppelter `User-agent: *` in robots.txt (Commit
+  `54a405f`).** Cloudflare injiziert seit dem AI-Crawl-Control-Feature
+  einen „Cloudflare Managed Content"-Block in jede robots.txt mit
+  eigenem `User-agent: *` + non-standard `Content-Signal:`-Direktive.
+  Unser `public/robots.txt` hatte zusätzlich noch einen eigenen
+  `User-agent: *` Block — Lighthouse meldete „robots.txt ist ungültig
+  — 1 Fehler gefunden". Fix: eigenen User-agent-Block entfernt, nur
+  Sitemap-Verweis behalten. Falls SEO trotzdem auf 92 bleibt, ist es
+  die `Content-Signal:`-Zeile — die kann nur im CF-Dashboard unter
+  Settings → Bots → AI Crawl Control → Content Signals deaktiviert
+  werden (kein Code-Fix möglich)._
 
 ## Bei nächster Session-Aufnahme
 
