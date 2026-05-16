@@ -1,9 +1,19 @@
+import { ArrowRight, Sparkles } from "lucide-react";
+import type { Preisstufe } from "@/content/preise";
 import { preise } from "@/content/preise";
 import { Reveal } from "@/components/Reveal";
 import { TealUnderline } from "@/components/TealUnderline";
+import { useCountUp } from "@/hooks/useCountUp";
 import {
+  useAnimVariant,
+  variantAtLeast,
+} from "@/hooks/useAnimVariant";
+import {
+  BTN_TERTIARY,
   CARD_ACCENT_BORDER,
   CARD_HOVER,
+  CARD_HOVER_GLOW,
+  ICON_SIZE,
   LABEL,
   LEAD,
 } from "@/components/ui/tokens";
@@ -27,57 +37,101 @@ export function Preise() {
         </Reveal>
 
         <Reveal delay={120}>
-        <div className="mt-10 overflow-x-auto rounded-lg border border-outline bg-white shadow-card">
-          <table className="w-full text-sm">
-            <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wider text-ink/60">
-              <tr>
-                <th className="px-6 py-4">Einwohnerklasse</th>
-                <th className="px-6 py-4 text-right">Einmalig (netto)</th>
-                <th className="px-6 py-4 text-right">Wartung ab Jahr 2</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-outline">
-              {preise.map((p) => (
-                <tr key={p.einwohner}>
-                  <td className="px-6 py-4 font-medium text-navy">
-                    {p.einwohner}
-                  </td>
-                  <td className="px-6 py-4 text-right text-ink">{p.einmalig}</td>
-                  <td className="px-6 py-4 text-right text-ink/70">
-                    {p.wartung}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+          <PilotBanner />
         </Reveal>
 
-        <Reveal delay={200}>
-        <div className="mt-8 grid gap-6 md:grid-cols-2">
-          <div
-            className={`rounded-lg border border-teal/30 bg-teal/5 p-6 shadow-card ${CARD_ACCENT_BORDER} ${CARD_HOVER}`}
-          >
-            <p className={LABEL}>Pilot-Kunde</p>
-            <p className="mt-2 text-sm text-ink/80">
-              50 % Rabatt auf den Listenpreis, Jahr 1 Wartung inklusive. Frühe
-              Anwender erhalten direkten Draht zur Produktentwicklung.
-            </p>
-          </div>
-          <div
-            className={`rounded-lg border border-outline bg-white p-6 shadow-card ${CARD_ACCENT_BORDER} ${CARD_HOVER}`}
-          >
-            <p className="text-xs font-semibold uppercase tracking-wider text-ink/60">
-              Wartung
-            </p>
-            <p className="mt-2 text-sm text-ink/80">
-              10 % p.a. ab Jahr 2, jährlich kündbar. Enthält Updates,
-              Rechtsanpassungen und E-Mail-Support.
-            </p>
-          </div>
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+          {preise.map((stufe, i) => (
+            <PreisCard key={stufe.einwohner} stufe={stufe} delay={i * 100} />
+          ))}
         </div>
+
+        <Reveal delay={700}>
+          <p className="mt-8 text-center text-sm text-ink/60">
+            Wartung im ersten Jahr inklusive. Ab Jahr 2 jährlich kündbar.
+            Enthält Updates, Rechtsanpassungen und E-Mail-Support.
+          </p>
         </Reveal>
       </div>
     </section>
+  );
+}
+
+function PilotBanner() {
+  return (
+    <div className="mt-12 overflow-hidden rounded-2xl border border-teal/30 bg-gradient-to-br from-teal/[0.12] via-teal/[0.04] to-transparent p-6 shadow-card md:flex md:items-center md:gap-6 md:p-8">
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-teal text-white shadow-card">
+        <Sparkles size={ICON_SIZE.feature} />
+      </div>
+      <div className="mt-4 flex-1 md:mt-0">
+        <p className={LABEL}>Pilot-Programm</p>
+        <h3 className="mt-1 text-xl font-bold text-navy md:text-2xl">
+          <TealUnderline>50 % Rabatt</TealUnderline> für Pilot-Kunden.
+        </h3>
+        <p className="mt-2 text-sm text-ink/70 md:text-base">
+          Frühe Anwender erhalten direkten Draht zur Produktentwicklung —
+          Wünsche, Bugs und Feature-Requests landen ohne Umweg beim Entwickler.
+        </p>
+      </div>
+      <a
+        href="#kontakt"
+        className={`group mt-4 shrink-0 md:mt-0 ${BTN_TERTIARY}`}
+      >
+        Pilot-Kontakt
+        <ArrowRight
+          size={ICON_SIZE.inline}
+          className="transition-transform group-hover:translate-x-1 motion-reduce:transform-none"
+        />
+      </a>
+    </div>
+  );
+}
+
+function PreisCard({ stufe, delay }: { stufe: Preisstufe; delay: number }) {
+  const variant = useAnimVariant();
+  // Counter-Animation ist Teil von Variante B+ (markante Wow-Momente).
+  const enableCounter = variantAtLeast(variant, "b");
+  const enableGlow = variantAtLeast(variant, "a"); // ab A aktiv
+
+  const [einmaligRef, einmaligValue] = useCountUp<HTMLSpanElement>(
+    stufe.einmaligNumeric,
+    { enabled: enableCounter, durationMs: 900, startDelayMs: delay },
+  );
+  const [wartungRef, wartungValue] = useCountUp<HTMLSpanElement>(
+    stufe.wartungNumeric,
+    { enabled: enableCounter, durationMs: 900, startDelayMs: delay + 150 },
+  );
+
+  const Icon = stufe.icon;
+  const formatNum = (n: number) => n.toLocaleString("de-DE");
+
+  return (
+    <Reveal delay={delay}>
+      <article
+        className={`group flex h-full flex-col rounded-lg border border-outline bg-white p-6 shadow-card ${CARD_ACCENT_BORDER} ${CARD_HOVER} ${
+          enableGlow ? CARD_HOVER_GLOW : ""
+        }`}
+      >
+        <div className="flex h-11 w-11 items-center justify-center rounded bg-teal/10 text-teal transition-colors group-hover:bg-teal/20">
+          <Icon size={ICON_SIZE.feature} />
+        </div>
+        <p className={`mt-4 ${LABEL}`}>{stufe.einwohner}</p>
+        <p className="mt-3 text-3xl font-bold tabular-nums text-navy md:text-4xl">
+          <span ref={einmaligRef}>{formatNum(einmaligValue)}</span>
+          <span className="text-2xl font-bold text-ink/55"> €</span>
+        </p>
+        <p className="mt-1 text-xs text-ink/55">einmalig (netto)</p>
+
+        <div className="mt-auto border-t border-outline pt-4">
+          <p className="text-xs text-ink/65">
+            Wartung ab Jahr 2:{" "}
+            <span ref={wartungRef} className="font-semibold tabular-nums text-ink/85">
+              {formatNum(wartungValue)}&nbsp;€
+            </span>
+            <span className="text-ink/55"> p.a.</span>
+          </p>
+        </div>
+      </article>
+    </Reveal>
   );
 }
