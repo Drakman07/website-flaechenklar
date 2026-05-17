@@ -1,6 +1,6 @@
 # FlächenKlar-Website — Session-Memory für Claude
 
-Letzter Stand: 2026-05-16, nach Welle 2 (PR #6, Merge `3c9cf99`) — Founder-Story-Block mit Alexander-Foto zwischen ProblemChance und Funktionen, 5-Tier-Preise-Card-Grid mit Pilot-Banner und Counter-Animationen, Hero-H1-Word-Stagger, ScrollProgressBar, Hero-Parallax, Vollgeschoss-Counter, Card-Hover-Glow auf allen Karten. PSI nach Welle 2: Mobile 100/100/96/92, Desktop 100/97/96/92 (Mobile Performance +3, Mobile A11y +3 ggü. Welle 1).
+Letzter Stand: 2026-05-17, nach Tutorial-Release (PRs #7 + #8 gemerged) — `/tutorial`-Route live mit allen 8 Kapitel-MP4s (~45 min Onboarding-Ersatz) auf R2. /tour bekam Footer-Funnel zum Tutorial. Vorgänger-Stand (Welle 2 PR #6): Founder-Story-Block + Alexander-Foto, 5-Tier-Preise mit Pilot-Banner + Counter-Animationen, Hero-H1-Word-Stagger, ScrollProgressBar, Hero-Parallax, Card-Hover-Glow. PSI Welle 2: Mobile 100/100/96/92, Desktop 100/97/96/92.
 
 ## Projekt-Kurzbeschreibung
 
@@ -29,8 +29,9 @@ Davor: Design-Upgrade (PR #3, Merge `a803055`) — zentrales Token-System in `sr
 | 60-Sek-Teaser auf Homepage | ✅ live mit echten R2-URLs |
 | `/tour`-Route mit Walkthrough-Player | ✅ live mit echten R2-URLs |
 | 4 Walkthrough-Kapitel produziert | ✅ alle 4 hochgeladen + Tour.tsx aktualisiert |
-| `/tutorial`-Route mit 8-Kapitel-Player | ✅ Code live (2026-05-17), MP4s noch nicht hochgeladen |
-| 8 Tutorial-Kapitel produziert (~28 min Onboarding-Ersatz) | ⏸ offen, User dreht selbst |
+| `/tutorial`-Route mit 8-Kapitel-Player | ✅ live mit echten R2-URLs (PRs #7 + #8 gemerged 2026-05-17) |
+| 8 Tutorial-Kapitel produziert (~45 min Onboarding-Ersatz) | ✅ alle 8 MP4s + 8 Poster auf R2, Player spielt ab |
+| VTT-Untertitel für Tutorial (BFSG-relevant) | ⏸ offen — Whisper-Transkription empfohlen |
 | Zentrales Design-Token-System | ✅ `src/components/ui/tokens.ts` (Cards, Buttons, Focus-Rings, Typo, Icon-Sizes, Hover-Glow) |
 | Premium-Polish + a11y-Essentials | ✅ PR #3 merged, live |
 | Founder-Story-Block mit Foto | ✅ PR #6 merged, `public/alexander-portrait.webp` (87.9 KB) |
@@ -93,14 +94,21 @@ teaser-poster.webp      (Standbild)                  ✅ hochgeladen
 tour-kapitel-{1..4}.mp4 (à 60 Sek)                   ✅ hochgeladen
 tour-kapitel-{1..4}.vtt (Untertitel)                 ✅ hochgeladen (ohne .de.-Infix)
 tour-kapitel-{1..4}-poster.webp                      ✅ hochgeladen
-tutorial-kapitel-{1..8}.mp4 (gesamt ~28 min)         ⏸ noch nicht aufgenommen
-tutorial-kapitel-{1..8}.vtt (Untertitel)             ⏸ noch nicht aufgenommen
-tutorial-kapitel-{1..8}-poster.webp                  ⏸ noch nicht aufgenommen
+tutorial-kapitel-{1..8}.mp4 (gesamt 42:24 / 152 MB)  ✅ alle 8 hochgeladen
+tutorial-kapitel-{1..8}-poster.webp                  ✅ alle 8 hochgeladen
+tutorial-kapitel-{1..8}.vtt (Untertitel)             ⏸ noch offen (BFSG-relevant)
 ```
 
 Tutorial-Naming-Konvention bewusst analog zu Tour gewählt (kein
 `.de.`-Infix). Drehbuch + Workflow-Integration siehe Plan-Datei
 `C:\Users\Alexander\.claude\plans\fl-chenklar-kurzzusammenfassung-immutable-liskov.md`.
+
+**Tutorial-Drehbuch wich vs Plan-Spec leicht ab:** K5 jetzt
+„Aufmaßprotokoll exportieren" (statt VG), K6 „Vollgeschoss-Berechnung"
+(statt Aufmaß), K7 „Updates & Hilfe" (statt „Projekt speichern"), K8
+„Schlussworte / Positive Aspekte". Plan war Skelett, Drehbuch ergab
+sich beim Drehen. Manifest in `Tutorial.tsx` reflektiert die finale
+Reihenfolge.
 
 Upload-Workflow: Dashboard-Drag&Drop oder Wrangler CLI (`wrangler login`
 nötig). Details in `docs/video-assets.md`.
@@ -169,6 +177,21 @@ Es gibt einen Cloudflare-MCP-Server der R2-Verwaltung kann
 _Aktuell keine offenen Punkte. Letzter Diskussionsstand 2026-05-16:
 SEO 92 (Mobile + Desktop) ist **bewusst so akzeptiert** — siehe
 „Erkenntnisse" unten. Nicht versuchen zu „fixen"._
+
+_Erledigt 2026-05-17 (Tutorial-Video komplett live):_
+- _**PR #7 — `/tutorial`-Route mit 8-Kapitel-Player.** Neue Page
+  `src/pages/Tutorial.tsx` mit Hero + bestehender `VideoPlayer.tsx` +
+  zweigeteiltem CTA-Block (Demo + Kontakt-Mail). Router um `/tutorial`
+  erweitert, App.tsx rendert neue Route. `Tour.tsx` bekam Footer-Block
+  „Tiefer einsteigen? → Komplettes Tutorial"._
+- _**PR #8 — Finale Kapiteltitel + 45-Min-Headline nach Schnitt.** Hero
+  jetzt „rund 45 Minuten" (statt 28-Min-Schätzung im Plan-Spec), 4
+  Kapiteltitel angepasst (K5/K6 getauscht, K7+K8 inhaltlich neu)._
+- _**Tutorial-Video produziert + R2-Upload.** `tutorial-komplett.mp4`
+  (42:24, 1080p H.264) via ffmpeg in 8 Kapitel re-encoded (CRF 23,
+  preset medium, +faststart). 152 MB gesamt für 8 MP4s + 1 MB für 8
+  Poster-WebPs. Upload via Cloudflare-Dashboard-Drag&Drop. Live unter
+  `https://flaechenklar.de/tutorial`._
 
 _Erledigt 2026-05-16:_
 - _Alle 4 Walkthrough-Kapitel produziert, MP4+VTT+WebP-Poster in R2 hochgeladen
