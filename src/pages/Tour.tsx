@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, PlayCircle } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { TealUnderline } from "@/components/TealUnderline";
 import { VideoPlayer, type VideoSource } from "@/components/VideoPlayer";
@@ -53,6 +53,11 @@ export function Tour() {
     }, 50);
   }
 
+  function handleTutorial(e: React.MouseEvent<HTMLAnchorElement>): void {
+    e.preventDefault();
+    navigate("/tutorial");
+  }
+
   return (
     <div className="bg-white py-16">
       <div className="mx-auto max-w-6xl px-6">
@@ -95,7 +100,33 @@ export function Tour() {
         </Reveal>
 
         <Reveal delay={240}>
-          <div className="mt-16 rounded-lg border border-teal/20 bg-teal/[0.04] px-8 py-10 text-center shadow-card">
+          <div className="mt-16 rounded-lg border border-navy/15 bg-navy/[0.03] px-8 py-8 text-center shadow-card">
+            <p className={LABEL}>Tiefer einsteigen?</p>
+            <h2 className="mt-2 text-xl font-bold text-navy md:text-2xl">
+              Komplettes Tutorial (~28 Minuten)
+            </h2>
+            <p className="mt-3 text-sm text-ink/70">
+              Acht aufeinander aufbauende Kapitel — vom ersten Doppelklick
+              bis zum fertigen Aufmaßprotokoll. So ausführlich, dass eine
+              Vor-Ort-Einarbeitung nicht mehr nötig ist.
+            </p>
+            <a
+              href="/tutorial"
+              onClick={handleTutorial}
+              className={`group mt-5 inline-flex items-center gap-2 rounded-sm px-5 py-3 text-sm font-semibold text-teal transition-colors hover:text-teal/80 ${FOCUS_RING}`}
+            >
+              <PlayCircle size={ICON_SIZE.inline} />
+              Zum Tutorial
+              <ArrowRight
+                size={ICON_SIZE.inline}
+                className="transition-transform group-hover:translate-x-1 motion-reduce:transform-none"
+              />
+            </a>
+          </div>
+        </Reveal>
+
+        <Reveal delay={320}>
+          <div className="mt-12 rounded-lg border border-teal/20 bg-teal/[0.04] px-8 py-10 text-center shadow-card">
             <h2 className="text-2xl font-bold text-navy md:text-3xl">
               Bereit für eine Demo?
             </h2>
