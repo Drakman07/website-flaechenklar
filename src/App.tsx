@@ -2,6 +2,7 @@ import { Nav } from "./components/Nav";
 import { Footer } from "./components/Footer";
 import { Home } from "./pages/Home";
 import { Tour } from "./pages/Tour";
+import { Tutorial } from "./pages/Tutorial";
 import { useRoute } from "./router";
 import { ScrollProgressBar } from "./components/animations/ScrollProgressBar";
 
@@ -17,7 +18,15 @@ export function App() {
         Zum Inhalt springen
       </a>
       <Nav />
-      <main id="main">{route === "tour" ? <Tour /> : <Home />}</main>
+      <main id="main">
+        {route === "tour" ? (
+          <Tour />
+        ) : route === "tutorial" ? (
+          <Tutorial />
+        ) : (
+          <Home />
+        )}
+      </main>
       <Footer />
     </>
   );

@@ -29,6 +29,8 @@ Davor: Design-Upgrade (PR #3, Merge `a803055`) — zentrales Token-System in `sr
 | 60-Sek-Teaser auf Homepage | ✅ live mit echten R2-URLs |
 | `/tour`-Route mit Walkthrough-Player | ✅ live mit echten R2-URLs |
 | 4 Walkthrough-Kapitel produziert | ✅ alle 4 hochgeladen + Tour.tsx aktualisiert |
+| `/tutorial`-Route mit 8-Kapitel-Player | ✅ Code live (2026-05-17), MP4s noch nicht hochgeladen |
+| 8 Tutorial-Kapitel produziert (~28 min Onboarding-Ersatz) | ⏸ offen, User dreht selbst |
 | Zentrales Design-Token-System | ✅ `src/components/ui/tokens.ts` (Cards, Buttons, Focus-Rings, Typo, Icon-Sizes, Hover-Glow) |
 | Premium-Polish + a11y-Essentials | ✅ PR #3 merged, live |
 | Founder-Story-Block mit Foto | ✅ PR #6 merged, `public/alexander-portrait.webp` (87.9 KB) |
@@ -37,16 +39,17 @@ Davor: Design-Upgrade (PR #3, Merge `a803055`) — zentrales Token-System in `sr
 
 ## Architektur-Eckpunkte
 
-- **Routing:** Eigener Mini-Router (`src/router.tsx`, ~50 Zeilen) für 2
-  Routen (`/` und `/tour`). Kein React Router. `useRoute()`-Hook plus
-  `navigate(to: RoutePath)`-Helper. Typ `RoutePath = "/" | "/tour"`.
+- **Routing:** Eigener Mini-Router (`src/router.tsx`, ~55 Zeilen) für 3
+  Routen (`/`, `/tour`, `/tutorial`). Kein React Router. `useRoute()`-Hook
+  plus `navigate(to: RoutePath)`-Helper. Typ
+  `RoutePath = "/" | "/tour" | "/tutorial"`.
 - **SPA-Fallback** in `wrangler.toml` aktiv: alle URLs → `index.html`.
 - **VideoPlayer-Komponente** (`src/components/VideoPlayer.tsx`):
   wiederverwendbar für 1 Quelle (Teaser) oder n Kapitel (Tour). Features:
   scroll-autoplay-stumm, Mute-Toggle-Overlay, Mobile-Tap-Fullscreen,
   Kapitel-Sidebar, optionale VTT-Captions.
 - **Layout:** `App.tsx` = Nav + `<Router />` + Footer. Router-Output ist
-  entweder `<Home />` oder `<Tour />`.
+  `<Home />`, `<Tour />` oder `<Tutorial />`.
 - **Marken-Farben:** `navy` + `teal` (HSL-CSS-Custom-Properties in
   `src/index.css`, gemappt in `tailwind.config.ts`).
 - **Schrift:** Geist Sans (lokal via `@fontsource/geist-sans`).
@@ -90,7 +93,14 @@ teaser-poster.webp      (Standbild)                  ✅ hochgeladen
 tour-kapitel-{1..4}.mp4 (à 60 Sek)                   ✅ hochgeladen
 tour-kapitel-{1..4}.vtt (Untertitel)                 ✅ hochgeladen (ohne .de.-Infix)
 tour-kapitel-{1..4}-poster.webp                      ✅ hochgeladen
+tutorial-kapitel-{1..8}.mp4 (gesamt ~28 min)         ⏸ noch nicht aufgenommen
+tutorial-kapitel-{1..8}.vtt (Untertitel)             ⏸ noch nicht aufgenommen
+tutorial-kapitel-{1..8}-poster.webp                  ⏸ noch nicht aufgenommen
 ```
+
+Tutorial-Naming-Konvention bewusst analog zu Tour gewählt (kein
+`.de.`-Infix). Drehbuch + Workflow-Integration siehe Plan-Datei
+`C:\Users\Alexander\.claude\plans\fl-chenklar-kurzzusammenfassung-immutable-liskov.md`.
 
 Upload-Workflow: Dashboard-Drag&Drop oder Wrangler CLI (`wrangler login`
 nötig). Details in `docs/video-assets.md`.
@@ -113,7 +123,8 @@ nötig). Details in `docs/video-assets.md`.
 | `public/alexander-portrait.webp` | Portrait Alexander Geitner (B&W, 600×800, 87.9 KB) |
 | `scripts/build-portrait.mjs` | sharp-basiertes Optimierungs-Script für das Portrait (`npm run build-portrait`) |
 | `src/pages/Home.tsx` | Homepage mit allen Sektionen |
-| `src/pages/Tour.tsx` | `/tour`-Seite mit 4-Kapitel-Player |
+| `src/pages/Tour.tsx` | `/tour`-Seite mit 4-Kapitel-Player + Footer-Hinweis zum Tutorial |
+| `src/pages/Tutorial.tsx` | `/tutorial`-Seite mit 8-Kapitel-Player (~28 min Onboarding-Ersatz) + CTA-Block (Demo + Kontakt-Mail) |
 | `src/sections/TeaserSection.tsx` | Teaser-Block direkt nach Hero (live!) |
 | `wrangler.toml` | CF-Workers-Config, SPA-Fallback aktiv |
 | `.github/workflows/deploy.yml` | Auto-Deploy auf Push → main |
