@@ -12,63 +12,54 @@ import {
 } from "@/components/ui/tokens";
 
 /**
- * Komplettes Schritt-für-Schritt-Tutorial (~28 min, 8 Kapitel).
+ * Komplettes Schritt-für-Schritt-Tutorial (~42 min, 8 Kapitel).
  * Ziel: Vor-Ort-Einarbeitung beim Kunden ersetzen.
  *
- * Videos werden separat auf R2 (videos.flaechenklar.de) hochgeladen.
- * Naming-Konvention analog zu Tour: tutorial-kapitel-N.{mp4,vtt} und
- * tutorial-kapitel-N-poster.webp. Solange noch nicht hochgeladen,
- * liefert R2 404 — der Player zeigt dann ein leeres Frame. Sobald
- * Kapitel-Files live sind, funktioniert die Seite ohne Code-Aenderung.
+ * Videos sind auf R2 (videos.flaechenklar.de) gehostet. Naming-Konvention
+ * analog zu Tour: tutorial-kapitel-N.mp4 + tutorial-kapitel-N-poster.webp.
+ * VTT-Captions sind derzeit nicht vorhanden — Feld `captions` weggelassen,
+ * kann pro Kapitel ergaenzt werden sobald Untertitel produziert sind.
  */
 const KAPITEL: VideoSource[] = [
   {
     src: "https://videos.flaechenklar.de/tutorial-kapitel-1.mp4",
     poster: "https://videos.flaechenklar.de/tutorial-kapitel-1-poster.webp",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-1.vtt",
     title: "1. Einstieg & Installation",
   },
   {
     src: "https://videos.flaechenklar.de/tutorial-kapitel-2.mp4",
     poster: "https://videos.flaechenklar.de/tutorial-kapitel-2-poster.webp",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-2.vtt",
     title: "2. Bauantrags-PDF importieren",
   },
   {
     src: "https://videos.flaechenklar.de/tutorial-kapitel-3.mp4",
     poster: "https://videos.flaechenklar.de/tutorial-kapitel-3-poster.webp",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-3.vtt",
     title: "3. Projektdaten erfassen",
   },
   {
     src: "https://videos.flaechenklar.de/tutorial-kapitel-4.mp4",
     poster: "https://videos.flaechenklar.de/tutorial-kapitel-4-poster.webp",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-4.vtt",
     title: "4. Geschosse & Polygone zeichnen",
   },
   {
     src: "https://videos.flaechenklar.de/tutorial-kapitel-5.mp4",
     poster: "https://videos.flaechenklar.de/tutorial-kapitel-5-poster.webp",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-5.vtt",
-    title: "5. Vollgeschoss-Berechnung",
+    title: "5. Aufmaßprotokoll exportieren",
   },
   {
     src: "https://videos.flaechenklar.de/tutorial-kapitel-6.mp4",
     poster: "https://videos.flaechenklar.de/tutorial-kapitel-6-poster.webp",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-6.vtt",
-    title: "6. Aufmaßprotokoll exportieren",
+    title: "6. Vollgeschoss-Berechnung",
   },
   {
     src: "https://videos.flaechenklar.de/tutorial-kapitel-7.mp4",
     poster: "https://videos.flaechenklar.de/tutorial-kapitel-7-poster.webp",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-7.vtt",
-    title: "7. Projekt speichern & laden",
+    title: "7. Updates & Hilfe",
   },
   {
     src: "https://videos.flaechenklar.de/tutorial-kapitel-8.mp4",
     poster: "https://videos.flaechenklar.de/tutorial-kapitel-8-poster.webp",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-8.vtt",
-    title: "8. Updates & Hilfe",
+    title: "8. Schlussworte",
   },
 ];
 
@@ -107,7 +98,7 @@ export function Tutorial() {
           <div className="mt-6 max-w-3xl">
             <p className={LABEL}>Komplettes Tutorial</p>
             <h1 className="mt-3 text-3xl font-bold text-navy md:text-5xl">
-              FlächenKlar in <TealUnderline>28 Minuten</TealUnderline>.
+              FlächenKlar in <TealUnderline>rund 45 Minuten</TealUnderline>.
             </h1>
             <p className={`mt-4 ${LEAD}`}>
               Acht aufeinander aufbauende Kapitel — vom ersten Doppelklick

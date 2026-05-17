@@ -7,13 +7,13 @@ export type RoutePath = "/" | "/tour" | "/tutorial";
 const TITLES: Record<Route, string> = {
   home: "FlächenKlar — Aufmaß für bayerische Bauämter",
   tour: "FlächenKlar — Komplette Tour",
-  tutorial: "FlächenKlar — Komplettes Tutorial (28 Minuten)",
+  tutorial: "FlächenKlar — Komplettes Tutorial (rund 45 Minuten)",
 };
 
 const DESCRIPTIONS: Record<Route, string> = {
   home: "FlächenKlar ist das Aufmaß-Werkzeug für bayerische Bauämter. PDF laden, Polygon zeichnen, druckreifes Aufmaßprotokoll nach Art. 5 KAG Bayern. Komplett offline.",
   tour: "Komplette Tour durch FlächenKlar: 4 Kapitel à 60 Sekunden zu Schnellstart, Vollgeschossen, mehrgeschossigen Gebäuden und Export.",
-  tutorial: "Schritt-für-Schritt-Tutorial: FlächenKlar in 8 Kapiteln und 28 Minuten — vom ersten Doppelklick bis zum fertigen Aufmaßprotokoll. Ersatz für die Vor-Ort-Einarbeitung.",
+  tutorial: "Schritt-für-Schritt-Tutorial: FlächenKlar in 8 Kapiteln und rund 45 Minuten — vom ersten Doppelklick bis zu Vollgeschoss-Berechnung und Aufmaßprotokoll. Ersatz für die Vor-Ort-Einarbeitung.",
 };
 
 function pathToRoute(pathname: string): Route {
