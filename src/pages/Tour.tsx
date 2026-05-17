@@ -103,7 +103,7 @@ export function Tour() {
           <div className="mt-16 rounded-lg border border-navy/15 bg-navy/[0.03] px-8 py-8 text-center shadow-card">
             <p className={LABEL}>Tiefer einsteigen?</p>
             <h2 className="mt-2 text-xl font-bold text-navy md:text-2xl">
-              Komplettes Tutorial (~28 Minuten)
+              Komplettes Tutorial (~45 Minuten)
             </h2>
             <p className="mt-3 text-sm text-ink/70">
               Acht aufeinander aufbauende Kapitel — vom ersten Doppelklick
