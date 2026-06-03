@@ -1,11 +1,9 @@
-import { ArrowRight, Sparkles } from "lucide-react";
 import type { Preisstufe } from "@/content/preise";
 import { preise } from "@/content/preise";
 import { Reveal } from "@/components/Reveal";
 import { TealUnderline } from "@/components/TealUnderline";
 import { useCountUp } from "@/hooks/useCountUp";
 import {
-  BTN_TERTIARY,
   CARD_ACCENT_BORDER,
   CARD_HOVER,
   CARD_HOVER_GLOW,
@@ -32,10 +30,6 @@ export function Preise() {
           </div>
         </Reveal>
 
-        <Reveal delay={120}>
-          <PilotBanner />
-        </Reveal>
-
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
           {preise.map((stufe, i) => (
             <PreisCard key={stufe.einwohner} stufe={stufe} delay={i * 100} />
@@ -50,36 +44,6 @@ export function Preise() {
         </Reveal>
       </div>
     </section>
-  );
-}
-
-function PilotBanner() {
-  return (
-    <div className="mt-12 overflow-hidden rounded-2xl border border-teal/30 bg-gradient-to-br from-teal/[0.12] via-teal/[0.04] to-transparent p-6 shadow-card md:flex md:items-center md:gap-6 md:p-8">
-      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-teal text-white shadow-card">
-        <Sparkles size={ICON_SIZE.feature} />
-      </div>
-      <div className="mt-4 flex-1 md:mt-0">
-        <p className={LABEL}>Pilot-Programm</p>
-        <h3 className="mt-1 text-xl font-bold text-navy md:text-2xl">
-          <TealUnderline>50 % Rabatt</TealUnderline> für Pilot-Kunden.
-        </h3>
-        <p className="mt-2 text-sm text-ink/70 md:text-base">
-          Frühe Anwender erhalten direkten Draht zur Produktentwicklung —
-          Wünsche, Bugs und Feature-Requests landen ohne Umweg beim Entwickler.
-        </p>
-      </div>
-      <a
-        href="#kontakt"
-        className={`group mt-4 shrink-0 md:mt-0 ${BTN_TERTIARY}`}
-      >
-        Pilot-Kontakt
-        <ArrowRight
-          size={ICON_SIZE.inline}
-          className="transition-transform group-hover:translate-x-1 motion-reduce:transform-none"
-        />
-      </a>
-    </div>
   );
 }
 

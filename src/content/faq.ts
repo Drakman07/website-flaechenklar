@@ -28,7 +28,7 @@ export const faq: readonly FaqItem[] = [
   },
   {
     q: "Was kostet FlächenKlar für eine Kommune?",
-    a: "Einmalkauf gestaffelt nach Einwohnerklasse: 1.600 Euro netto für Kommunen bis 3.000 Einwohner, 3.100 Euro netto für 3.000 bis 8.000 Einwohner, 5.800 Euro netto für 8.000 bis 15.000 Einwohner, 10.500 Euro netto für 15.000 bis 30.000 Einwohner und 14.500 Euro netto über 30.000 Einwohner. Die Wartung im ersten Jahr ist enthalten, ab dem zweiten Jahr 10 Prozent pro Jahr, jährlich kündbar. Pilot-Kunden erhalten 50 Prozent Rabatt.",
+    a: "Einmalkauf gestaffelt nach Einwohnerklasse: 1.600 Euro netto für Kommunen bis 3.000 Einwohner, 3.100 Euro netto für 3.000 bis 8.000 Einwohner, 5.800 Euro netto für 8.000 bis 15.000 Einwohner, 10.500 Euro netto für 15.000 bis 30.000 Einwohner und 14.500 Euro netto über 30.000 Einwohner. Die Wartung im ersten Jahr ist enthalten, ab dem zweiten Jahr 10 Prozent pro Jahr, jährlich kündbar.",
   },
   {
     q: "Kann ich das Aufmaßprotokoll als PDF an die Akte hängen?",
