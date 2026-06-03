@@ -144,7 +144,7 @@ export function Kontakt() {
             Kontakt
           </p>
           <h2 className="mt-3 text-3xl font-bold md:text-4xl">
-            Demo, Pilot oder einfach Fragen.
+            Demo, Angebot oder einfach Fragen.
           </h2>
           <p className="mt-4 text-white/70 md:text-lg">
             Formular ausfüllen, abschicken — wir melden uns innerhalb von einem
@@ -233,7 +233,6 @@ export function Kontakt() {
                 >
                   <option value="">Bitte wählen</option>
                   <option>Demo</option>
-                  <option>Pilot</option>
                   <option>Angebot</option>
                   <option>Frage</option>
                 </select>
