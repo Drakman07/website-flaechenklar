@@ -1,10 +1,12 @@
-import { ArrowLeft, ArrowRight, Mail } from "lucide-react";
+import { ArrowLeft, ArrowRight, Mail, Sparkles } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { TealUnderline } from "@/components/TealUnderline";
 import { VideoPlayer, type VideoSource } from "@/components/VideoPlayer";
 import { navigate } from "@/router";
+import { versionen } from "@/content/versionen";
 import {
   BTN_PRIMARY_ON_LIGHT,
+  CARD_BASE,
   FOCUS_RING,
   ICON_SIZE,
   LABEL,
@@ -77,6 +79,13 @@ export function Tutorial() {
     }, 50);
   }
 
+  function handleVersionen(e: React.MouseEvent<HTMLAnchorElement>): void {
+    e.preventDefault();
+    navigate("/versionen");
+  }
+
+  const aktuelle = versionen[0];
+
   return (
     <div className="bg-white py-16">
       <div className="mx-auto max-w-6xl px-6">
@@ -117,6 +126,42 @@ export function Tutorial() {
               captionsDefaultOn
               className="rounded-lg"
             />
+          </div>
+        </Reveal>
+
+        {/* Was die aktuelle Version gebracht hat — Inhalt aus content/versionen.ts */}
+        <Reveal delay={200}>
+          <div className={`mt-12 ${CARD_BASE} border-l-4 border-l-teal p-6 md:p-8`}>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <Sparkles size={ICON_SIZE.feature} className="text-teal" />
+                <h2 className="text-lg font-bold text-navy">
+                  Neu in dieser Version
+                </h2>
+              </div>
+              <span className="rounded bg-navy px-2.5 py-1 text-xs font-medium text-white">
+                Version {aktuelle.version} · {aktuelle.datum}
+              </span>
+            </div>
+            <ul className="mt-5 space-y-3 text-sm">
+              {aktuelle.punkte.map((p) => (
+                <li key={p.titel} className="text-ink/80">
+                  <span className="font-medium text-navy">{p.titel}</span> —{" "}
+                  {p.text}
+                </li>
+              ))}
+            </ul>
+            <a
+              href="/versionen"
+              onClick={handleVersionen}
+              className={`group mt-6 inline-flex items-center gap-2 rounded-sm text-sm font-semibold text-teal transition-colors hover:text-teal/80 ${FOCUS_RING}`}
+            >
+              Alle Versionen ansehen
+              <ArrowRight
+                size={ICON_SIZE.inline}
+                className="transition-transform group-hover:translate-x-1 motion-reduce:transform-none"
+              />
+            </a>
           </div>
         </Reveal>
 

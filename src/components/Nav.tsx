@@ -32,6 +32,13 @@ function handleAnchorClick(e: MouseEvent<HTMLAnchorElement>): void {
   e.currentTarget.closest("details")?.removeAttribute("open");
 }
 
+// Route-Link (keine Section-Anchor) — echte Navigation zu /versionen
+function handleVersionenClick(e: MouseEvent<HTMLAnchorElement>): void {
+  e.preventDefault();
+  navigate("/versionen");
+  e.currentTarget.closest("details")?.removeAttribute("open");
+}
+
 function useActiveSection(enabled: boolean): string | null {
   const [activeId, setActiveId] = useState<string | null>(null);
 
@@ -106,6 +113,18 @@ export function Nav() {
             );
           })}
           <a
+            href="/versionen"
+            onClick={handleVersionenClick}
+            aria-current={route === "versionen" ? "true" : undefined}
+            className={`relative rounded-sm text-sm transition-colors hover:text-navy after:absolute after:-bottom-1 after:left-0 after:right-0 after:h-px after:origin-left after:bg-teal after:transition-transform after:duration-300 after:content-[''] motion-reduce:after:transition-none ${FOCUS_RING} ${
+              route === "versionen"
+                ? "font-semibold text-navy after:scale-x-100"
+                : "text-ink/70 after:scale-x-0"
+            }`}
+          >
+            Versionen
+          </a>
+          <a
             href="#kontakt"
             onClick={handleAnchorClick}
             className={BTN_PRIMARY_COMPACT}
@@ -132,6 +151,16 @@ export function Nav() {
                 {l.label}
               </a>
             ))}
+            <a
+              href="/versionen"
+              onClick={handleVersionenClick}
+              aria-current={route === "versionen" ? "true" : undefined}
+              className={`block rounded px-3 py-3 text-sm hover:bg-outline/40 ${FOCUS_RING} ${
+                route === "versionen" ? "font-semibold text-navy" : "text-ink"
+              }`}
+            >
+              Versionen
+            </a>
             <a
               href="#kontakt"
               onClick={handleAnchorClick}
