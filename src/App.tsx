@@ -3,6 +3,7 @@ import { Footer } from "./components/Footer";
 import { Home } from "./pages/Home";
 import { Tour } from "./pages/Tour";
 import { Tutorial } from "./pages/Tutorial";
+import { Versionen } from "./pages/Versionen";
 import { useRoute } from "./router";
 import { ScrollProgressBar } from "./components/animations/ScrollProgressBar";
 
@@ -23,6 +24,8 @@ export function App() {
           <Tour />
         ) : route === "tutorial" ? (
           <Tutorial />
+        ) : route === "versionen" ? (
+          <Versionen />
         ) : (
           <Home />
         )}

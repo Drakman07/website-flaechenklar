@@ -15,9 +15,15 @@ export function Footer() {
         Das Aufmaß-Werkzeug für den digitalen Bauantrag
       </p>
       <nav
-        aria-label="Rechtliches"
+        aria-label="Footer-Navigation"
         className="mt-6 flex justify-center gap-6 text-sm"
       >
+        <a
+          href="/versionen"
+          className={`rounded-sm transition-colors hover:text-white ${FOCUS_RING_DARK}`}
+        >
+          Versionsverlauf
+        </a>
         <a
           href="/impressum"
           className={`rounded-sm transition-colors hover:text-white ${FOCUS_RING_DARK}`}
