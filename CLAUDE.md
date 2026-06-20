@@ -323,8 +323,8 @@ _Erledigt 2026-05-16:_
 
 ## Lokale Pfade
 
-- Repo-Wurzel: `F:\Geschäft\Unternehmen\Claude Code\Website FlächenKlar\`
-- Tool-Schwester-Repo: `F:\Geschäft\Unternehmen\Claude Code\Geschossflächenberechnung Tool\`
+- Repo-Wurzel: `F:\Geschaeft\Unternehmen\Claude Code\FlaechenKlar\website\`
+- Tool-Schwester-Repo: `F:\Geschaeft\Unternehmen\Claude Code\FlaechenKlar\tool\`
   (eigene CLAUDE.md dort)
 - Implementation-Plan: `docs/superpowers/plans/2026-05-15-vorstellungsvideos.md`
 

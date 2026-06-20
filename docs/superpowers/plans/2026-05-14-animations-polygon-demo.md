@@ -10,7 +10,7 @@
 
 **Spec / Design Source:** `C:\Users\Alexander\.claude\plans\c-users-alexander-downloads-datenschutz-wondrous-puppy.md`
 
-**Working Directory:** `F:\Geschäft\Unternehmen\Claude Code\Website FlächenKlar`
+**Working Directory:** `F:\Geschaeft\Unternehmen\Claude Code\FlaechenKlar\website`
 
 ---
 
