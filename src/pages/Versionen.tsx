@@ -67,7 +67,9 @@ export function Versionen() {
                   </time>
                 </div>
                 <ul className="mt-4 space-y-4">
-                  {v.punkte.map((p) => (
+                  {v.punkte
+                    .filter((p) => p.oeffentlich !== false)
+                    .map((p) => (
                     <li key={p.titel}>
                       <p className="font-medium text-navy">{p.titel}</p>
                       <p className="mt-1 text-ink/70">{p.text}</p>

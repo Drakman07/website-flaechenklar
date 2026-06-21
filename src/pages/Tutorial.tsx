@@ -156,7 +156,9 @@ export function Tutorial() {
               </span>
             </div>
             <ul className="mt-5 space-y-3 text-sm">
-              {aktuelle.punkte.map((p) => (
+              {aktuelle.punkte
+                .filter((p) => p.oeffentlich !== false)
+                .map((p) => (
                 <li key={p.titel} className="text-ink/80">
                   <span className="font-medium text-navy">{p.titel}</span> —{" "}
                   {p.text}

@@ -3,6 +3,13 @@ export type VersionPunkt = {
   titel: string;
   /** Ein bis zwei Sätze, sachlich, in Kundensprache. */
   text: string;
+  /**
+   * Ob der einzelne Punkt im Internet erscheint. Default: true.
+   * Auf `false` setzen, um ein bereits eingebautes, aber noch nicht
+   * freigegebenes Feature aus der öffentlichen Liste auszublenden —
+   * der Punkt bleibt in dieser Datei dokumentiert.
+   */
+  oeffentlich?: boolean;
 };
 
 export type Version = {
@@ -69,6 +76,10 @@ export const versionen: readonly Version[] = [
       {
         titel: "Daten-Export als CSV und JSON",
         text: "Das Aufmaß lässt sich zusätzlich zum PDF-Protokoll als CSV für die Tabellenkalkulation und als JSON zur Weiterverarbeitung ausgeben.",
+        // Eingebaut, aber im Tool noch ausgeblendet (RIWA-Schnittstelle offen).
+        // Vorübergehend NICHT öffentlich; wieder aufgreifen, sobald die erste
+        // Gemeinde konkret danach fragt.
+        oeffentlich: false,
       },
       {
         titel: "Plan mit der Leertaste verschieben",
