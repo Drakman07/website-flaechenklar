@@ -14,11 +14,13 @@ import {
 } from "@/components/ui/tokens";
 
 /**
- * Komplettes Schritt-für-Schritt-Tutorial (~42 min, 8 Kapitel).
+ * Komplettes Schritt-für-Schritt-Tutorial (~59 min, 10 Kapitel).
  * Ziel: Vor-Ort-Einarbeitung beim Kunden ersetzen.
  *
  * Videos sind auf R2 (videos.flaechenklar.de) gehostet. Naming-Konvention
  * analog zu Tour: tutorial-kapitel-N.mp4 + tutorial-kapitel-N-poster.webp.
+ * Struktur v1.2 (2026-06-21): eigener Maßstab-Schritt, Vollgeschoss vor
+ * Export, Speichern als eigener Schritt.
  * VTT-Captions sind derzeit nicht vorhanden — Feld `captions` weggelassen,
  * kann pro Kapitel ergaenzt werden sobald Untertitel produziert sind.
  */
@@ -41,27 +43,37 @@ const KAPITEL: VideoSource[] = [
   {
     src: "https://videos.flaechenklar.de/tutorial-kapitel-4.mp4",
     poster: "https://videos.flaechenklar.de/tutorial-kapitel-4-poster.webp",
-    title: "4. Geschosse & Polygone zeichnen",
+    title: "4. Geschoss & Region anlegen",
   },
   {
     src: "https://videos.flaechenklar.de/tutorial-kapitel-5.mp4",
     poster: "https://videos.flaechenklar.de/tutorial-kapitel-5-poster.webp",
-    title: "5. Aufmaßprotokoll exportieren",
+    title: "5. Maßstab setzen",
   },
   {
     src: "https://videos.flaechenklar.de/tutorial-kapitel-6.mp4",
     poster: "https://videos.flaechenklar.de/tutorial-kapitel-6-poster.webp",
-    title: "6. Vollgeschoss-Berechnung",
+    title: "6. Flächen zeichnen",
   },
   {
     src: "https://videos.flaechenklar.de/tutorial-kapitel-7.mp4",
     poster: "https://videos.flaechenklar.de/tutorial-kapitel-7-poster.webp",
-    title: "7. Updates & Hilfe",
+    title: "7. Vollgeschoss-Beurteilung",
   },
   {
     src: "https://videos.flaechenklar.de/tutorial-kapitel-8.mp4",
     poster: "https://videos.flaechenklar.de/tutorial-kapitel-8-poster.webp",
-    title: "8. Schlussworte",
+    title: "8. Aufmaßprotokoll exportieren",
+  },
+  {
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-9.mp4",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-9-poster.webp",
+    title: "9. Speichern, Updates & Hilfe",
+  },
+  {
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-10.mp4",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-10-poster.webp",
+    title: "10. Schlusswort",
   },
 ];
 
@@ -107,10 +119,10 @@ export function Tutorial() {
           <div className="mt-6 max-w-3xl">
             <p className={LABEL}>Komplettes Tutorial</p>
             <h1 className="mt-3 text-3xl font-bold text-navy md:text-5xl">
-              FlächenKlar in <TealUnderline>rund 45 Minuten</TealUnderline>.
+              FlächenKlar in <TealUnderline>rund einer Stunde</TealUnderline>.
             </h1>
             <p className={`mt-4 ${LEAD}`}>
-              Acht aufeinander aufbauende Kapitel — vom ersten Doppelklick
+              Zehn aufeinander aufbauende Kapitel — vom ersten Doppelklick
               bis zum fertigen Aufmaßprotokoll. So ausführlich, dass eine
               Vor-Ort-Einarbeitung nicht mehr nötig ist. Jedes Kapitel ist
               auch alleine verständlich, springen Sie also gezielt zum
