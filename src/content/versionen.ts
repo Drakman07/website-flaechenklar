@@ -28,6 +28,17 @@ export type Version = {
  */
 export const versionen: readonly Version[] = [
   {
+    version: "1.2.1",
+    datum: "21.06.2026",
+    iso: "2026-06-21",
+    punkte: [
+      {
+        titel: "Update-Hinweis im Programm korrigiert",
+        text: "Die Prüfung auf neue Versionen direkt im Programm funktioniert wieder zuverlässig. Wer Aktualisierungen über die mitgelieferte Update-Datei einspielt, war davon nicht betroffen.",
+      },
+    ],
+  },
+  {
     version: "1.2.0",
     datum: "21.06.2026",
     iso: "2026-06-21",
