@@ -28,6 +28,33 @@ export type Version = {
  */
 export const versionen: readonly Version[] = [
   {
+    version: "1.2.0",
+    datum: "21.06.2026",
+    iso: "2026-06-21",
+    punkte: [
+      {
+        titel: "Vektor-Snapping (Magnet)",
+        text: "Beim Zeichnen rasten die Punkte an den Linien maßhaltiger CAD-Pläne ein — schneller und genauer. Mit gedrückter Umschalttaste lässt sich der Magnet kurz aussetzen.",
+      },
+      {
+        titel: "Maßstab automatisch aus den Maßketten",
+        text: "Bei vermaßten Vektor-Plänen liest FlächenKlar die Maßketten aus und schlägt den passenden Maßstab selbst vor. Das manuelle Kalibrieren entfällt, wo der Plan die Maße schon mitbringt.",
+      },
+      {
+        titel: "Rechteck-Werkzeug",
+        text: "Rechteckige Flächen entstehen mit zwei Klicks über die Diagonale statt mit vier einzelnen Eckpunkten.",
+      },
+      {
+        titel: "Daten-Export als CSV und JSON",
+        text: "Das Aufmaß lässt sich zusätzlich zum PDF-Protokoll als CSV für die Tabellenkalkulation und als JSON zur Weiterverarbeitung ausgeben.",
+      },
+      {
+        titel: "Plan mit der Leertaste verschieben",
+        text: "Der Plan lässt sich jetzt auch während einer laufenden Zeichnung mit gedrückter Leertaste und der Maus verschieben.",
+      },
+    ],
+  },
+  {
     version: "1.1.0",
     datum: "15.06.2026",
     iso: "2026-06-15",

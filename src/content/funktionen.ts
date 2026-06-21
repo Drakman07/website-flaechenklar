@@ -5,6 +5,7 @@ import {
   Layers,
   Triangle,
   FileOutput,
+  Table,
   Save,
   Cpu,
 } from "lucide-react";
@@ -25,8 +26,8 @@ export const funktionen: readonly Funktion[] = [
   },
   {
     icon: PenTool,
-    title: "Polygone mit Snap & Bemaßung",
-    text: "Außenkontur abklicken, Kanten nachträglich bemaßen, Eckpunkte verschieben. Fläche per Shoelace-Formel automatisch.",
+    title: "Polygone mit Magnet & Bemaßung",
+    text: "Außenkontur abklicken — mit Magnet-Einrasten an den Vektorlinien — oder Rechteck mit zwei Klicks. Kanten nachträglich bemaßen, Eckpunkte verschieben. Fläche per Shoelace-Formel automatisch.",
   },
   {
     icon: Layers,
@@ -42,6 +43,11 @@ export const funktionen: readonly Funktion[] = [
     icon: FileOutput,
     title: "Druckreifes Aufmaßprotokoll",
     text: "Ein Klick → PDF mit Deckblatt, Geschossaufstellung, Plan-Ausschnitten und Berechnungsanhang. Akten-fertig.",
+  },
+  {
+    icon: Table,
+    title: "Export als CSV und JSON",
+    text: "Neben dem PDF-Protokoll gibt FlächenKlar das Aufmaß strukturiert als CSV und JSON aus — für Tabellenkalkulation und Weiterverarbeitung.",
   },
   {
     icon: Save,
