@@ -96,7 +96,7 @@ export function Tutorial() {
     navigate("/versionen");
   }
 
-  const aktuelle = versionen[0];
+  const aktuelle = versionen.find((v) => v.oeffentlich !== false) ?? versionen[0];
 
   return (
     <div className="bg-white py-16">

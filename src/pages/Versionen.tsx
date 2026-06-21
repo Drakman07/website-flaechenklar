@@ -49,7 +49,9 @@ export function Versionen() {
         </Reveal>
 
         <ol className="relative mt-12 border-l border-outline">
-          {versionen.map((v, i) => (
+          {versionen
+            .filter((v) => v.oeffentlich !== false)
+            .map((v, i) => (
             <li key={v.version} className="relative pl-8 pb-12 last:pb-0">
               <span
                 aria-hidden="true"

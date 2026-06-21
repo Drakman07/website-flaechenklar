@@ -14,6 +14,13 @@ export type Version = {
   iso: string;
   /** Kundenrelevante Änderungen dieser Version. */
   punkte: readonly VersionPunkt[];
+  /**
+   * Ob der Eintrag im Internet erscheint (auf /versionen und als
+   * versionen[0]-Block auf /tutorial). Default: true.
+   * Hotfix-/Patch-Releases auf `false` setzen — sie bleiben hier
+   * vollständig dokumentiert, werden aber öffentlich nicht angezeigt.
+   */
+  oeffentlich?: boolean;
 };
 
 /**
@@ -27,9 +34,21 @@ export type Version = {
  * Test-/Refactor-Notizen aus tool/CHANGELOG.md gehören NICHT hierher.
  */
 export const versionen: readonly Version[] = [
-  // Öffentlich nur Feature-Releases (Minor). Hotfix-/Patch-Releases
-  // (z. B. 1.2.1) erscheinen bewusst NICHT auf /versionen — Eilpatches
-  // gehören nicht ins Schaufenster.
+  // Vollständige Historie — auch Hotfixes werden hier dokumentiert.
+  // Im Internet erscheinen aber nur Einträge mit oeffentlich !== false.
+  // Eilpatches bekommen `oeffentlich: false` (siehe 1.2.1).
+  {
+    version: "1.2.1",
+    datum: "21.06.2026",
+    iso: "2026-06-21",
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Update-Hinweis im Programm korrigiert",
+        text: "Die Prüfung auf neue Versionen direkt im Programm funktioniert wieder zuverlässig. Wer Aktualisierungen über die mitgelieferte Update-Datei einspielt, war davon nicht betroffen.",
+      },
+    ],
+  },
   {
     version: "1.2.0",
     datum: "21.06.2026",
