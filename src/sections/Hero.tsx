@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { TealUnderline } from "@/components/TealUnderline";
 import { BlueprintGrid } from "@/components/BlueprintGrid";
-import { PolygonDemo } from "@/components/PolygonDemo";
+import { PlanMessDemo } from "@/components/PlanMessDemo";
 import { useCountUp } from "@/hooks/useCountUp";
 import { useInView } from "@/hooks/useInView";
 import {
@@ -213,15 +213,8 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="relative hidden items-center justify-center lg:flex">
-          {/* Ghost-Panel hinter dem Canvas — vermittelt subtile Tiefe */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute h-[420px] w-[420px] translate-x-4 translate-y-3 rounded-2xl border border-white/10 bg-white/[0.025]"
-          />
-          <div className="relative rounded-2xl shadow-feature">
-            <PolygonDemo />
-          </div>
+        <div className="relative flex items-start justify-center">
+          <PlanMessDemo />
         </div>
       </div>
     </section>
