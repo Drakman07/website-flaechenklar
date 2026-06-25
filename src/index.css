@@ -74,6 +74,18 @@
   @keyframes fade-rise-in {
     to { opacity: 1; transform: translateY(0); }
   }
+
+  /* Pulsierender Ring am naechsten anzuklickenden Eckpunkt (Aufmass-Demo). */
+  .corner-pulse {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: corner-pulse 1.6s ease-out infinite;
+  }
+  @keyframes corner-pulse {
+    0%   { transform: scale(0.8); opacity: 0.9; }
+    70%  { transform: scale(1.6); opacity: 0; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -94,5 +106,9 @@
     animation: none;
     opacity: 1;
     transform: none;
+  }
+  .corner-pulse {
+    animation: none;
+    opacity: 0;
   }
 }
