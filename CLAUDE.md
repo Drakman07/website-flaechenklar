@@ -1,6 +1,8 @@
 # FlächenKlar-Website — Session-Memory für Claude
 
-Letzter Stand: 2026-05-17, nach Tutorial-Release (PRs #7 + #8 gemerged) — `/tutorial`-Route live mit allen 8 Kapitel-MP4s (~45 min Onboarding-Ersatz) auf R2. /tour bekam Footer-Funnel zum Tutorial. Vorgänger-Stand (Welle 2 PR #6): Founder-Story-Block + Alexander-Foto, 5-Tier-Preise mit Pilot-Banner + Counter-Animationen, Hero-H1-Word-Stagger, ScrollProgressBar, Hero-Parallax, Card-Hover-Glow. PSI Welle 2: Mobile 100/100/96/92, Desktop 100/97/96/92.
+Letzter Stand: 2026-06-25, **Welle 3 (Wow-Upgrade, PRs #10 + #11 gemerged)** — interaktives Aufmass-Tool im Hero (oben rechts, `src/components/PlanMessDemo.tsx`): vorgegebener L-Haus-Grundriss, Eckpunkte der Reihe nach abklicken → Messpolygon zeichnet sich → Flaeche 100,50 m² + Massketten → Aufmassblatt (`AufmassProtokoll`) entsteht darunter. Ersetzt die alte `PolygonDemo`. Dazu: choreografierter Hero-Auftritt (`fade-rise`), Zahlen-Mini-Viz (Ring/Sparkline/Balken auf den echten Stats 100 % / 0 / 1), editorial Typo-Skala + Micro-Interaktionen. PSI live (mobile): A11y 100 / BP 96 / SEO 100, LCP 423 ms, CLS 0,00. Null Animations-Lib (gsap war kurz für eine Scroll-Sequenz drin, wieder entfernt). Main-Bundle 82,95 KB gz.
+
+Vorgänger-Stand 2026-05-17, Tutorial-Release (PRs #7 + #8) — `/tutorial`-Route live mit allen 8 Kapitel-MP4s (~45 min Onboarding-Ersatz) auf R2. /tour bekam Footer-Funnel zum Tutorial. Welle 2 (PR #6): Founder-Story-Block + Alexander-Foto, 5-Tier-Preise mit Pilot-Banner + Counter-Animationen, Hero-H1-Word-Stagger, ScrollProgressBar, Hero-Parallax, Card-Hover-Glow. PSI Welle 2: Mobile 100/100/96/92, Desktop 100/97/96/92.
 
 ## Projekt-Kurzbeschreibung
 
@@ -125,6 +127,10 @@ nötig). Details in `docs/video-assets.md`.
 | `src/components/Reveal.tsx` | Scroll-triggered Fade-Slide-In, IntersectionObserver-basiert |
 | `src/components/TealUnderline.tsx` | In-View-getriggerte teal Underline-Animation für Headline-Akzente |
 | `src/components/BlueprintGrid.tsx` | Drift-animiertes Hintergrund-Grid, optionaler `style`-Prop für Parallax |
+| `src/components/PlanMessDemo.tsx` | **Interaktives Hero-Aufmass-Tool** (Welle 3): Haus-Grundriss als Vorlage, Eckpunkte abklicken → Fläche → Aufmassblatt. Ersetzt `PolygonDemo` (gelöscht) |
+| `src/components/animations/planSvg.tsx` | Geometrie der Aufmass-Demo (`MEASURE_POLYGON`, `AREA_M2`, `TEILFLAECHEN`, `polyPathD`) — nur Flächen, kein €/Beitrag |
+| `src/components/animations/AufmassProtokoll.tsx` | Aufmassblatt-Karte (Teilflächen + Gesamtfläche in m²), erscheint nach Abschluss |
+| `src/lib/easing.ts` | Geteilte Easing-Helfer (`easeOutCubic`, `clamp01`, `lerp`) für `useCountUp` + Demo |
 | `src/components/animations/ScrollProgressBar.tsx` | rAF-throttled Scroll-Progress-Bar fixed top |
 | `src/sections/Founder.tsx` | Founder-Story-Block, Portrait-Foto in Polaroid-Frame + Ghost-Panel |
 | `src/hooks/useCountUp.ts` | Counter-Animation mit Options-Object (enabled, startDelayMs, decimals) |
@@ -331,9 +337,10 @@ _Erledigt 2026-05-16:_
 ## GitHub
 
 - Repo: https://github.com/Drakman07/website-flaechenklar (private)
-- Letzter Merge: PR #6 (Welle 2 Restore) → Merge-Commit `3c9cf99`
-- Letzte Pushes auf main: `e0ba298` (Cleanup) + `693e7ea` (Reapply von revertiertem Welle-2-Inhalt)
-- Davor: PR #5 hatte PR #4 komplett revertiert (siehe Welle-2-Saga in Erkenntnissen)
+- Letzter Merge: PR #11 (interaktives Hero-Aufmass-Tool, Scroll-Sequenz entfernt) → Merge-Commit `8ef72ae`
+- Davor: PR #10 (Welle-3 Wow-Upgrade: Hero-Choreografie + Scroll-Scrub-Sequenz + Feinschliff) → `2ebba51`
+- Auto-Deploy nach beiden Merges grün (GitHub Actions → Cloudflare)
+- Selbst-Merge via `gh pr merge` lief in dieser Session durch (nicht mehr blockiert); Merge dennoch nur auf ausdrückliche Freigabe
 
 ## Erkenntnisse aus diesem Projektabschnitt
 
