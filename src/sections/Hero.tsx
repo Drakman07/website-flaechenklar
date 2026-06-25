@@ -40,9 +40,9 @@ export function Hero() {
   const scrollY = useScrollY();
 
   // Zahlen zaehlen nach der Headline hoch (gestaffelt); die Mini-Viz laeuft mit.
-  const [ref100, n100] = useCountUp<HTMLElement>(100, { startDelayMs: 1400 });
-  const [ref0, n0] = useCountUp<HTMLElement>(0, { startDelayMs: 1550 });
-  const [ref1, n1] = useCountUp<HTMLElement>(1, { startDelayMs: 1700 });
+  const [ref100, n100] = useCountUp<HTMLDivElement>(100, { startDelayMs: 1400 });
+  const [ref0, n0] = useCountUp<HTMLDivElement>(0, { startDelayMs: 1550 });
+  const [ref1, n1] = useCountUp<HTMLDivElement>(1, { startDelayMs: 1700 });
   // Fraktionaler Begleitwert fuer den wachsenden Balken (Text bleibt ganzzahlig).
   const [refBar, barFill] = useCountUp<SVGSVGElement>(1, {
     decimals: 2,
@@ -95,7 +95,7 @@ export function Hero() {
             </a>
           </div>
 
-          <dl className="mt-14 grid max-w-xl grid-cols-3 gap-8 text-sm">
+          <div className="mt-14 grid max-w-xl grid-cols-3 gap-8 text-sm">
             <div className="border-l border-white/15 pl-4 first:border-l-0 first:pl-0">
               {/* 100 % offline -> Fortschrittsring, fuellt sich mit dem Zaehler */}
               <svg viewBox="0 0 36 36" className="h-8 w-8" aria-hidden="true">
@@ -122,13 +122,13 @@ export function Hero() {
                   transform="rotate(-90 18 18)"
                 />
               </svg>
-              <dt
+              <div
                 ref={ref100}
                 className="mt-2 text-2xl font-bold text-teal md:text-3xl tabular-nums"
               >
                 {n100} <span className="text-xl md:text-2xl">%</span>
-              </dt>
-              <dd className="mt-1 text-white/70">offline</dd>
+              </div>
+              <div className="mt-1 text-white/70">offline</div>
             </div>
             <div className="border-l border-white/15 pl-4">
               {/* 0 Cloud-Calls -> flache Linie auf der Nulllinie (nichts passiert) */}
@@ -168,13 +168,13 @@ export function Hero() {
                   strokeWidth="1.5"
                 />
               </svg>
-              <dt
+              <div
                 ref={ref0}
                 className="mt-2 text-2xl font-bold text-teal md:text-3xl tabular-nums"
               >
                 {n0}
-              </dt>
-              <dd className="mt-1 text-white/70">Cloud-Calls</dd>
+              </div>
+              <div className="mt-1 text-white/70">Cloud-Calls</div>
             </div>
             <div className="border-l border-white/15 pl-4">
               {/* 1 Doppelklick -> ein Balken waechst auf volle Hoehe */}
@@ -202,15 +202,15 @@ export function Hero() {
                   y={21 - 18 * barFill}
                 />
               </svg>
-              <dt
+              <div
                 ref={ref1}
                 className="mt-2 text-2xl font-bold text-teal md:text-3xl tabular-nums"
               >
                 {n1}
-              </dt>
-              <dd className="mt-1 text-white/70">Doppelklick</dd>
+              </div>
+              <div className="mt-1 text-white/70">Doppelklick</div>
             </div>
-          </dl>
+          </div>
         </div>
 
         <div className="relative hidden items-center justify-center lg:flex">
