@@ -6,7 +6,9 @@ import {
   CARD_BASE,
   CARD_HOVER,
   CARD_HOVER_GLOW,
+  H2,
   ICON_SIZE,
+  ICON_TILE,
   LABEL,
   LEAD,
 } from "@/components/ui/tokens";
@@ -20,7 +22,7 @@ export function Funktionen() {
         <Reveal>
           <div className="max-w-2xl">
             <p className={LABEL}>Funktionen</p>
-            <h2 className="mt-3 text-3xl font-bold text-navy md:text-4xl">
+            <h2 className={`mt-3 text-navy ${H2}`}>
               Alles, was ein Aufmaß <TealUnderline>braucht</TealUnderline>.
             </h2>
             <p className={`mt-4 ${LEAD}`}>
@@ -36,7 +38,7 @@ export function Funktionen() {
               <article
                 className={`group h-full p-8 lg:col-span-2 ${CARD_BASE} ${CARD_ACCENT_BORDER} ${CARD_HOVER} ${CARD_HOVER_GLOW}`}
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded bg-teal/10 text-teal transition-colors group-hover:bg-teal/20">
+                <div className={`h-14 w-14 ${ICON_TILE}`}>
                   <featured.icon size={ICON_SIZE.hero} />
                 </div>
                 <h3 className="mt-5 text-xl font-semibold text-navy md:text-2xl">
@@ -52,7 +54,7 @@ export function Funktionen() {
               <article
                 className={`group h-full p-6 ${CARD_BASE} ${CARD_ACCENT_BORDER} ${CARD_HOVER} ${CARD_HOVER_GLOW}`}
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded bg-teal/10 text-teal transition-colors group-hover:bg-teal/20">
+                <div className={`h-10 w-10 ${ICON_TILE}`}>
                   <Icon size={ICON_SIZE.feature} />
                 </div>
                 <h3 className="mt-4 text-base font-semibold text-navy">

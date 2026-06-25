@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-
-const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+import { easeOutCubic } from "@/lib/easing";
 
 type CountUpOptions = {
   /** Animationsdauer (ms). Default 800ms. */

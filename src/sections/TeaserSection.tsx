@@ -2,7 +2,13 @@ import { ArrowRight } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { VideoPlayer, type VideoSource } from "@/components/VideoPlayer";
 import { navigate } from "@/router";
-import { BTN_TERTIARY, ICON_SIZE } from "@/components/ui/tokens";
+import {
+  BTN_TERTIARY,
+  H2,
+  ICON_SIZE,
+  LABEL,
+  LEAD,
+} from "@/components/ui/tokens";
 
 const TEASER: VideoSource = {
   src: "https://videos.flaechenklar.de/teaser.mp4",
@@ -22,13 +28,9 @@ export function TeaserSection() {
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
           <div className="max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-wider text-teal">
-              In 60 Sekunden
-            </p>
-            <h2 className="mt-3 text-3xl font-bold text-navy md:text-4xl">
-              Sehen Sie es selbst.
-            </h2>
-            <p className="mt-4 text-base text-ink/70 md:text-lg">
+            <p className={LABEL}>In 60 Sekunden</p>
+            <h2 className={`mt-3 text-navy ${H2}`}>Sehen Sie es selbst.</h2>
+            <p className={`mt-4 ${LEAD}`}>
               Vom Bauplan zum Aufmaßprotokoll — der komplette Workflow in einer
               Minute.
             </p>
