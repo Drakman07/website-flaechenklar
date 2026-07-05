@@ -45,6 +45,21 @@ export const versionen: readonly Version[] = [
   // Im Internet erscheinen aber nur Einträge mit oeffentlich !== false.
   // Eilpatches bekommen `oeffentlich: false` (siehe 1.2.1).
   {
+    version: "1.2.6",
+    datum: "05.07.2026",
+    iso: "2026-07-05",
+    punkte: [
+      {
+        titel: "Maßstab: Referenzmessung ist jetzt der verlässliche Standard",
+        text: "Der Maßstab wird über eine kurze Referenzmessung im Plan festgelegt — auch bei verzerrten oder nicht maßstabsgetreuen PDF-Exporten zuverlässig. Die automatische Erkennung schlägt einen Wert nur noch vor, wenn die Maßketten des Plans ihn zweifelsfrei bestätigen; andernfalls führt das Programm direkt zur Messung. Die bisherige Maßstab-Direkteingabe (1:N) und die Schnellwahl-Knöpfe entfallen, weil Maßstabsangaben im Plankopf bei verzerrten Exporten trügen können.",
+      },
+      {
+        titel: "Eindeutige Maßstab-Anzeige",
+        text: "Eine klare Ampel zeigt pro Bereich, ob der Maßstab gesetzt ist. Weicht eine verlässliche Planbemaßung deutlich ab, weist das Programm auf eine empfohlene Zweitmessung hin.",
+      },
+    ],
+  },
+  {
     version: "1.2.1",
     datum: "21.06.2026",
     iso: "2026-06-21",
