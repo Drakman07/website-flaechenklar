@@ -48,6 +48,9 @@ export const versionen: readonly Version[] = [
     version: "1.2.6",
     datum: "05.07.2026",
     iso: "2026-07-05",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich (siehe 1.2.1).
+    // Auf der Website erscheinen nur Minor-Releases (1.1, 1.2, 1.3, 1.4).
+    oeffentlich: false,
     punkte: [
       {
         titel: "Maßstab: Referenzmessung ist jetzt der verlässliche Standard",
