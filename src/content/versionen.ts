@@ -45,6 +45,23 @@ export const versionen: readonly Version[] = [
   // Im Internet erscheinen aber nur Einträge mit oeffentlich !== false.
   // Eilpatches bekommen `oeffentlich: false` (siehe 1.2.1).
   {
+    version: "1.2.7",
+    datum: "06.07.2026",
+    iso: "2026-07-06",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich (siehe 1.2.1/1.2.6).
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Vollgeschoss-Beurteilung: Aufmaßblatt aufgeräumt",
+        text: "Das Aufmaßprotokoll zeigt jetzt ausschließlich das Ergebnis der Vollgeschoss-Beurteilung. Ein interner Plausibilitäts-Hinweis, der bislang mit ins Protokoll rutschte, bleibt jetzt im Programm sichtbar, erscheint aber nicht mehr im Ausdruck.",
+      },
+      {
+        titel: "Kleinere Anzeige-Korrektur beim manuellen Ansetzen der Fläche ≥ 2,30 m",
+        text: "Bestätigen- und Zurücksetzen-Symbol beim manuellen Ansetzen der Fläche saßen in seltenen Fällen leicht außerhalb des Eingabefelds. Behoben.",
+      },
+    ],
+  },
+  {
     version: "1.2.6",
     datum: "05.07.2026",
     iso: "2026-07-05",
