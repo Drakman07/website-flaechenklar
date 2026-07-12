@@ -31,6 +31,10 @@ export const faq: readonly FaqItem[] = [
     a: "Einmalkauf gestaffelt nach Einwohnerklasse: 1.600 Euro netto für Kommunen bis 3.000 Einwohner, 3.100 Euro netto für 3.000 bis 8.000 Einwohner, 5.800 Euro netto für 8.000 bis 15.000 Einwohner, 10.500 Euro netto für 15.000 bis 30.000 Einwohner und 14.500 Euro netto über 30.000 Einwohner. Die Wartung im ersten Jahr ist enthalten, ab dem zweiten Jahr 10 Prozent pro Jahr, jährlich kündbar.",
   },
   {
+    q: "Kann FlächenKlar auch den Beitragsbescheid erstellen?",
+    a: "Dafür gibt es das Bescheidmodul als Zusatzmodul: Es erstellt aus den Berechnungsergebnissen und den Angaben der gemeindlichen Satzung Entwürfe für Herstellungsbeitragsbescheide nach Art. 5 KAG Bayern, orientiert am amtlichen Muster. Die fachliche Prüfung und der Erlass des Bescheids verbleiben bei der Gemeinde — FlächenKlar leistet keine Rechtsberatung. Details zur Verfügbarkeit erhalten Sie unter info@flaechenklar.de.",
+  },
+  {
     q: "Kann ich das Aufmaßprotokoll als PDF an die Akte hängen?",
     a: "Ja, genau dafür ist das Aufmaßprotokoll gedacht: ein druckreifes PDF mit Deckblatt, Geschossaufstellung, Plan-Ausschnitten und vollständigem Berechnungsanhang. Akten-fertig und nachvollziehbar.",
   },

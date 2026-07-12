@@ -11,6 +11,7 @@ import {
 const links = [
   { href: "#funktionen", label: "Funktionen" },
   { href: "#vollgeschoss", label: "Vollgeschoss" },
+  { href: "#bescheid", label: "Bescheid" },
   { href: "#sicherheit", label: "Sicherheit" },
   { href: "#preise", label: "Preise" },
   { href: "#faq", label: "FAQ" },
@@ -93,7 +94,7 @@ export function Nav() {
           <img src={logoUrl} alt="FlächenKlar" className="h-9 w-auto" />
         </a>
 
-        <nav className="hidden items-center gap-7 md:flex">
+        <nav className="hidden items-center gap-6 md:flex lg:gap-7">
           {links.map((l) => {
             const isActive = activeId === l.href.slice(1);
             return (
