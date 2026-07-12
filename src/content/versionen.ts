@@ -45,6 +45,20 @@ export const versionen: readonly Version[] = [
   // Im Internet erscheinen aber nur Einträge mit oeffentlich !== false.
   // Eilpatches bekommen `oeffentlich: false` (siehe 1.2.1).
   {
+    version: "1.3.0",
+    datum: "TT.MM.JJJJ", // beim Release setzen
+    iso: "2026-01-01", // Platzhalter, beim Release setzen
+    // Zusammen mit bescheidReleased=true (src/content/bescheid.ts) freischalten:
+    // dann `oeffentlich`-Zeile entfernen und Datum/iso setzen.
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Bescheidmodul (Add-on)",
+        text: "Erstellt aus den Berechnungsergebnissen und den Angaben der gemeindlichen Satzung Entwürfe für Herstellungsbeitragsbescheide nach Art. 5 KAG Bayern — orientiert am amtlichen Muster. Die fachliche Prüfung und der Erlass verbleiben bei der Gemeinde.",
+      },
+    ],
+  },
+  {
     version: "1.2.7",
     datum: "06.07.2026",
     iso: "2026-07-06",

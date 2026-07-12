@@ -14,6 +14,13 @@ export type Preisstufe = {
   einmaligNumeric: number;
   wartung: string;
   wartungNumeric: number;
+  /** Bescheidmodul-Add-on, einmalig — Anzeige-String ("250 €"). */
+  bescheidModul: string;
+  /** Rohwert des Add-ons für Berechnungen/Counter. */
+  bescheidModulNumeric: number;
+  /** Wartung ab Jahr 2 MIT Bescheidmodul: 10 % auf (einmalig + bescheidModul). */
+  wartungMitModul: string;
+  wartungMitModulNumeric: number;
 };
 
 /**
@@ -30,6 +37,10 @@ export const preise: readonly Preisstufe[] = [
     einmaligNumeric: 1600,
     wartung: "160 €",
     wartungNumeric: 160,
+    bescheidModul: "250 €",
+    bescheidModulNumeric: 250,
+    wartungMitModul: "185 €",
+    wartungMitModulNumeric: 185,
   },
   {
     icon: Building,
@@ -38,6 +49,10 @@ export const preise: readonly Preisstufe[] = [
     einmaligNumeric: 3100,
     wartung: "310 €",
     wartungNumeric: 310,
+    bescheidModul: "500 €",
+    bescheidModulNumeric: 500,
+    wartungMitModul: "360 €",
+    wartungMitModulNumeric: 360,
   },
   {
     icon: Building2,
@@ -46,6 +61,10 @@ export const preise: readonly Preisstufe[] = [
     einmaligNumeric: 5800,
     wartung: "580 €",
     wartungNumeric: 580,
+    bescheidModul: "900 €",
+    bescheidModulNumeric: 900,
+    wartungMitModul: "670 €",
+    wartungMitModulNumeric: 670,
   },
   {
     icon: Landmark,
@@ -54,6 +73,10 @@ export const preise: readonly Preisstufe[] = [
     einmaligNumeric: 10500,
     wartung: "1.050 €",
     wartungNumeric: 1050,
+    bescheidModul: "1.600 €",
+    bescheidModulNumeric: 1600,
+    wartungMitModul: "1.210 €",
+    wartungMitModulNumeric: 1210,
   },
   {
     icon: Castle,
@@ -62,5 +85,9 @@ export const preise: readonly Preisstufe[] = [
     einmaligNumeric: 14500,
     wartung: "1.450 €",
     wartungNumeric: 1450,
+    bescheidModul: "2.200 €",
+    bescheidModulNumeric: 2200,
+    wartungMitModul: "1.670 €",
+    wartungMitModulNumeric: 1670,
   },
 ] as const;

@@ -1,5 +1,6 @@
 import type { Preisstufe } from "@/content/preise";
 import { preise } from "@/content/preise";
+import { bescheidReleased } from "@/content/bescheid";
 import { Reveal } from "@/components/Reveal";
 import { TealUnderline } from "@/components/TealUnderline";
 import { useCountUp } from "@/hooks/useCountUp";
@@ -25,7 +26,11 @@ export function Preise() {
             </h2>
             <p className={`mt-4 ${LEAD}`}>
               Einmalkauf nach Einwohnerklasse. Wartung im ersten Jahr inklusive,
-              ab dem zweiten Jahr 10 % p. a., jährlich kündbar.
+              ab dem zweiten Jahr{" "}
+              {bescheidReleased
+                ? "10 % auf Lizenz und gebuchte Module p. a."
+                : "10 % p. a."}
+              , jährlich kündbar.
             </p>
           </div>
         </Reveal>
@@ -38,8 +43,12 @@ export function Preise() {
 
         <Reveal delay={700}>
           <p className="mt-8 text-center text-sm text-ink/60">
-            Wartung im ersten Jahr inklusive. Ab Jahr 2 jährlich kündbar.
-            Enthält Updates, Rechtsanpassungen und E-Mail-Support.
+            Wartung im ersten Jahr inklusive. Ab Jahr 2{" "}
+            {bescheidReleased
+              ? "10 % auf Lizenz und gebuchte Module, "
+              : ""}
+            jährlich kündbar. Enthält Updates, Rechtsanpassungen und
+            E-Mail-Support.
           </p>
         </Reveal>
       </div>
@@ -76,6 +85,16 @@ function PreisCard({ stufe, delay }: { stufe: Preisstufe; delay: number }) {
         </p>
         <p className="mt-1 text-xs text-ink/55">einmalig (netto)</p>
 
+        {bescheidReleased && (
+          <p className="mt-3 text-xs text-ink/65">
+            + Bescheidmodul (Add-on):{" "}
+            <span className="font-semibold tabular-nums text-ink/85">
+              {stufe.bescheidModul}
+            </span>{" "}
+            einmalig
+          </p>
+        )}
+
         <div className="mt-auto border-t border-outline pt-4">
           <p className="text-xs text-ink/65">
             Wartung ab Jahr 2:{" "}
@@ -84,6 +103,15 @@ function PreisCard({ stufe, delay }: { stufe: Preisstufe; delay: number }) {
             </span>
             <span className="text-ink/55"> p.a.</span>
           </p>
+          {bescheidReleased && (
+            <p className="mt-1 text-xs text-ink/65">
+              mit Bescheidmodul:{" "}
+              <span className="font-semibold tabular-nums text-ink/85">
+                {stufe.wartungMitModul}
+              </span>
+              <span className="text-ink/55"> p.a.</span>
+            </p>
+          )}
         </div>
       </article>
     </Reveal>
