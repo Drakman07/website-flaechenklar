@@ -165,7 +165,7 @@ export function Nav() {
             <a
               href="#kontakt"
               onClick={handleAnchorClick}
-              className={`mt-2 block w-full bg-teal px-3 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-teal/90 rounded ${FOCUS_RING}`}
+              className={`mt-2 block w-full bg-teal-ink px-3 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-teal-ink/90 rounded ${FOCUS_RING}`}
             >
               Demo anfragen
             </a>

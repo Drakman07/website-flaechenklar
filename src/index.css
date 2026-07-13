@@ -7,6 +7,12 @@
     --navy: 220 70% 14%;
     --navy-deep: 220 75% 10%;
     --teal: 174 65% 42%;
+    /* AA-Kontrast-Variante von --teal fuer Text/Button-Flaechen auf hellem
+       Grund (Label-Eyebrows, Primary-Buttons, Links). Bei 42% Lightness
+       liegt der Kontrast gegen Weiss nur bei ~2.7:1 (WCAG-Fail); 28%
+       Lightness liefert ~5.2:1. Fuer Text/Icons auf dunklem Grund (Navy)
+       bleibt --teal unveraendert, dort ist der Kontrast bereits gut. */
+    --teal-ink: 174 65% 28%;
     --text: 220 52% 21%;
     --muted: 215 16% 47%;
     --border: 220 20% 92%;

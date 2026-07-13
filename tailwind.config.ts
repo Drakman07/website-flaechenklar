@@ -8,6 +8,7 @@ export default {
         navy: "hsl(var(--navy) / <alpha-value>)",
         "navy-deep": "hsl(var(--navy-deep) / <alpha-value>)",
         teal: "hsl(var(--teal) / <alpha-value>)",
+        "teal-ink": "hsl(var(--teal-ink) / <alpha-value>)",
         ink: "hsl(var(--text) / <alpha-value>)",
         muted: "hsl(var(--muted) / <alpha-value>)",
         outline: "hsl(var(--border) / <alpha-value>)",

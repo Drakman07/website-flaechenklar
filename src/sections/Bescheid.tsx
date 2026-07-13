@@ -16,11 +16,11 @@ export function Bescheid() {
           <p className={LABEL}>Add-on · Bescheid-Entwürfe</p>
 
           {!bescheidReleased ? (
-            <span className="mt-4 inline-flex items-center gap-2 rounded-full border border-teal/40 bg-teal/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-teal">
+            <span className="mt-4 inline-flex items-center gap-2 rounded-full border border-teal/40 bg-teal/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-teal-ink">
               In Vorbereitung
             </span>
           ) : (
-            <span className="mt-4 inline-flex items-center gap-2 rounded-full border border-teal/40 bg-teal/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-teal">
+            <span className="mt-4 inline-flex items-center gap-2 rounded-full border border-teal/40 bg-teal/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-teal-ink">
               Neu in Version 1.3
             </span>
           )}
