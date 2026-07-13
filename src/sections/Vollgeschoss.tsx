@@ -3,7 +3,7 @@ import { BlueprintGrid } from "@/components/BlueprintGrid";
 import { Reveal } from "@/components/Reveal";
 import { TealUnderline } from "@/components/TealUnderline";
 import { useCountUp } from "@/hooks/useCountUp";
-import { ICON_SIZE, LABEL } from "@/components/ui/tokens";
+import { ICON_SIZE, LABEL_ON_DARK } from "@/components/ui/tokens";
 
 const bullets = [
   "SVG-Diagramme: Grundriss, Aufrisse, Querschnitt — live mitwachsend",
@@ -43,7 +43,7 @@ export function Vollgeschoss() {
       <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-24 lg:grid-cols-[5fr_7fr] lg:gap-16">
         <Reveal>
         <div>
-          <p className={LABEL}>Spezial · Dachgeschoss</p>
+          <p className={LABEL_ON_DARK}>Spezial · Dachgeschoss</p>
           <h2 className="mt-3 text-3xl font-bold md:text-4xl">
             Vollgeschoss-Modul nach{" "}
             <TealUnderline>Art. 83 Abs. 7 BayBO</TealUnderline>.
@@ -72,7 +72,7 @@ export function Vollgeschoss() {
 
         <Reveal delay={120}>
         <div className="relative rounded-lg border border-white/15 bg-white/5 p-6 shadow-feature md:p-8">
-          <p className={LABEL}>Beispiel-Berechnung</p>
+          <p className={LABEL_ON_DARK}>Beispiel-Berechnung</p>
 
           <dl className="mt-5 space-y-2 text-sm">
             {inputs.map((row) => (

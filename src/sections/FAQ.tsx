@@ -33,7 +33,7 @@ export function FAQ() {
                     aria-expanded={isOpen}
                     aria-controls={`faq-panel-${i}`}
                     onClick={() => setOpenIndex(isOpen ? null : i)}
-                    className={`group flex w-full items-start justify-between gap-6 py-5 text-left text-base font-semibold text-navy transition-colors hover:text-teal md:text-lg ${FOCUS_RING}`}
+                    className={`group flex w-full items-start justify-between gap-6 py-5 text-left text-base font-semibold text-navy transition-colors hover:text-teal-ink md:text-lg ${FOCUS_RING}`}
                   >
                     <span>{q}</span>
                     <span

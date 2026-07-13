@@ -5,7 +5,7 @@
  * Beitrags-, Satzungs- oder Geldberechnung — das Tool gibt nur Flaechen aus.
  */
 import { Fragment } from "react";
-import { LABEL } from "@/components/ui/tokens";
+import { LABEL_ON_DARK } from "@/components/ui/tokens";
 
 type Teilflaeche = { label: string; m2: number };
 
@@ -25,7 +25,7 @@ export function AufmassProtokoll({
 }) {
   return (
     <div className="rounded-lg border border-white/15 bg-white/5 p-6 shadow-feature">
-      <p className={LABEL}>Aufmaßprotokoll</p>
+      <p className={LABEL_ON_DARK}>Aufmaßprotokoll</p>
       <p className="mt-1 text-sm text-white/50">Beispiel-Auswertung · Plan 1:100</p>
 
       <dl className="mt-5 grid grid-cols-[1fr_auto] gap-x-4 gap-y-2 text-sm">

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BlueprintGrid } from "@/components/BlueprintGrid";
 import { Reveal } from "@/components/Reveal";
 import { TealUnderline } from "@/components/TealUnderline";
-import { LABEL } from "@/components/ui/tokens";
+import { LABEL_ON_DARK } from "@/components/ui/tokens";
 
 /**
  * Founder-Story-Sektion.
@@ -51,7 +51,7 @@ export function Founder() {
         {/* Rechte Spalte: Text */}
         <Reveal delay={120}>
           <div>
-            <p className={LABEL}>Über den Entwickler</p>
+            <p className={LABEL_ON_DARK}>Über den Entwickler</p>
             <h2 className="mt-3 text-3xl font-bold leading-tight md:text-4xl">
               Ich bin <TealUnderline>Alexander Geitner</TealUnderline>.
             </h2>

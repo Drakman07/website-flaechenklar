@@ -115,7 +115,7 @@ export function Tutorial() {
           <a
             href="/"
             onClick={handleBack}
-            className={`group inline-flex items-center gap-2 rounded-sm text-sm font-semibold text-teal transition-colors hover:text-teal/80 ${FOCUS_RING}`}
+            className={`group inline-flex items-center gap-2 rounded-sm text-sm font-semibold text-teal-ink transition-colors hover:text-teal-ink/80 ${FOCUS_RING}`}
           >
             <ArrowLeft
               size={ICON_SIZE.inline}
@@ -178,7 +178,7 @@ export function Tutorial() {
             <a
               href="/versionen"
               onClick={handleVersionen}
-              className={`group mt-6 inline-flex items-center gap-2 rounded-sm text-sm font-semibold text-teal transition-colors hover:text-teal/80 ${FOCUS_RING}`}
+              className={`group mt-6 inline-flex items-center gap-2 rounded-sm text-sm font-semibold text-teal-ink transition-colors hover:text-teal-ink/80 ${FOCUS_RING}`}
             >
               Alle Versionen ansehen
               <ArrowRight
@@ -214,7 +214,7 @@ export function Tutorial() {
               </a>
               <a
                 href="mailto:info@flaechenklar.de"
-                className={`inline-flex items-center gap-2 rounded-sm px-5 py-3 text-sm font-semibold text-teal transition-colors hover:text-teal/80 ${FOCUS_RING}`}
+                className={`inline-flex items-center gap-2 rounded-sm px-5 py-3 text-sm font-semibold text-teal-ink transition-colors hover:text-teal-ink/80 ${FOCUS_RING}`}
               >
                 <Mail size={ICON_SIZE.inline} />
                 info@flaechenklar.de

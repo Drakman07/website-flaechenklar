@@ -49,20 +49,32 @@ export const FOCUS_RING_DARK =
 const BTN_BASE =
   "inline-flex items-center justify-center gap-2 rounded text-sm font-semibold transition-[background-color,box-shadow,transform] duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none";
 
-export const BTN_PRIMARY = `${BTN_BASE} bg-teal px-5 py-3.5 text-white shadow-sm hover:bg-teal/90 hover:-translate-y-px hover:shadow-md active:translate-y-0 ${FOCUS_RING_DARK}`;
+// bg-teal-ink statt bg-teal: weisser Text auf --teal (L 42%) faellt mit
+// ~2.7:1 unter WCAG-AA (4.5:1). --teal-ink (L 28%) traegt denselben Hue/Sat,
+// erreicht aber ~5.2:1 gegen Weiss.
+export const BTN_PRIMARY = `${BTN_BASE} bg-teal-ink px-5 py-3.5 text-white shadow-sm hover:bg-teal-ink/90 hover:-translate-y-px hover:shadow-md active:translate-y-0 ${FOCUS_RING_DARK}`;
 
-export const BTN_PRIMARY_ON_LIGHT = `${BTN_BASE} bg-teal px-5 py-3.5 text-white shadow-sm hover:bg-teal/90 hover:-translate-y-px hover:shadow-md active:translate-y-0 ${FOCUS_RING}`;
+export const BTN_PRIMARY_ON_LIGHT = `${BTN_BASE} bg-teal-ink px-5 py-3.5 text-white shadow-sm hover:bg-teal-ink/90 hover:-translate-y-px hover:shadow-md active:translate-y-0 ${FOCUS_RING}`;
 
 export const BTN_SECONDARY_ON_DARK = `${BTN_BASE} border border-white/25 px-5 py-3.5 text-white/90 hover:bg-white/5 ${FOCUS_RING_DARK}`;
 
-export const BTN_TERTIARY = `${BTN_BASE} border border-teal/40 bg-teal/5 px-5 py-3 text-teal hover:bg-teal/10 ${FOCUS_RING}`;
+export const BTN_TERTIARY = `${BTN_BASE} border border-teal/40 bg-teal/5 px-5 py-3 text-teal-ink hover:bg-teal/10 ${FOCUS_RING}`;
 
 // Kompaktere Nav-Variante (kleineres Padding)
-export const BTN_PRIMARY_COMPACT = `${BTN_BASE} bg-teal px-4 py-2 text-white shadow-sm hover:bg-teal/90 ${FOCUS_RING}`;
+export const BTN_PRIMARY_COMPACT = `${BTN_BASE} bg-teal-ink px-4 py-2 text-white shadow-sm hover:bg-teal-ink/90 ${FOCUS_RING}`;
 
 // ---------- Typography ----------
 
+// Fuer Label auf hellem Grund (Standardfall, die meisten Sektionen).
+// text-teal-ink statt text-teal: --teal (L 42%) faellt gegen Weiss mit
+// ~2.6:1 unter WCAG-AA (4.5:1). --teal-ink (L 28%) traegt denselben
+// Hue/Sat, erreicht aber ~5.2:1.
 export const LABEL =
+  "text-xs font-semibold uppercase tracking-wider text-teal-ink";
+
+// Fuer Label auf dunklem (Navy-)Grund — dort ist --teal bereits AA-konform,
+// --teal-ink waere dort zu dunkel und würde selbst unter 4.5:1 fallen.
+export const LABEL_ON_DARK =
   "text-xs font-semibold uppercase tracking-wider text-teal";
 
 // Editorial-Ueberschriften (Groesse/Zeilenhoehe/Tracking/Gewicht stecken im
