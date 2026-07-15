@@ -57,9 +57,11 @@ export function Preise() {
 }
 
 function PreisCard({ stufe, delay }: { stufe: Preisstufe; delay: number }) {
-  // Komplett-Paket = Basis + Bescheidmodul, aus den Rohwerten berechnet
+  // Komplett-Paket = Aufmaßmodul + Bescheidmodul, aus den Rohwerten berechnet
   // (keine hartkodierten Summen) — der prominente Anker-Preis, sobald das
-  // Modul released ist. Ohne Modul bleibt der Basispreis der Anker.
+  // Modul released ist. Ohne Bescheidmodul bleibt der Aufmaßmodul-Preis der
+  // Anker (bewusst NICHT als "Basis"/Minimalversion geframt — das
+  // Aufmaßmodul ist ein vollwertiges, eigenständig sinnvolles Produkt).
   const komplettNumeric = stufe.einmaligNumeric + stufe.bescheidModulNumeric;
   const wartungKomplettNumeric = stufe.wartungMitModulNumeric;
 
@@ -109,7 +111,7 @@ function PreisCard({ stufe, delay }: { stufe: Preisstufe; delay: number }) {
 
         {bescheidReleased && (
           <p className="mt-2 text-xs text-ink/50">
-            Nur Basis, ohne Bescheidmodul: {formatNum(stufe.einmaligNumeric)} €
+            Aufmaßmodul allein: {formatNum(stufe.einmaligNumeric)} €
           </p>
         )}
 
@@ -123,7 +125,7 @@ function PreisCard({ stufe, delay }: { stufe: Preisstufe; delay: number }) {
           </p>
           {bescheidReleased && (
             <p className="mt-1 text-xs text-ink/50">
-              ohne Modul: {formatNum(stufe.wartungNumeric)} € p.a.
+              Aufmaßmodul allein: {formatNum(stufe.wartungNumeric)} € p.a.
             </p>
           )}
         </div>
