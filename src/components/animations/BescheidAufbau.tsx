@@ -12,7 +12,6 @@ import { useCountUp } from "@/hooks/useCountUp";
 
 const BEISPIEL_GRUNDSTUECKSFLAECHE = "620 m²";
 const BEISPIEL_GESCHOSSFLAECHE = "128,40 m²";
-const BEISPIEL_NUTZUNGSFAKTOR = "1,0";
 const BEISPIEL_BEITRAGSSATZ = "32,55 €/m²";
 const BEISPIEL_BEITRAG = 4180;
 
@@ -83,10 +82,6 @@ export function BescheidAufbau() {
             <span className="text-ink/55">Geschossfläche</span>
             <span className="text-right font-mono tabular-nums text-navy">
               {BEISPIEL_GESCHOSSFLAECHE}
-            </span>
-            <span className="text-ink/55">Nutzungsfaktor</span>
-            <span className="text-right font-mono tabular-nums text-navy">
-              {BEISPIEL_NUTZUNGSFAKTOR}
             </span>
             <span className="text-ink/55">Beitragssatz</span>
             <span className="text-right font-mono tabular-nums text-navy">
