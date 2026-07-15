@@ -1,4 +1,4 @@
-import { useState, type FormEvent, type ChangeEvent } from "react";
+import { useEffect, useState, type FormEvent, type ChangeEvent } from "react";
 import { CircleCheck, CircleAlert } from "lucide-react";
 import { BlueprintGrid } from "@/components/BlueprintGrid";
 import { Reveal } from "@/components/Reveal";
@@ -8,6 +8,8 @@ import {
   ICON_SIZE,
   INPUT_ON_DARK,
 } from "@/components/ui/tokens";
+
+const ANLIEGEN_OPTIONS = ["Demo", "Angebot", "Frage"] as const;
 
 /**
  * Formspree-Endpoint fuer das Kontaktformular.
@@ -27,6 +29,7 @@ type FormState = {
   behoerde: string;
   einwohner: string;
   anliegen: string;
+  bescheidInteresse: boolean;
   ansprechpartner: string;
   email: string;
   telefon: string;
@@ -42,7 +45,8 @@ type SubmitStatus =
 const initial: FormState = {
   behoerde: "",
   einwohner: "",
-  anliegen: "",
+  anliegen: "Demo",
+  bescheidInteresse: false,
   ansprechpartner: "",
   email: "",
   telefon: "",
@@ -63,6 +67,17 @@ export function Kontakt() {
       >,
     ) =>
       setForm({ ...form, [k]: e.target.value });
+
+  // Bescheid-CTAs (z.B. in der Bescheid-Sektion) feuern dieses Event statt
+  // eines Router-Umbaus — schlankste Variante fuer die Vorbelegung.
+  useEffect(() => {
+    const onBescheidInteresse = () => {
+      setForm((f) => ({ ...f, anliegen: "Demo", bescheidInteresse: true }));
+    };
+    window.addEventListener("fk-bescheid-interesse", onBescheidInteresse);
+    return () =>
+      window.removeEventListener("fk-bescheid-interesse", onBescheidInteresse);
+  }, []);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -86,6 +101,7 @@ export function Kontakt() {
         Behörde: form.behoerde,
         Einwohnerzahl: form.einwohner,
         Anliegen: form.anliegen,
+        "Interesse Bescheidmodul": form.bescheidInteresse ? "Ja" : "Nein",
         Ansprechpartner: form.ansprechpartner,
         email: form.email,
         Telefon: form.telefon || "—",
@@ -144,7 +160,7 @@ export function Kontakt() {
             Kontakt
           </p>
           <h2 className="mt-3 text-3xl font-bold md:text-4xl">
-            Demo, Angebot oder einfach Fragen.
+            In zwei Minuten zur Demo-Anfrage.
           </h2>
           <p className="mt-4 text-white/70 md:text-lg">
             Formular ausfüllen, abschicken — wir melden uns innerhalb von einem
@@ -222,20 +238,46 @@ export function Kontakt() {
                 </select>
               </label>
 
-              <label>
+              <div className="md:col-span-2">
                 <span className="text-sm text-white/70">Anliegen *</span>
-                <select
-                  required
-                  disabled={submitting}
-                  value={form.anliegen}
-                  onChange={update("anliegen")}
-                  className={`mt-1 ${inputCls}`}
+                <div
+                  role="group"
+                  aria-label="Anliegen"
+                  className="mt-2 flex flex-wrap gap-2"
                 >
-                  <option value="">Bitte wählen</option>
-                  <option>Demo</option>
-                  <option>Angebot</option>
-                  <option>Frage</option>
-                </select>
+                  {ANLIEGEN_OPTIONS.map((opt) => {
+                    const active = form.anliegen === opt;
+                    return (
+                      <button
+                        key={opt}
+                        type="button"
+                        disabled={submitting}
+                        aria-pressed={active}
+                        onClick={() => setForm({ ...form, anliegen: opt })}
+                        className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${FOCUS_RING_DARK} ${
+                          active
+                            ? "border-teal bg-teal-ink text-white"
+                            : "border-white/25 text-white/80 hover:bg-white/10"
+                        }`}
+                      >
+                        {opt}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <label className="md:col-span-2 flex items-center gap-2.5 text-sm text-white/80">
+                <input
+                  type="checkbox"
+                  checked={form.bescheidInteresse}
+                  onChange={(e) =>
+                    setForm({ ...form, bescheidInteresse: e.target.checked })
+                  }
+                  disabled={submitting}
+                  className={`h-4 w-4 rounded border-white/40 bg-white/10 accent-teal ${FOCUS_RING_DARK}`}
+                />
+                Interesse am Bescheidmodul
               </label>
 
               <label>

@@ -57,13 +57,19 @@ export function Preise() {
 }
 
 function PreisCard({ stufe, delay }: { stufe: Preisstufe; delay: number }) {
+  // Komplett-Paket = Basis + Bescheidmodul, aus den Rohwerten berechnet
+  // (keine hartkodierten Summen) — der prominente Anker-Preis, sobald das
+  // Modul released ist. Ohne Modul bleibt der Basispreis der Anker.
+  const komplettNumeric = stufe.einmaligNumeric + stufe.bescheidModulNumeric;
+  const wartungKomplettNumeric = stufe.wartungMitModulNumeric;
+
   // Counter-Animation: Preise zaehlen beim Reveal hoch, staggered je Card.
   const [einmaligRef, einmaligValue] = useCountUp<HTMLSpanElement>(
-    stufe.einmaligNumeric,
+    bescheidReleased ? komplettNumeric : stufe.einmaligNumeric,
     { durationMs: 900, startDelayMs: delay },
   );
   const [wartungRef, wartungValue] = useCountUp<HTMLSpanElement>(
-    stufe.wartungNumeric,
+    bescheidReleased ? wartungKomplettNumeric : stufe.wartungNumeric,
     { durationMs: 900, startDelayMs: delay + 150 },
   );
 
@@ -73,25 +79,37 @@ function PreisCard({ stufe, delay }: { stufe: Preisstufe; delay: number }) {
   return (
     <Reveal delay={delay}>
       <article
-        className={`group flex h-full flex-col rounded-lg border border-outline bg-white p-6 shadow-card ${CARD_ACCENT_BORDER} ${CARD_HOVER} ${CARD_HOVER_GLOW}`}
+        className={`group relative flex h-full flex-col rounded-lg bg-white p-6 shadow-card ${CARD_HOVER} ${CARD_HOVER_GLOW} ${
+          bescheidReleased
+            ? "border-2 border-teal/40"
+            : `border border-outline ${CARD_ACCENT_BORDER}`
+        }`}
       >
+        {bescheidReleased && (
+          <span className="absolute -top-3 left-6 rounded-full bg-teal-ink px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white shadow-sm">
+            Empfohlen
+          </span>
+        )}
+
         <div className="flex h-11 w-11 items-center justify-center rounded bg-teal/10 text-teal transition-colors group-hover:bg-teal/20">
           <Icon size={ICON_SIZE.feature} />
         </div>
         <p className={`mt-4 ${LABEL}`}>{stufe.einwohner}</p>
-        <p className="mt-3 text-3xl font-bold tabular-nums text-navy md:text-4xl">
+
+        {bescheidReleased && (
+          <p className="mt-3 text-xs font-semibold text-teal-ink">
+            Komplett-Paket · mit Bescheidmodul
+          </p>
+        )}
+        <p className="mt-1 text-3xl font-bold tabular-nums text-navy md:text-4xl">
           <span ref={einmaligRef}>{formatNum(einmaligValue)}</span>
           <span className="text-2xl font-bold text-ink/55"> €</span>
         </p>
         <p className="mt-1 text-xs text-ink/55">einmalig (netto)</p>
 
         {bescheidReleased && (
-          <p className="mt-3 text-xs text-ink/65">
-            + Bescheidmodul (Add-on):{" "}
-            <span className="font-semibold tabular-nums text-ink/85">
-              {stufe.bescheidModul}
-            </span>{" "}
-            einmalig
+          <p className="mt-2 text-xs text-ink/50">
+            Nur Basis, ohne Bescheidmodul: {formatNum(stufe.einmaligNumeric)} €
           </p>
         )}
 
@@ -104,12 +122,8 @@ function PreisCard({ stufe, delay }: { stufe: Preisstufe; delay: number }) {
             <span className="text-ink/55"> p.a.</span>
           </p>
           {bescheidReleased && (
-            <p className="mt-1 text-xs text-ink/65">
-              mit Bescheidmodul:{" "}
-              <span className="font-semibold tabular-nums text-ink/85">
-                {stufe.wartungMitModul}
-              </span>
-              <span className="text-ink/55"> p.a.</span>
+            <p className="mt-1 text-xs text-ink/50">
+              ohne Modul: {formatNum(stufe.wartungNumeric)} € p.a.
             </p>
           )}
         </div>

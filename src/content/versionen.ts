@@ -46,15 +46,16 @@ export const versionen: readonly Version[] = [
   // Eilpatches bekommen `oeffentlich: false` (siehe 1.2.1).
   {
     version: "1.3.0",
-    datum: "TT.MM.JJJJ", // beim Release setzen
-    iso: "2026-01-01", // Platzhalter, beim Release setzen
-    // Zusammen mit bescheidReleased=true (src/content/bescheid.ts) freischalten:
-    // dann `oeffentlich`-Zeile entfernen und Datum/iso setzen.
-    oeffentlich: false,
+    datum: "15.07.2026",
+    iso: "2026-07-15",
     punkte: [
       {
         titel: "Bescheidmodul (Add-on)",
         text: "Erstellt aus den Berechnungsergebnissen und den Angaben der gemeindlichen Satzung Entwürfe für Herstellungsbeitragsbescheide nach Art. 5 KAG Bayern — orientiert am amtlichen Muster. Die fachliche Prüfung und der Erlass verbleiben bei der Gemeinde.",
+      },
+      {
+        titel: "Foto-Import mit Entzerrung",
+        text: "Auch ein Handyfoto eines Papierplans reicht: vier Eckpunkte eines bekannten Rechtecks anklicken, Maße eintragen — FlächenKlar rechnet die Perspektive heraus und kalibriert die Fläche automatisch. Danach funktionieren Polygon-Aufmaß, Vollgeschoss-Beurteilung und Aufmaßprotokoll wie bei einem PDF.",
       },
     ],
   },

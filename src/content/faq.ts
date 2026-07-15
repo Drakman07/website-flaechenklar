@@ -32,7 +32,7 @@ export const faq: readonly FaqItem[] = [
   },
   {
     q: "Kann FlächenKlar auch den Beitragsbescheid erstellen?",
-    a: "Dafür gibt es das Bescheidmodul als Zusatzmodul: Es erstellt aus den Berechnungsergebnissen und den Angaben der gemeindlichen Satzung Entwürfe für Herstellungsbeitragsbescheide nach Art. 5 KAG Bayern, orientiert am amtlichen Muster. Die fachliche Prüfung und der Erlass des Bescheids verbleiben bei der Gemeinde — FlächenKlar leistet keine Rechtsberatung. Details zur Verfügbarkeit erhalten Sie unter info@flaechenklar.de.",
+    a: "Ja, mit dem Bescheidmodul (Add-on, seit Version 1.3 verfügbar): Es erstellt aus den Berechnungsergebnissen und den Angaben der gemeindlichen Satzung Entwürfe für Herstellungsbeitragsbescheide nach Art. 5 KAG Bayern, orientiert am amtlichen Muster. Die fachliche Prüfung und der Erlass des Bescheids verbleiben bei der Gemeinde — FlächenKlar leistet keine Rechtsberatung.",
   },
   {
     q: "Kann ich das Aufmaßprotokoll als PDF an die Akte hängen?",

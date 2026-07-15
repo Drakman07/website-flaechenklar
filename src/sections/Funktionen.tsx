@@ -21,7 +21,7 @@ export function Funktionen() {
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
           <div className="max-w-2xl">
-            <p className={LABEL}>Funktionen</p>
+            <p className={LABEL}>Schritt 1 · Messen</p>
             <h2 className={`mt-3 text-navy ${H2}`}>
               Alles, was ein Aufmaß <TealUnderline>braucht</TealUnderline>.
             </h2>
@@ -41,7 +41,10 @@ export function Funktionen() {
                 <div className={`h-14 w-14 ${ICON_TILE}`}>
                   <featured.icon size={ICON_SIZE.hero} />
                 </div>
-                <h3 className="mt-5 text-xl font-semibold text-navy md:text-2xl">
+                <p className="mt-4 text-sm font-semibold text-teal-ink">
+                  Das Lineal bleibt in der <TealUnderline>Schublade</TealUnderline>.
+                </p>
+                <h3 className="mt-2 text-xl font-semibold text-navy md:text-2xl">
                   {featured.title}
                 </h3>
                 <p className="mt-3 text-base text-ink/75">{featured.text}</p>

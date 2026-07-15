@@ -30,6 +30,9 @@ export const bescheidBullets: readonly string[] = [
   "Der Entwurf bleibt Entwurf: fachliche Prüfung und Erlass liegen bei der Gemeinde",
 ] as const;
 
+/** Sektions-Label (Eyebrow) — hebt das Modul als eigenständigen Schritt hervor. */
+export const bescheidLabel = "Das Bescheidmodul · Schritt 3";
+
 /** mailto-Link für die „Jetzt vormerken"-Aktion (Phase A). */
 export const bescheidMailto: string =
   "mailto:info@flaechenklar.de?subject=" +
