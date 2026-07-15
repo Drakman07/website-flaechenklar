@@ -42,7 +42,7 @@ export function Hero() {
   // Zahlen zaehlen nach der Headline hoch (gestaffelt); die Mini-Viz laeuft mit.
   const [ref100, n100] = useCountUp<HTMLDivElement>(100, { startDelayMs: 1400 });
   const [ref0, n0] = useCountUp<HTMLDivElement>(0, { startDelayMs: 1550 });
-  const [ref1, n1] = useCountUp<HTMLDivElement>(1, { startDelayMs: 1700 });
+  const [ref1, n1] = useCountUp<HTMLDivElement>(3, { startDelayMs: 1700 });
   // Fraktionaler Begleitwert fuer den wachsenden Balken (Text bleibt ganzzahlig).
   const [refBar, barFill] = useCountUp<SVGSVGElement>(1, {
     decimals: 2,
@@ -73,10 +73,11 @@ export function Hero() {
             className="fade-rise mt-6 max-w-2xl text-lead text-white/70"
             style={{ animationDelay: "480ms" }}
           >
-            FlächenKlar ist das Aufmaß-Werkzeug für bayerische Bauämter. PDF
-            laden, Polygon zeichnen, druckreifes Aufmaßprotokoll als Grundlage
-            für den Herstellungsbeitrag nach Art. 5 KAG Bayern. Komplett
-            offline, ohne Cloud, ohne Installation.
+            FlächenKlar begleitet Sie durch die ganze Kette: PDF laden,
+            Flächen messen, Vollgeschosse prüfen — und daraus einen
+            Bescheid-Entwurf nach Art. 5 KAG Bayern erstellen. Prüfung und
+            Erlass bleiben bei Ihrer Gemeinde. Komplett offline, ohne Cloud,
+            ohne Installation.
           </p>
 
           <div
@@ -208,7 +209,7 @@ export function Hero() {
               >
                 {n1}
               </div>
-              <div className="mt-1 text-white/70">Doppelklick</div>
+              <div className="mt-1 text-white/70">Schritte zum Entwurf</div>
             </div>
           </div>
         </div>
@@ -226,7 +227,7 @@ export function Hero() {
  * (60-70ms Stagger, ~600ms total). Das letzte Wort bekommt zusaetzlich
  * TealUnderline.
  */
-const HEADLINE_WORDS = ["Das", "Lineal", "bleibt", "in", "der"] as const;
+const HEADLINE_WORDS = ["Vom", "Bauplan", "zum"] as const;
 const WORD_STAGGER_MS = 70;
 
 function HeroHeadline() {
@@ -248,7 +249,7 @@ function HeroHeadline() {
           animationDelay: `${HEADLINE_WORDS.length * WORD_STAGGER_MS}ms`,
         }}
       >
-        <TealUnderline>Schublade</TealUnderline>
+        <TealUnderline>Bescheid-Entwurf</TealUnderline>
       </span>
     </>
   );

@@ -3,7 +3,7 @@ import { BlueprintGrid } from "@/components/BlueprintGrid";
 import { Reveal } from "@/components/Reveal";
 import { TealUnderline } from "@/components/TealUnderline";
 import { useCountUp } from "@/hooks/useCountUp";
-import { ICON_SIZE, LABEL_ON_DARK } from "@/components/ui/tokens";
+import { FOCUS_RING_DARK, ICON_SIZE, LABEL_ON_DARK } from "@/components/ui/tokens";
 
 const bullets = [
   "SVG-Diagramme: Grundriss, Aufrisse, Querschnitt — live mitwachsend",
@@ -43,7 +43,7 @@ export function Vollgeschoss() {
       <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-24 lg:grid-cols-[5fr_7fr] lg:gap-16">
         <Reveal>
         <div>
-          <p className={LABEL_ON_DARK}>Spezial · Dachgeschoss</p>
+          <p className={LABEL_ON_DARK}>Schritt 2 · Vollgeschosse prüfen</p>
           <h2 className="mt-3 text-3xl font-bold md:text-4xl">
             Vollgeschoss-Modul nach{" "}
             <TealUnderline>Art. 83 Abs. 7 BayBO</TealUnderline>.
@@ -67,6 +67,16 @@ export function Vollgeschoss() {
               </li>
             ))}
           </ul>
+          <p className="mt-6 text-sm text-white/60">
+            Das Ergebnis fließt direkt in den{" "}
+            <a
+              href="#bescheid"
+              className={`rounded-sm text-teal underline decoration-teal/40 underline-offset-2 transition-colors hover:text-white ${FOCUS_RING_DARK}`}
+            >
+              Bescheid-Entwurf
+            </a>{" "}
+            ein — ohne Abtippen.
+          </p>
         </div>
         </Reveal>
 

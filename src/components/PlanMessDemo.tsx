@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { RotateCcw } from "lucide-react";
+import { RotateCcw, CircleCheck } from "lucide-react";
 import { BlueprintGrid } from "@/components/BlueprintGrid";
 import { useInView } from "@/hooks/useInView";
 import { polygonArea, svgAreaToM2, SVG_TO_METER } from "@/lib/polygonArea";
@@ -12,6 +12,7 @@ import {
   polyPathD,
 } from "@/components/animations/planSvg";
 import { AufmassProtokoll } from "@/components/animations/AufmassProtokoll";
+import { ICON_SIZE } from "@/components/ui/tokens";
 
 const N = MEASURE_POLYGON.length;
 const BREITE_M = (360 - 120) * SVG_TO_METER; // 12,00 m
@@ -194,6 +195,27 @@ export function PlanMessDemo() {
       {closed && (
         <div className="fade-rise mt-4">
           <AufmassProtokoll teilflaechen={TEILFLAECHEN} gesamt={AREA_M2} />
+        </div>
+      )}
+
+      {/* Letzter Schritt der Kette: Bescheid-Entwurf entsteht aus dem Aufmass */}
+      {closed && (
+        <div
+          className="fade-rise mt-4 rounded-lg border border-teal/30 bg-teal/5 p-4"
+          style={{ animationDelay: "450ms" }}
+        >
+          <div className="flex items-center gap-2 text-sm font-semibold text-teal">
+            <CircleCheck size={ICON_SIZE.body} strokeWidth={2} />
+            Bescheid-Entwurf erstellt
+          </div>
+          <div className="mt-3 space-y-1.5" aria-hidden="true">
+            <div className="h-1.5 w-3/4 rounded-full bg-teal/20" />
+            <div className="h-1.5 w-full rounded-full bg-teal/20" />
+            <div className="h-1.5 w-1/2 rounded-full bg-teal/20" />
+          </div>
+          <p className="mt-3 text-xs text-white/50">
+            Beispiel · orientiert am amtlichen Muster nach Art. 5 KAG Bayern
+          </p>
         </div>
       )}
     </div>
