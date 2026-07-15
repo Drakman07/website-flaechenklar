@@ -19,7 +19,7 @@
  * (`bescheidReleased && …`) als „unerreichbar" markiert und der Vergleich
  * zum Compile-Fehler würde. Beide Zweige müssen typecheckbar bleiben.
  */
-export const bescheidReleased: boolean = false;
+export const bescheidReleased: boolean = true;
 
 /** Nutzen-Argumente der Bescheidmodul-Sektion (Reihenfolge = Anzeige). */
 export const bescheidBullets: readonly string[] = [
