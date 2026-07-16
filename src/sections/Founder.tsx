@@ -3,6 +3,7 @@ import { BlueprintGrid } from "@/components/BlueprintGrid";
 import { Reveal } from "@/components/Reveal";
 import { TealUnderline } from "@/components/TealUnderline";
 import { LABEL_ON_DARK } from "@/components/ui/tokens";
+import { versionen } from "@/content/versionen";
 
 /**
  * Founder-Story-Sektion.
@@ -14,6 +15,10 @@ import { LABEL_ON_DARK } from "@/components/ui/tokens";
  */
 export function Founder() {
   const [photoFailed, setPhotoFailed] = useState(false);
+  const releaseDatum = new Date(versionen[0].iso).toLocaleDateString("de-DE", {
+    month: "long",
+    year: "numeric",
+  });
 
   return (
     <section
@@ -89,9 +94,11 @@ export function Founder() {
               </div>
               <div className="border-l border-white/15 pl-4">
                 <dt className="text-base font-semibold text-teal md:text-lg">
-                  Mai 2026
+                  {releaseDatum}
                 </dt>
-                <dd className="mt-1 text-white/70">v1.0.0 live</dd>
+                <dd className="mt-1 text-white/70">
+                  v{versionen[0].version} live
+                </dd>
               </div>
             </dl>
           </div>

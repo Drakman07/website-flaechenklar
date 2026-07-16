@@ -48,7 +48,9 @@ export function Preise() {
               ? "10 % auf Lizenz und gebuchte Module, "
               : ""}
             jährlich kündbar. Enthält Updates, Rechtsanpassungen und
-            E-Mail-Support.
+            E-Mail-Support. Als Kleinunternehmer nach § 19 UStG weise ich
+            keine Umsatzsteuer aus — die genannten Preise sind zugleich die
+            Endpreise.
           </p>
         </Reveal>
       </div>
