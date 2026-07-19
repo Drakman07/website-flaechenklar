@@ -14,7 +14,7 @@ const TITLES: Record<Route, string> = {
 const DESCRIPTIONS: Record<Route, string> = {
   home: "FlächenKlar begleitet bayerische Bauämter vom Aufmaß über die Vollgeschoss-Prüfung bis zum Bescheid-Entwurf nach Art. 5 KAG Bayern. Komplett offline, ohne Cloud.",
   tour: "Komplette Tour durch FlächenKlar: 4 Kapitel à 60 Sekunden zu Schnellstart, Vollgeschossen, mehrgeschossigen Gebäuden und Export.",
-  tutorial: "Schritt-für-Schritt-Tutorial: FlächenKlar in 10 Kapiteln und rund einer Stunde — vom ersten Doppelklick bis zu Vollgeschoss-Berechnung und Aufmaßprotokoll. Ersatz für die Vor-Ort-Einarbeitung.",
+  tutorial: "Schritt-für-Schritt-Tutorial: FlächenKlar in 13 Kapiteln und rund einer Stunde — vom ersten Doppelklick bis zum fertigen Beitragsbescheid, inklusive Foto-Import und RIWA-Datenexport. Ersatz für die Vor-Ort-Einarbeitung.",
   versionen: "Versionsverlauf von FlächenKlar: alle Releases im Überblick — was in welcher Version dazugekommen ist, chronologisch und nachvollziehbar dokumentiert.",
 };
 

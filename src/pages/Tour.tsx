@@ -106,8 +106,8 @@ export function Tour() {
               Komplettes Tutorial (~1 Stunde)
             </h2>
             <p className="mt-3 text-sm text-ink/70">
-              Zehn aufeinander aufbauende Kapitel — vom ersten Doppelklick
-              bis zum fertigen Aufmaßprotokoll. So ausführlich, dass eine
+              13 aufeinander aufbauende Kapitel — vom ersten Doppelklick
+              bis zum fertigen Beitragsbescheid. So ausführlich, dass eine
               Vor-Ort-Einarbeitung nicht mehr nötig ist.
             </p>
             <a
