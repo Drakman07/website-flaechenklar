@@ -14,76 +14,84 @@ import {
 } from "@/components/ui/tokens";
 
 /**
- * Komplettes Schritt-für-Schritt-Tutorial (~59 min, 10 Kapitel).
+ * Komplettes Schritt-für-Schritt-Tutorial (~58 min, 13 Kapitel).
  * Ziel: Vor-Ort-Einarbeitung beim Kunden ersetzen.
  *
  * Videos sind auf R2 (videos.flaechenklar.de) gehostet. Naming-Konvention
  * analog zu Tour: tutorial-kapitel-N.mp4 + tutorial-kapitel-N-poster.webp.
- * Struktur v1.2 (2026-06-21): eigener Maßstab-Schritt, Vollgeschoss vor
- * Export, Speichern als eigener Schritt.
- * VTT-Captions sind derzeit nicht vorhanden — Feld `captions` weggelassen,
- * kann pro Kapitel ergaenzt werden sobald Untertitel produziert sind.
+ * Struktur v1.3 (2026-07-19, s. tutorial-spicker-v1.3.pdf): komplett neues
+ * Drehbuch, 3 neue Kapitel (Foto-Import, RIWA-Export, Bescheid-Stammdaten
+ * + Bescheid-Erstellung als 2 Kapitel) gegenüber v1.2.
+ * VTT-Captions bewusst weggelassen (2026-07-19): alte Kapitel-1..10-VTTs
+ * auf R2 stammen noch vom v1.2-Drehbuch und passen inhaltlich/zeitlich
+ * nicht mehr. Kein `captions`-Feld gesetzt, bis neue Untertitel produziert
+ * sind (VideoPlayer rendert <track> nur wenn captions gesetzt ist).
  */
 const KAPITEL: VideoSource[] = [
   {
-    src: "https://videos.flaechenklar.de/tutorial-kapitel-1.mp4?v=2",
-    poster: "https://videos.flaechenklar.de/tutorial-kapitel-1-poster.webp?v=2",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-1.vtt?v=3",
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-1.mp4?v=4",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-1-poster.webp?v=4",
     title: "1. Einstieg & Installation",
   },
   {
-    src: "https://videos.flaechenklar.de/tutorial-kapitel-2.mp4?v=2",
-    poster: "https://videos.flaechenklar.de/tutorial-kapitel-2-poster.webp?v=2",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-2.vtt?v=3",
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-2.mp4?v=4",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-2-poster.webp?v=4",
     title: "2. Bauantrags-PDF importieren",
   },
   {
-    src: "https://videos.flaechenklar.de/tutorial-kapitel-3.mp4?v=2",
-    poster: "https://videos.flaechenklar.de/tutorial-kapitel-3-poster.webp?v=2",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-3.vtt?v=3",
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-3.mp4?v=4",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-3-poster.webp?v=4",
     title: "3. Projektdaten erfassen",
   },
   {
-    src: "https://videos.flaechenklar.de/tutorial-kapitel-4.mp4?v=2",
-    poster: "https://videos.flaechenklar.de/tutorial-kapitel-4-poster.webp?v=2",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-4.vtt?v=3",
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-4.mp4?v=4",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-4-poster.webp?v=4",
     title: "4. Geschoss & Region anlegen",
   },
   {
-    src: "https://videos.flaechenklar.de/tutorial-kapitel-5.mp4?v=2",
-    poster: "https://videos.flaechenklar.de/tutorial-kapitel-5-poster.webp?v=2",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-5.vtt?v=3",
-    title: "5. Maßstab setzen",
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-5.mp4?v=4",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-5-poster.webp?v=4",
+    title: "5. Maßstab messen",
   },
   {
-    src: "https://videos.flaechenklar.de/tutorial-kapitel-6.mp4?v=2",
-    poster: "https://videos.flaechenklar.de/tutorial-kapitel-6-poster.webp?v=2",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-6.vtt?v=3",
-    title: "6. Flächen zeichnen",
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-6.mp4?v=4",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-6-poster.webp?v=4",
+    title: "6. Foto statt PDF",
   },
   {
-    src: "https://videos.flaechenklar.de/tutorial-kapitel-7.mp4?v=2",
-    poster: "https://videos.flaechenklar.de/tutorial-kapitel-7-poster.webp?v=2",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-7.vtt?v=3",
-    title: "7. Vollgeschoss-Beurteilung",
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-7.mp4?v=4",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-7-poster.webp?v=4",
+    title: "7. Flächen zeichnen",
   },
   {
-    src: "https://videos.flaechenklar.de/tutorial-kapitel-8.mp4?v=2",
-    poster: "https://videos.flaechenklar.de/tutorial-kapitel-8-poster.webp?v=2",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-8.vtt?v=3",
-    title: "8. Aufmaßprotokoll exportieren",
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-8.mp4?v=4",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-8-poster.webp?v=4",
+    title: "8. Vollgeschoss-Beurteilung",
   },
   {
-    src: "https://videos.flaechenklar.de/tutorial-kapitel-9.mp4?v=2",
-    poster: "https://videos.flaechenklar.de/tutorial-kapitel-9-poster.webp?v=2",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-9.vtt?v=3",
-    title: "9. Speichern, Updates & Hilfe",
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-9.mp4?v=4",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-9-poster.webp?v=4",
+    title: "9. Aufmaßprotokoll exportieren",
   },
   {
-    src: "https://videos.flaechenklar.de/tutorial-kapitel-10.mp4?v=2",
-    poster: "https://videos.flaechenklar.de/tutorial-kapitel-10-poster.webp?v=2",
-    captions: "https://videos.flaechenklar.de/tutorial-kapitel-10.vtt?v=3",
-    title: "10. Schlusswort",
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-10.mp4?v=4",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-10-poster.webp?v=4",
+    title: "10. Datenexport RIWA",
+  },
+  {
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-11.mp4?v=4",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-11-poster.webp?v=4",
+    title: "11. Bescheid-Stammdaten einrichten",
+  },
+  {
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-12.mp4?v=4",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-12-poster.webp?v=4",
+    title: "12. Beitragsbescheid erstellen",
+  },
+  {
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-13.mp4?v=4",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-13-poster.webp?v=4",
+    title: "13. Speichern, Updates, Hilfe & Schlusswort",
   },
 ];
 
@@ -132,11 +140,12 @@ export function Tutorial() {
               FlächenKlar in <TealUnderline>rund einer Stunde</TealUnderline>.
             </h1>
             <p className={`mt-4 ${LEAD}`}>
-              Zehn aufeinander aufbauende Kapitel — vom ersten Doppelklick
-              bis zum fertigen Aufmaßprotokoll. So ausführlich, dass eine
-              Vor-Ort-Einarbeitung nicht mehr nötig ist. Jedes Kapitel ist
-              auch alleine verständlich, springen Sie also gezielt zum
-              Thema, das Sie brauchen.
+              13 aufeinander aufbauende Kapitel — vom ersten Doppelklick
+              bis zum fertigen Beitragsbescheid, inklusive Foto-Import und
+              RIWA-Datenexport. So ausführlich, dass eine Vor-Ort-Einarbeitung
+              nicht mehr nötig ist. Jedes Kapitel ist auch alleine
+              verständlich, springen Sie also gezielt zum Thema, das Sie
+              brauchen.
             </p>
           </div>
         </Reveal>

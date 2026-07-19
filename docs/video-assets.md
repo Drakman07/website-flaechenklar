@@ -65,7 +65,32 @@ videos.flaechenklar.de/tour-kapitel-3-poster.webp
 videos.flaechenklar.de/tour-kapitel-4.mp4
 videos.flaechenklar.de/tour-kapitel-4.vtt
 videos.flaechenklar.de/tour-kapitel-4-poster.webp
+videos.flaechenklar.de/tutorial-kapitel-{1..13}.mp4
+videos.flaechenklar.de/tutorial-kapitel-{1..13}-poster.webp
 ```
+
+## Tutorial v1.3 (2026-07-19, 13 Kapitel)
+
+Komplettes Tutorial-Drehbuch ersetzt (s. `tutorial-spicker-v1.3.pdf` im
+Projekt-Hauptordner). Rohmaterial lag als OBS-`.mkv` in
+`tutorial-videos-v1.3/` (außerhalb des Website-Repos), Encoding lokal per
+ffmpeg (`-c:v libx264 -preset medium -crf 23 -pix_fmt yuv420p -c:a aac
+-b:a 160k -movflags +faststart`), Poster per `-ss 3 -frames:v 1 -c:v
+libwebp -q:v 82`. Kapitel 4/5 und 9/10 sind Split/Concat aus je einer
+Aufnahme (Zeitstempel-Schnitt per `-ss`/`-t`, Kapitel 9 zusätzlich
+`concat`-Demuxer über zwei Segmente).
+
+**VTT-Untertitel bewusst nicht erzeugt** (User-Entscheidung 2026-07-19):
+alte Kapitel-1..10-VTTs auf R2 stammen vom v1.2-Drehbuch und passen
+nicht mehr — `captions`-Feld in `Tutorial.tsx` daher komplett entfernt,
+bis neue Untertitel produziert sind. Whisper via `ffmpeg`-Filter
+(`whisper.cpp`, auf diesem Rechner verfügbar) wäre der Weg, braucht
+aber noch einen separaten Modell-Download (nicht identisch mit der
+lokalen Diktier-App „Handy", die ein anderes Modellformat nutzt).
+
+Naming ist 1:1 gleich geblieben (`tutorial-kapitel-N.mp4/-poster.webp`),
+daher reines Überschreiben der alten Objekte — kein Löschen nötig,
+Cache-Busting über `?v=N`-Query in `Tutorial.tsx` erledigt den Rest.
 
 > **Naming-Konvention:** Der Teaser verwendet historisch das `.de.vtt`-Suffix,
 > die vier Walkthrough-Kapitel das kürzere `.vtt`-Suffix. Beide Varianten
