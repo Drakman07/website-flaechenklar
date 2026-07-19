@@ -1,6 +1,16 @@
 # FlächenKlar-Website — Session-Memory für Claude
 
-Letzter Stand: 2026-06-25, **Welle 3 (Wow-Upgrade, PRs #10 + #11 gemerged)** — interaktives Aufmass-Tool im Hero (oben rechts, `src/components/PlanMessDemo.tsx`): vorgegebener L-Haus-Grundriss, Eckpunkte der Reihe nach abklicken → Messpolygon zeichnet sich → Flaeche 100,50 m² + Massketten → Aufmassblatt (`AufmassProtokoll`) entsteht darunter. Ersetzt die alte `PolygonDemo`. Dazu: choreografierter Hero-Auftritt (`fade-rise`), Zahlen-Mini-Viz (Ring/Sparkline/Balken auf den echten Stats 100 % / 0 / 1), editorial Typo-Skala + Micro-Interaktionen. PSI live (mobile): A11y 100 / BP 96 / SEO 100, LCP 423 ms, CLS 0,00. Null Animations-Lib (gsap war kurz für eine Scroll-Sequenz drin, wieder entfernt). Main-Bundle 82,95 KB gz.
+Letzter Stand: 2026-07-19, **Tutorial v1.3 komplett neu produziert** —
+13 Kapitel statt 10 (neues Drehbuch, s. `tutorial-spicker-v1.3.pdf`),
+alle Kapitel neu gedreht + geschnitten (ffmpeg, CRF 23 1080p) + auf R2
+hochgeladen (`tutorial-kapitel-{1..13}.mp4/-poster.webp`, gleiche
+Objekte überschrieben, `Tutorial.tsx`-KAPITEL-Array + Hero-Text
+aktualisiert). VTT-Untertitel bewusst ausgelassen diese Runde (alte
+Kapitel-1..10-VTTs passen inhaltlich nicht mehr zum neuen Video —
+`captions`-Feld komplett entfernt statt falsche Untertitel zu zeigen).
+Details in `docs/video-assets.md` → Abschnitt „Tutorial v1.3".
+
+Vorgänger-Stand 2026-06-25, **Welle 3 (Wow-Upgrade, PRs #10 + #11 gemerged)** — interaktives Aufmass-Tool im Hero (oben rechts, `src/components/PlanMessDemo.tsx`): vorgegebener L-Haus-Grundriss, Eckpunkte der Reihe nach abklicken → Messpolygon zeichnet sich → Flaeche 100,50 m² + Massketten → Aufmassblatt (`AufmassProtokoll`) entsteht darunter. Ersetzt die alte `PolygonDemo`. Dazu: choreografierter Hero-Auftritt (`fade-rise`), Zahlen-Mini-Viz (Ring/Sparkline/Balken auf den echten Stats 100 % / 0 / 1), editorial Typo-Skala + Micro-Interaktionen. PSI live (mobile): A11y 100 / BP 96 / SEO 100, LCP 423 ms, CLS 0,00. Null Animations-Lib (gsap war kurz für eine Scroll-Sequenz drin, wieder entfernt). Main-Bundle 82,95 KB gz.
 
 Vorgänger-Stand 2026-05-17, Tutorial-Release (PRs #7 + #8) — `/tutorial`-Route live mit allen 8 Kapitel-MP4s (~45 min Onboarding-Ersatz) auf R2. /tour bekam Footer-Funnel zum Tutorial. Welle 2 (PR #6): Founder-Story-Block + Alexander-Foto, 5-Tier-Preise mit Pilot-Banner + Counter-Animationen, Hero-H1-Word-Stagger, ScrollProgressBar, Hero-Parallax, Card-Hover-Glow. PSI Welle 2: Mobile 100/100/96/92, Desktop 100/97/96/92.
 
@@ -31,9 +41,9 @@ Davor: Design-Upgrade (PR #3, Merge `a803055`) — zentrales Token-System in `sr
 | 60-Sek-Teaser auf Homepage | ✅ live mit echten R2-URLs |
 | `/tour`-Route mit Walkthrough-Player | ✅ live mit echten R2-URLs |
 | 4 Walkthrough-Kapitel produziert | ✅ alle 4 hochgeladen + Tour.tsx aktualisiert |
-| `/tutorial`-Route mit 8-Kapitel-Player | ✅ live mit echten R2-URLs (PRs #7 + #8 gemerged 2026-05-17) |
-| 8 Tutorial-Kapitel produziert (~45 min Onboarding-Ersatz) | ✅ alle 8 MP4s + 8 Poster auf R2, Player spielt ab |
-| VTT-Untertitel für Tutorial (BFSG-relevant) | ⏸ offen — Whisper-Transkription empfohlen |
+| `/tutorial`-Route mit 13-Kapitel-Player | ✅ live mit echten R2-URLs (v1.3-Neuproduktion 2026-07-19) |
+| 13 Tutorial-Kapitel produziert (~58 min, v1.3-Drehbuch) | ✅ alle 13 MP4s + 13 Poster auf R2, Player spielt ab |
+| VTT-Untertitel für Tutorial (BFSG-relevant) | ⏸ offen — Whisper-Transkription empfohlen, Modell-Download noch offen |
 | Zentrales Design-Token-System | ✅ `src/components/ui/tokens.ts` (Cards, Buttons, Focus-Rings, Typo, Icon-Sizes, Hover-Glow) |
 | Premium-Polish + a11y-Essentials | ✅ PR #3 merged, live |
 | Founder-Story-Block mit Foto | ✅ PR #6 merged, `public/alexander-portrait.webp` (87.9 KB) |
