@@ -45,6 +45,23 @@ export const versionen: readonly Version[] = [
   // Im Internet erscheinen aber nur Einträge mit oeffentlich !== false.
   // Eilpatches bekommen `oeffentlich: false` (siehe 1.2.1).
   {
+    version: "1.4.1",
+    datum: "26.07.2026",
+    iso: "2026-07-26",
+    // Hotfix/Patch: intern dokumentiert, aber nicht öffentlich (siehe 1.2.1/1.2.6/1.2.7).
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Ablauf-Leiste zeigt jetzt den Fortschritt je Geschoss",
+        text: "Ein neu angelegtes Geschoss zeigte in der Ablauf-Leiste fälschlich schon den Fortschritt eines anderen, bereits bearbeiteten Geschosses. Behoben — die Anzeige bezieht sich jetzt korrekt auf das gerade aktive Geschoss.",
+      },
+      {
+        titel: "Namens-Vorschläge beim Anlegen eines Geschosses",
+        text: "Beim Anlegen eines neuen Geschosses stehen jetzt Schaltflächen mit den üblichen Bezeichnungen (Kellergeschoss, Erdgeschoss, 1./2. Obergeschoss, Dachgeschoss) zur Auswahl.",
+      },
+    ],
+  },
+  {
     version: "1.4.0",
     datum: "26.07.2026",
     iso: "2026-07-26",
