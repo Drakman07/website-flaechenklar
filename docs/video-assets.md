@@ -98,6 +98,35 @@ Cache-Busting über `?v=N`-Query in `Tutorial.tsx` erledigt den Rest.
 > `srcLang="de"` an. Beim Hochladen weiterer Assets bitte das jeweilige
 > Schema beibehalten.
 
+## Tutorial v1.4 (2026-07-26, 6 von 13 Kapiteln neu)
+
+Nur die Kapitel **2, 4, 5, 7, 11, 12** neu gedreht (Delta-Drehbuch
+`tutorial-drehbuch-v1.4-delta.pdf` im Projekt-Hauptordner) — die übrigen
+sieben (1, 3, 6, 8, 9, 10, 13) bleiben inhaltlich gültig und liegen
+unverändert auf R2. Rohmaterial als OBS-`.mkv` (1920×1080 @ 50 fps, AAC
+48 kHz) in `tutorial-videos-v1.4/`, Encoding lokal mit demselben Befehl
+wie beim v1.3-Lauf, Ausgabe in `tutorial-videos-v1.4/produktion/`.
+Gesamt 32:17 / 121 MB für die sechs Kapitel.
+
+Kein Split/Concat nötig — jedes Kapitel ist genau eine Aufnahme.
+Zuordnung Rohdatei → Kapitel lief über den OBS-Zeitstempel im Dateinamen
+(Aufnahmestart) plus die Datei-Änderungszeit (Ende); die Aufnahmen sind
+lückenlos aufsteigend und überschneidungsfrei.
+
+**Cache-Busting:** `?v=4` → `?v=5` **nur** auf den sechs ersetzten
+Kapiteln in `Tutorial.tsx`. Die sieben unveränderten bleiben bewusst auf
+`?v=4`, damit Besucher sie nicht ohne Grund neu laden.
+
+**Titeländerung:** Kapitel 4 heißt jetzt „Geschoss & **Ausschnitt**
+anlegen" (vorher „Region") — Teil der durchgängigen Begriffs-Bereinigung
+in Tool v1.4 („Ausschnitt"/„Fläche" statt „Region"/„Polygon").
+
+**VTT-Untertitel weiterhin offen** — Stand unverändert gegenüber v1.3.
+
+> **Wrangler-Falle:** `wrangler r2 object put` kennt **kein** `--remote`
+> (Remote ist der Default, `--local` ist das Gegenteil). Mit dem Flag
+> bricht jeder Upload mit „Unknown argument: remote" ab.
+
 ## Echte URLs einsetzen (nach Video-Produktion)
 
 Sobald die Videos hochgeladen sind:

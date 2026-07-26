@@ -34,8 +34,8 @@ const KAPITEL: VideoSource[] = [
     title: "1. Einstieg & Installation",
   },
   {
-    src: "https://videos.flaechenklar.de/tutorial-kapitel-2.mp4?v=4",
-    poster: "https://videos.flaechenklar.de/tutorial-kapitel-2-poster.webp?v=4",
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-2.mp4?v=5",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-2-poster.webp?v=5",
     title: "2. Bauantrags-PDF importieren",
   },
   {
@@ -44,13 +44,13 @@ const KAPITEL: VideoSource[] = [
     title: "3. Projektdaten erfassen",
   },
   {
-    src: "https://videos.flaechenklar.de/tutorial-kapitel-4.mp4?v=4",
-    poster: "https://videos.flaechenklar.de/tutorial-kapitel-4-poster.webp?v=4",
-    title: "4. Geschoss & Region anlegen",
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-4.mp4?v=5",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-4-poster.webp?v=5",
+    title: "4. Geschoss & Ausschnitt anlegen",
   },
   {
-    src: "https://videos.flaechenklar.de/tutorial-kapitel-5.mp4?v=4",
-    poster: "https://videos.flaechenklar.de/tutorial-kapitel-5-poster.webp?v=4",
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-5.mp4?v=5",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-5-poster.webp?v=5",
     title: "5. Maßstab messen",
   },
   {
@@ -59,8 +59,8 @@ const KAPITEL: VideoSource[] = [
     title: "6. Foto statt PDF",
   },
   {
-    src: "https://videos.flaechenklar.de/tutorial-kapitel-7.mp4?v=4",
-    poster: "https://videos.flaechenklar.de/tutorial-kapitel-7-poster.webp?v=4",
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-7.mp4?v=5",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-7-poster.webp?v=5",
     title: "7. Flächen zeichnen",
   },
   {
@@ -79,13 +79,13 @@ const KAPITEL: VideoSource[] = [
     title: "10. Datenexport RIWA",
   },
   {
-    src: "https://videos.flaechenklar.de/tutorial-kapitel-11.mp4?v=4",
-    poster: "https://videos.flaechenklar.de/tutorial-kapitel-11-poster.webp?v=4",
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-11.mp4?v=5",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-11-poster.webp?v=5",
     title: "11. Bescheid-Stammdaten einrichten",
   },
   {
-    src: "https://videos.flaechenklar.de/tutorial-kapitel-12.mp4?v=4",
-    poster: "https://videos.flaechenklar.de/tutorial-kapitel-12-poster.webp?v=4",
+    src: "https://videos.flaechenklar.de/tutorial-kapitel-12.mp4?v=5",
+    poster: "https://videos.flaechenklar.de/tutorial-kapitel-12-poster.webp?v=5",
     title: "12. Beitragsbescheid erstellen",
   },
   {
