@@ -45,6 +45,29 @@ export const versionen: readonly Version[] = [
   // Im Internet erscheinen aber nur Einträge mit oeffentlich !== false.
   // Eilpatches bekommen `oeffentlich: false` (siehe 1.2.1).
   {
+    version: "1.4.0",
+    datum: "26.07.2026",
+    iso: "2026-07-26",
+    punkte: [
+      {
+        titel: "Schritt-für-Schritt-Führung durch den Arbeitsablauf",
+        text: "Eine durchgängige Ablauf-Leiste zeigt, wo man im Arbeitsablauf gerade steht und was als Nächstes ansteht — von der PDF-Übernahme bis zum fertigen Aufmaßprotokoll.",
+      },
+      {
+        titel: "Eigener Dialog für Abzugsflächen",
+        text: "Abzugsflächen werden jetzt über ein Formular im Tool-Design erfasst statt über ein Browser-Eingabefenster — übersichtlicher und ohne Bruch im Bedienerlebnis.",
+      },
+      {
+        titel: "Bescheidmaske als geführter Wizard",
+        text: "Der Beitragsbescheid entsteht jetzt in vier klaren Schritten — Empfänger & Grundstück, Beitragssätze, Zahlung & Unterschrift, Texte prüfen — mit einem Zähler für offene Pflichtfelder je Schritt.",
+      },
+      {
+        titel: "Abweichender Unterzeichner je Bescheid",
+        text: "Der Bescheid kann wahlweise einen vom Sachbearbeiter abweichenden Unterzeichner tragen, etwa den Bürgermeister, mit optionalem Zeichnungsvermerk „i. A.“ oder „i. V.“ über dem Unterschriftsstrich — pflegbar je Gemeinde-Profil, im Einzelfall überschreibbar.",
+      },
+    ],
+  },
+  {
     version: "1.3.0",
     datum: "15.07.2026",
     iso: "2026-07-15",
