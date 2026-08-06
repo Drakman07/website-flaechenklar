@@ -45,6 +45,19 @@ export const versionen: readonly Version[] = [
   // Im Internet erscheinen aber nur Einträge mit oeffentlich !== false.
   // Eilpatches bekommen `oeffentlich: false` (siehe 1.2.1).
   {
+    version: "1.4.3",
+    datum: "06.08.2026",
+    iso: "2026-08-06",
+    // Hotfix/Patch: intern dokumentiert, aber nicht öffentlich (siehe 1.2.1/1.2.6/1.2.7/1.4.1).
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Fälligkeitsdatum-Berechnung beim Eintippen korrigiert",
+        text: "Beim manuellen Eintippen des Versanddatums konnte das automatisch berechnete Fälligkeitsdatum fälschlich auf ein sehr altes Datum springen. Behoben — die Berechnung funktioniert jetzt zuverlässig, egal ob das Datum eingetippt oder über den Kalender ausgewählt wird.",
+      },
+    ],
+  },
+  {
     version: "1.4.1",
     datum: "26.07.2026",
     iso: "2026-07-26",
