@@ -45,6 +45,21 @@ export const versionen: readonly Version[] = [
   // Im Internet erscheinen aber nur Einträge mit oeffentlich !== false.
   // Eilpatches bekommen `oeffentlich: false` (siehe 1.2.1).
   {
+    version: "1.5.0",
+    datum: "12.08.2026",
+    iso: "2026-08-12",
+    punkte: [
+      {
+        titel: "Ein Klick für Programmstart und Updates",
+        text: "FlächenKlar startet jetzt über eine einzelne Datei im Programmordner, die beim Start automatisch prüft, ob eine neue Version vorliegt, und sie bei Bedarf mit einem Klick anbietet. Der bisherige Weg über den Programmordner und eine separate Update-Datei entfällt.",
+      },
+      {
+        titel: "Änderungsübersicht beim Update",
+        text: "Der Update-Hinweis zeigt jetzt zusätzlich kurz, was sich seit der installierten Version geändert hat, statt nur die neue Versionsnummer.",
+      },
+    ],
+  },
+  {
     version: "1.4.3",
     datum: "06.08.2026",
     iso: "2026-08-06",
