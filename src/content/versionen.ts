@@ -62,6 +62,40 @@ export const versionen: readonly Version[] = [
     ],
   },
   {
+    version: "1.5.2",
+    datum: "14.08.2026",
+    iso: "2026-08-14",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich (siehe 1.2.1/1.2.6/1.2.7/1.4.1/1.4.3).
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Update-Vorgang zuverlässiger",
+        text: "Der automatische Update-Weg wurde robuster gemacht — künftige Verbesserungen kommen zuverlässiger und ohne zusätzliches Zutun bei Ihnen an.",
+      },
+      {
+        titel: "Warnhinweise bei unsicherer Gemeinde-Zuordnung",
+        text: "Zwei neue Hinweisbalken schützen vor Bescheiden mit falschen Daten: Der eine meldet, wenn sich einer Akte keine eindeutige Gemeinde zuordnen lässt; der andere erinnert daran, dass geänderte Stammdaten erst nach Ablage und Neuladen für die ganze Installation gelten.",
+      },
+      {
+        titel: "Beitragssätze erneut aus Stammdaten übernehmen",
+        text: "Im Beitragsbescheid lassen sich die Beitragssätze jetzt per Knopf erneut aus den Stammdaten übernehmen — praktisch, wenn die Gemeinde-Zuordnung einer Akte nachträglich korrigiert wurde.",
+      },
+    ],
+  },
+  {
+    version: "1.5.1",
+    datum: "13.08.2026",
+    iso: "2026-08-13",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich (siehe 1.2.1/1.2.6/1.2.7/1.4.1/1.4.3).
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Update-Fehler auf älteren Windows-Servern behoben",
+        text: "Das Einspielen von Updates schlug auf älteren Windows-Servern mit einer TLS-Fehlermeldung fehl, obwohl der Update-Server im Browser normal erreichbar war — behoben.",
+      },
+    ],
+  },
+  {
     version: "1.5.0",
     datum: "12.08.2026",
     iso: "2026-08-12",
@@ -73,6 +107,19 @@ export const versionen: readonly Version[] = [
       {
         titel: "Änderungsübersicht beim Update",
         text: "Der Update-Hinweis zeigt jetzt zusätzlich kurz, was sich seit der installierten Version geändert hat, statt nur die neue Versionsnummer.",
+      },
+    ],
+  },
+  {
+    version: "1.4.4",
+    datum: "12.08.2026",
+    iso: "2026-08-12",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich (siehe 1.2.1/1.2.6/1.2.7/1.4.1/1.4.3).
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Wappen bei Verwaltungsgemeinschaften korrigiert",
+        text: "Bei Verwaltungsgemeinschaften zeigte das Aufmaßprotokoll teils das Wappen der falschen Gemeinde. Das Protokoll übernimmt jetzt zuverlässig das Wappen der im Projekt gewählten Gemeinde.",
       },
     ],
   },
