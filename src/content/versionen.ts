@@ -45,6 +45,23 @@ export const versionen: readonly Version[] = [
   // Im Internet erscheinen aber nur Einträge mit oeffentlich !== false.
   // Eilpatches bekommen `oeffentlich: false` (siehe 1.2.1).
   {
+    version: "1.5.3",
+    datum: "20.08.2026",
+    iso: "2026-08-20",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich (siehe 1.2.1/1.2.6/1.2.7/1.4.1/1.4.3).
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Gemeinde-Zuordnung vereinheitlicht",
+        text: "Programmkopf, Aufmaßprotokoll, Beitragsbescheid und Datenexport greifen jetzt auf dieselbe Gemeinde-Zuordnung einer Akte zurück. Bei mehreren Gemeinden (Verwaltungsgemeinschaften) konnte der Programmkopf bislang die Standard-Gemeinde statt der tatsächlich zugeordneten anzeigen — behoben.",
+      },
+      {
+        titel: "Vollgeschoss-Beurteilung: interne Anzeige korrigiert",
+        text: "Eine interne Abweichungs-Anzeige im Vollgeschoss-Baustein konnte nach nachträglicher Änderung der Grenzhöhe veraltet bleiben. Die im Bescheid verwendete Fläche war davon nicht betroffen — behoben.",
+      },
+    ],
+  },
+  {
     version: "1.5.0",
     datum: "12.08.2026",
     iso: "2026-08-12",
