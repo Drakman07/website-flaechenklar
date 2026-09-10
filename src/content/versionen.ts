@@ -137,6 +137,19 @@ export const versionen: readonly Version[] = [
     ],
   },
   {
+    version: "1.4.2",
+    datum: "05.08.2026",
+    iso: "2026-08-05",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich.
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Ohne Aufmaß ließ sich der Beitragsbescheid bisher gar nicht öffnen, etwa bei…",
+        text: "Ohne Aufmaß ließ sich der Beitragsbescheid bisher gar nicht öffnen, etwa bei reiner Grundstücksmehrung ohne neue Geschossfläche — er lässt sich jetzt auch ohne Aufmaß öffnen, mit einer Rückfrage für diesen Sonderfall.",
+      },
+    ],
+  },
+  {
     version: "1.4.1",
     datum: "26.07.2026",
     iso: "2026-07-26",
@@ -173,6 +186,49 @@ export const versionen: readonly Version[] = [
       {
         titel: "Abweichender Unterzeichner je Bescheid",
         text: "Der Bescheid kann wahlweise einen vom Sachbearbeiter abweichenden Unterzeichner tragen, etwa den Bürgermeister, mit optionalem Zeichnungsvermerk „i. A.“ oder „i. V.“ über dem Unterschriftsstrich — pflegbar je Gemeinde-Profil, im Einzelfall überschreibbar.",
+      },
+    ],
+  },
+  {
+    version: "1.3.3",
+    datum: "23.07.2026",
+    iso: "2026-07-23",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich.
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Bei einer Nacherhebung war für den Empfänger nicht nachvollziehbar, wie sich…",
+        text: "Bei einer Nacherhebung war für den Empfänger nicht nachvollziehbar, wie sich der niedrigere Betrag ergibt — der Bescheid zeigt jetzt die Zahlen-Herleitung.",
+      },
+      {
+        titel: "Bei zwei Zahlungspflichtigen fehlte teils die persönliche Anrede für den zwei…",
+        text: "Bei zwei Zahlungspflichtigen fehlte teils die persönliche Anrede für den zweiten — beide werden jetzt korrekt einzeln angeschrieben.",
+      },
+    ],
+  },
+  {
+    version: "1.3.2",
+    datum: "23.07.2026",
+    iso: "2026-07-23",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich.
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Flächen, die zwar innerhalb der Umrisse liegen, aber nicht mitzählen sollen (…",
+        text: "Flächen, die zwar innerhalb der Umrisse liegen, aber nicht mitzählen sollen (z. B. Luftraum, abgemauerte Bereiche), lassen sich jetzt je Geschoss als Abzugsfläche erfassen.",
+      },
+    ],
+  },
+  {
+    version: "1.3.1",
+    datum: "22.07.2026",
+    iso: "2026-07-22",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich.
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Wurde ein Plan importiert, bevor die Gemeinde-Stammdaten hinterlegt waren, fa…",
+        text: "Wurde ein Plan importiert, bevor die Gemeinde-Stammdaten hinterlegt waren, fand der Bescheid anschließend keine ausstellende Behörde für den Briefkopf — bei genau einer hinterlegten Gemeinde übernimmt der Bescheid diese jetzt automatisch.",
       },
     ],
   },
@@ -223,6 +279,58 @@ export const versionen: readonly Version[] = [
       {
         titel: "Eindeutige Maßstab-Anzeige",
         text: "Eine klare Ampel zeigt pro Bereich, ob der Maßstab gesetzt ist. Weicht eine verlässliche Planbemaßung deutlich ab, weist das Programm auf eine empfohlene Zweitmessung hin.",
+      },
+    ],
+  },
+  {
+    version: "1.2.5",
+    datum: "04.07.2026",
+    iso: "2026-07-04",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich.
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Bei detailreichen Plänen mit vielen Winkel-/Gradangaben verwarf das Tool eine…",
+        text: "Bei detailreichen Plänen mit vielen Winkel-/Gradangaben verwarf das Tool einen korrekt eingegebenen Maßstab teils fälschlich — das ist behoben.",
+      },
+    ],
+  },
+  {
+    version: "1.2.4",
+    datum: "02.07.2026",
+    iso: "2026-07-02",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich.
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Das Datum im Aufmaßblatt zeigte das ursprüngliche Anlagedatum des Projekts st…",
+        text: "Das Datum im Aufmaßblatt zeigte das ursprüngliche Anlagedatum des Projekts statt des Ausdruck-Datums — es zeigt jetzt das tatsächliche Export-Datum.",
+      },
+    ],
+  },
+  {
+    version: "1.2.3",
+    datum: "25.06.2026",
+    iso: "2026-06-25",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich.
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Der errechnete Wert der Vollgeschoss-Teilfläche (≥ 2,30 m lichte Höhe) lässt…",
+        text: "Der errechnete Wert der Vollgeschoss-Teilfläche (≥ 2,30 m lichte Höhe) lässt sich jetzt von Hand nachjustieren, wenn er um Zentimeter nicht passt.",
+      },
+    ],
+  },
+  {
+    version: "1.2.2",
+    datum: "25.06.2026",
+    iso: "2026-06-25",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich.
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Das Tool gleicht einen eingegebenen Maßstab jetzt automatisch gegen die im Pl…",
+        text: "Das Tool gleicht einen eingegebenen Maßstab jetzt automatisch gegen die im Plan gemessene Bemaßung ab und warnt, wenn ein Plan nicht maßstabsgetreu exportiert wurde (z. B. „Auf Seite anpassen“).",
       },
     ],
   },
