@@ -32,7 +32,7 @@ Im lokalen Worker-Modus funktionieren die Routen `/`, `/impressum` und
 ## Deployment
 
 Bei jedem Push auf `main` deployt GitHub Actions automatisch zu Cloudflare
-Workers (siehe `.github/workflows/deploy.yml`). Erforderliche Repo-Secrets:
+Workers (siehe `.github/workflows/deploy.yml`). Die CI fährt vorher `npm run typecheck` und `npm run build`; schlägt eines fehl, bleibt die alte Version live. Erforderliche Repo-Secrets:
 
 - `CLOUDFLARE_API_TOKEN` (Cloudflare Dashboard → My Profile → API Tokens →
   Template „Edit Cloudflare Workers")

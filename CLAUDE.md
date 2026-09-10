@@ -179,6 +179,12 @@ statische Marketing-Site mit 2 Routen. Gate stattdessen:
 - Auf Live: PowerShell `Invoke-WebRequest`-basierter Bundle-Check ob
   Asset-URLs im JS auftauchen
 
+### Verhältnis zum Prüf-Gate des Hauptordners
+
+- `website/src/content/` ist Änderungsklasse **Bagatelle** (kein Review, kein Gate); die übrigen Website-Dateien haben keinen zugeordneten Prüf-Agent (Quelle: `../.claude/hooks/pruef_mapping.py`).
+- Wird aus einer Session im Hauptordner committet/gepusht, läuft trotzdem `../.claude/hooks/fk_pruef_gate.py` (PreToolUse) — es blockt nur, wenn seit dem letzten Marker Pfade mit Prüf-Agent editiert wurden.
+- Vor `git push`: `py fk.py done` im Hauptordner (Lint, Source↔Live, offene Prüfungen). Regeln: `../CLAUDE.md`, Abschnitte „Prüf-Pflicht“ und „Änderungs-Klassen“.
+
 ## Cloudflare-MCP
 
 Es gibt einen Cloudflare-MCP-Server der R2-Verwaltung kann
