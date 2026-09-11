@@ -100,6 +100,10 @@ export function VideoPlayer({
 
   const hasChapters = sources.length > 1;
   const showMuteOverlay = scrollAutoplay && isMuted;
+  // Cross-Origin-<track> (VTT auf videos.flaechenklar.de) laedt der Browser
+  // nur im CORS-Modus. Dann laufen auch MP4 und Poster ueber CORS — der
+  // R2-Bucket muss fuer die Seiten-Origin Access-Control-Allow-Origin liefern.
+  const crossOrigin = current.captions ? "anonymous" : undefined;
 
   return (
     <div
@@ -113,6 +117,7 @@ export function VideoPlayer({
           ref={videoRef}
           src={current.src}
           poster={current.poster}
+          crossOrigin={crossOrigin}
           autoPlay={autoplay}
           muted={isMuted}
           controls
