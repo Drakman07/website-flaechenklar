@@ -2,16 +2,20 @@ import { sicherheit } from "@/content/sicherheit";
 import { Reveal } from "@/components/Reveal";
 import { TealUnderline } from "@/components/TealUnderline";
 import {
-  CARD_ACCENT_BORDER,
-  CARD_BASE,
-  CARD_HOVER,
-  CARD_HOVER_GLOW,
   H2,
   ICON_SIZE,
+  ICON_TILE,
   LABEL,
   LEAD,
 } from "@/components/ui/tokens";
 
+/**
+ * Sicherheit & Datenschutz.
+ *
+ * Bewusst ohne Karten-Chrome: die sechs Punkte stehen als redaktionelle
+ * Liste mit Trennlinie ueber jedem Eintrag. Die Startseite hat mit
+ * Funktionen und Preisen schon genug Karten.
+ */
 export function Sicherheit() {
   return (
     <section id="sicherheit" className="bg-white py-24">
@@ -28,23 +32,23 @@ export function Sicherheit() {
           </p>
         </Reveal>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:col-span-3">
+        <ul className="grid gap-x-10 sm:grid-cols-2 lg:col-span-3">
           {sicherheit.map(({ icon: Icon, title, text }, i) => (
-            <Reveal key={title} delay={i * 70}>
-              <article
-                className={`group h-full p-6 ${CARD_BASE} ${CARD_ACCENT_BORDER} ${CARD_HOVER} ${CARD_HOVER_GLOW}`}
-              >
-                <div className="flex h-10 w-10 items-center justify-center rounded bg-navy/5 text-navy transition-colors group-hover:bg-teal/15 group-hover:text-teal">
-                  <Icon size={ICON_SIZE.feature} />
+            <li key={title} className="border-t border-outline">
+              <Reveal delay={i * 70}>
+                <div className="group flex gap-4 py-6">
+                  <div className={`h-10 w-10 shrink-0 ${ICON_TILE}`}>
+                    <Icon size={ICON_SIZE.feature} aria-hidden="true" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-semibold text-navy">{title}</h3>
+                    <p className="mt-1.5 text-sm text-ink/70">{text}</p>
+                  </div>
                 </div>
-                <h3 className="mt-4 text-base font-semibold text-navy">
-                  {title}
-                </h3>
-                <p className="mt-2 text-sm text-ink/70">{text}</p>
-              </article>
-            </Reveal>
+              </Reveal>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

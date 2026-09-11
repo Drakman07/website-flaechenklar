@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { Preisstufe } from "@/content/preise";
 import { preise } from "@/content/preise";
 import { bescheidReleased } from "@/content/bescheid";
@@ -8,6 +9,7 @@ import {
   CARD_ACCENT_BORDER,
   CARD_HOVER,
   CARD_HOVER_GLOW,
+  FOCUS_RING,
   H2,
   ICON_SIZE,
   LABEL,
@@ -15,6 +17,10 @@ import {
 } from "@/components/ui/tokens";
 
 export function Preise() {
+  // Mobil (< md) zeigt nur die gewaehlte Stufe, statt fuenf Karten zu
+  // stapeln. Ab md sind immer alle Karten sichtbar.
+  const [aktiv, setAktiv] = useState(0);
+
   return (
     <section id="preise" className="bg-slate-50/60 py-24">
       <div className="mx-auto max-w-6xl px-6">
@@ -36,9 +42,44 @@ export function Preise() {
           </div>
         </Reveal>
 
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="mt-8 md:hidden">
+          <p id="preise-einwohner-label" className="text-sm font-medium text-ink/70">
+            Einwohnerzahl Ihrer Kommune
+          </p>
+          <div
+            role="group"
+            aria-labelledby="preise-einwohner-label"
+            className="mt-3 flex flex-wrap gap-2"
+          >
+            {preise.map((stufe, i) => {
+              const active = i === aktiv;
+              return (
+                <button
+                  key={stufe.einwohner}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => setAktiv(i)}
+                  className={`rounded-full border px-4 py-2.5 text-sm font-medium transition-colors motion-reduce:transition-none ${FOCUS_RING} ${
+                    active
+                      ? "border-teal-ink bg-teal-ink text-white"
+                      : "border-outline bg-white text-ink/80 hover:border-teal/40 hover:bg-teal/5"
+                  }`}
+                >
+                  {stufe.einwohner}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="mt-6 grid gap-6 md:mt-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {preise.map((stufe, i) => (
-            <PreisCard key={stufe.einwohner} stufe={stufe} delay={i * 100} />
+            <PreisCard
+              key={stufe.einwohner}
+              stufe={stufe}
+              delay={i * 100}
+              className={i === aktiv ? "" : "hidden md:block"}
+            />
           ))}
         </div>
 
@@ -59,7 +100,15 @@ export function Preise() {
   );
 }
 
-function PreisCard({ stufe, delay }: { stufe: Preisstufe; delay: number }) {
+function PreisCard({
+  stufe,
+  delay,
+  className = "",
+}: {
+  stufe: Preisstufe;
+  delay: number;
+  className?: string;
+}) {
   // Komplett-Paket = Aufmaßmodul + Bescheidmodul, aus den Rohwerten berechnet
   // (keine hartkodierten Summen) — der prominente Anker-Preis, sobald das
   // Modul released ist. Ohne Bescheidmodul bleibt der Aufmaßmodul-Preis der
@@ -82,7 +131,7 @@ function PreisCard({ stufe, delay }: { stufe: Preisstufe; delay: number }) {
   const formatNum = (n: number) => n.toLocaleString("de-DE");
 
   return (
-    <Reveal delay={delay}>
+    <Reveal delay={delay} className={className}>
       <article
         className={`group relative flex h-full flex-col rounded-lg border border-outline bg-white p-6 shadow-card ${CARD_ACCENT_BORDER} ${CARD_HOVER} ${CARD_HOVER_GLOW}`}
       >
