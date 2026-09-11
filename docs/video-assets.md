@@ -18,6 +18,21 @@ einem R2-Bucket mit Custom-Domain.
    }]
    ```
 
+   Wichtig (Befund 11.09.2026): Die CORS-Regel allein reicht nicht. Ein
+   `<track>` mit Cross-Origin-`src` lädt der Browser nur, wenn das
+   `<video>`-Element `crossOrigin="anonymous"` trägt — sonst meldet Chrome
+   „Unsafe attempt to load URL … Domains, protocols and ports must match."
+   und die Untertitel fehlen. `VideoPlayer.tsx` setzt das Attribut, sobald
+   `captions` gesetzt ist; dann laufen auch MP4 und Poster im CORS-Modus.
+   Folgen:
+   - Lokal (`npm run dev` auf `localhost:5173`, `npm run preview` auf
+     `localhost:8787`) liefert R2 keinen `Access-Control-Allow-Origin` —
+     Teaser und Tour laden dort nicht, solange die Origin nicht in der
+     CORS-Regel steht.
+   - Beim Umstellen einer Quelle auf CORS die URL per `?v=N` neu versionieren.
+     Die Objekte haben `max-age=31536000, immutable`; ein Browser könnte
+     sonst eine früher ohne CORS gecachte Antwort wiederverwenden.
+
 ## Asset-Upload pro Video
 
 Jedes fertig produzierte Video besteht aus drei Dateien:
