@@ -11,29 +11,30 @@ import {
   LEAD,
 } from "@/components/ui/tokens";
 
+// ?v=2: neuer Cache-Key fuer den CORS-Modus (Begruendung in TeaserSection.tsx).
 const KAPITEL: VideoSource[] = [
   {
-    src: "https://videos.flaechenklar.de/tour-kapitel-1.mp4",
-    poster: "https://videos.flaechenklar.de/tour-kapitel-1-poster.webp",
-    captions: "https://videos.flaechenklar.de/tour-kapitel-1.vtt",
+    src: "https://videos.flaechenklar.de/tour-kapitel-1.mp4?v=2",
+    poster: "https://videos.flaechenklar.de/tour-kapitel-1-poster.webp?v=2",
+    captions: "https://videos.flaechenklar.de/tour-kapitel-1.vtt?v=2",
     title: "Schnellstart — vom PDF zum Protokoll",
   },
   {
-    src: "https://videos.flaechenklar.de/tour-kapitel-2.mp4",
-    poster: "https://videos.flaechenklar.de/tour-kapitel-2-poster.webp",
-    captions: "https://videos.flaechenklar.de/tour-kapitel-2.vtt",
+    src: "https://videos.flaechenklar.de/tour-kapitel-2.mp4?v=2",
+    poster: "https://videos.flaechenklar.de/tour-kapitel-2-poster.webp?v=2",
+    captions: "https://videos.flaechenklar.de/tour-kapitel-2.vtt?v=2",
     title: "Vollgeschosse nach KAG Bayern",
   },
   {
-    src: "https://videos.flaechenklar.de/tour-kapitel-3.mp4",
-    poster: "https://videos.flaechenklar.de/tour-kapitel-3-poster.webp",
-    captions: "https://videos.flaechenklar.de/tour-kapitel-3.vtt",
+    src: "https://videos.flaechenklar.de/tour-kapitel-3.mp4?v=2",
+    poster: "https://videos.flaechenklar.de/tour-kapitel-3-poster.webp?v=2",
+    captions: "https://videos.flaechenklar.de/tour-kapitel-3.vtt?v=2",
     title: "Mehrere Geschosse & Maßstab",
   },
   {
-    src: "https://videos.flaechenklar.de/tour-kapitel-4.mp4",
-    poster: "https://videos.flaechenklar.de/tour-kapitel-4-poster.webp",
-    captions: "https://videos.flaechenklar.de/tour-kapitel-4.vtt",
+    src: "https://videos.flaechenklar.de/tour-kapitel-4.mp4?v=2",
+    poster: "https://videos.flaechenklar.de/tour-kapitel-4-poster.webp?v=2",
+    captions: "https://videos.flaechenklar.de/tour-kapitel-4.vtt?v=2",
     title: "Export & Aufmaßprotokoll",
   },
 ];

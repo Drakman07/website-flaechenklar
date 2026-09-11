@@ -10,10 +10,14 @@ import {
   LEAD,
 } from "@/components/ui/tokens";
 
+// ?v=2: Mit Untertiteln laedt der Player im CORS-Modus. R2 liefert die Assets
+// mit "max-age=31536000, immutable" — ohne neuen Cache-Key koennte ein Browser
+// die frueher ohne CORS gecachte Antwort (ohne Access-Control-Allow-Origin)
+// wiederverwenden, und Video/Poster wuerden brechen.
 const TEASER: VideoSource = {
-  src: "https://videos.flaechenklar.de/teaser.mp4",
-  poster: "https://videos.flaechenklar.de/teaser-poster.webp",
-  captions: "https://videos.flaechenklar.de/teaser.de.vtt",
+  src: "https://videos.flaechenklar.de/teaser.mp4?v=2",
+  poster: "https://videos.flaechenklar.de/teaser-poster.webp?v=2",
+  captions: "https://videos.flaechenklar.de/teaser.de.vtt?v=2",
   title: "FlächenKlar in 60 Sekunden",
 };
 
