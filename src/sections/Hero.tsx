@@ -64,7 +64,7 @@ export function Hero() {
         <div>
           <div className="fade-rise inline-flex items-center gap-2 rounded-full border border-teal/40 bg-teal/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-teal">
             <span className="h-1.5 w-1.5 rounded-full bg-teal" />
-            Von Praktikern für Praktiker entwickelt
+            Von Praktiker für Praktiker
           </div>
           <h1 className="mt-6 text-display">
             <HeroHeadline />

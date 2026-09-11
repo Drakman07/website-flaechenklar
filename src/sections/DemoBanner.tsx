@@ -4,7 +4,9 @@ import {
   CARD_ACCENT_BORDER,
   CARD_HOVER,
   CARD_HOVER_GLOW,
+  H2,
   ICON_SIZE,
+  ICON_TILE,
   LABEL,
   LEAD,
 } from "@/components/ui/tokens";
@@ -34,7 +36,7 @@ export function DemoBanner() {
         <Reveal>
           <div className="max-w-2xl">
             <p className={LABEL}>Demo-Modus</p>
-            <h2 className="mt-3 text-3xl font-bold text-navy md:text-4xl">
+            <h2 className={`mt-3 text-navy ${H2}`}>
               Erst testen, dann entscheiden.
             </h2>
             <p className={`mt-4 ${LEAD}`}>
@@ -51,7 +53,7 @@ export function DemoBanner() {
               <article
                 className={`group h-full rounded-lg border border-teal/20 bg-white p-6 shadow-card ${CARD_ACCENT_BORDER} ${CARD_HOVER} ${CARD_HOVER_GLOW}`}
               >
-                <div className="flex h-11 w-11 items-center justify-center rounded bg-teal text-white">
+                <div className={`h-11 w-11 ${ICON_TILE}`}>
                   <Icon size={ICON_SIZE.feature} />
                 </div>
                 <h3 className="mt-4 text-lg font-semibold text-navy">{title}</h3>

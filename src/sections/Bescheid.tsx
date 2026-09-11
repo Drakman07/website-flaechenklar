@@ -2,7 +2,7 @@ import { Triangle } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { TealUnderline } from "@/components/TealUnderline";
 import { BescheidAufbau } from "@/components/animations/BescheidAufbau";
-import { BTN_PRIMARY_ON_LIGHT, BTN_TERTIARY, ICON_SIZE, LABEL, LEAD } from "@/components/ui/tokens";
+import { BTN_PRIMARY_ON_LIGHT, BTN_TERTIARY, H2, ICON_SIZE, LABEL, LEAD } from "@/components/ui/tokens";
 import {
   bescheidBullets,
   bescheidLabel,
@@ -32,7 +32,7 @@ export function Bescheid() {
               </span>
             )}
 
-            <h2 className="mt-3 text-3xl font-bold text-navy md:text-4xl">
+            <h2 className={`mt-3 text-navy ${H2}`}>
               Vom Aufmaß zum fertigen{" "}
               <TealUnderline>Bescheid-Entwurf</TealUnderline>.
             </h2>

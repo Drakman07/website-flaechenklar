@@ -6,6 +6,7 @@ import {
   CARD_BASE,
   CARD_HOVER,
   CARD_HOVER_GLOW,
+  H2,
   ICON_SIZE,
   LABEL,
   LEAD,
@@ -17,7 +18,7 @@ export function Sicherheit() {
       <div className="mx-auto grid max-w-6xl gap-12 px-6 lg:grid-cols-5 lg:gap-16">
         <Reveal className="lg:col-span-2">
           <p className={LABEL}>Sicherheit & Datenschutz</p>
-          <h2 className="mt-3 text-3xl font-bold text-navy md:text-4xl">
+          <h2 className={`mt-3 text-navy ${H2}`}>
             Bauherrendaten verlassen nie den{" "}
             <TealUnderline>Rechner</TealUnderline>.
           </h2>

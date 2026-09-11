@@ -5,6 +5,7 @@ import { Reveal } from "@/components/Reveal";
 import {
   BTN_PRIMARY,
   FOCUS_RING_DARK,
+  H2,
   ICON_SIZE,
   INPUT_ON_DARK,
 } from "@/components/ui/tokens";
@@ -159,7 +160,7 @@ export function Kontakt() {
           <p className="text-xs font-semibold uppercase tracking-wider text-teal">
             Kontakt
           </p>
-          <h2 className="mt-3 text-3xl font-bold md:text-4xl">
+          <h2 className={`mt-3 ${H2}`}>
             In zwei Minuten zur Demo-Anfrage.
           </h2>
           <p className="mt-4 text-white/70 md:text-lg">
