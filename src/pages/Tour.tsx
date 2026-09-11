@@ -6,6 +6,7 @@ import { navigate } from "@/router";
 import {
   BTN_PRIMARY_ON_LIGHT,
   FOCUS_RING,
+  H1,
   ICON_SIZE,
   LABEL,
   LEAD,
@@ -78,7 +79,7 @@ export function Tour() {
         <Reveal delay={80}>
           <div className="mt-6 max-w-3xl">
             <p className={LABEL}>Komplette Tour</p>
-            <h1 className="mt-3 text-3xl font-bold text-navy md:text-5xl">
+            <h1 className={`mt-3 text-navy ${H1}`}>
               FlächenKlar im <TealUnderline>Detail</TealUnderline>.
             </h1>
             <p className={`mt-4 ${LEAD}`}>

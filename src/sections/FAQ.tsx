@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { faq } from "@/content/faq";
 import { Reveal } from "@/components/Reveal";
-import { FOCUS_RING, LABEL, LEAD } from "@/components/ui/tokens";
+import { FOCUS_RING, H2, LABEL, LEAD } from "@/components/ui/tokens";
 
 export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -12,7 +12,7 @@ export function FAQ() {
         <Reveal>
           <div>
             <p className={LABEL}>Häufige Fragen</p>
-            <h2 className="mt-3 text-3xl font-bold text-navy md:text-4xl">
+            <h2 className={`mt-3 text-navy ${H2}`}>
               Antworten auf das, was Bauämter zuerst fragen.
             </h2>
             <p className={`mt-4 ${LEAD}`}>

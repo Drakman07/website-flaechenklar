@@ -5,6 +5,7 @@ import { Reveal } from "@/components/Reveal";
 import {
   BTN_PRIMARY,
   FOCUS_RING_DARK,
+  H2,
   ICON_SIZE,
   INPUT_ON_DARK,
 } from "@/components/ui/tokens";
@@ -39,8 +40,43 @@ type FormState = {
 type SubmitStatus =
   | { kind: "idle" }
   | { kind: "submitting" }
-  | { kind: "success" }
+  | { kind: "success"; email?: string }
   | { kind: "error"; message: string };
+
+/** Pflichtfelder, in Anzeige-Reihenfolge (erstes fehlerhaftes Feld bekommt den Fokus). */
+const PFLICHTFELDER = ["behoerde", "einwohner", "ansprechpartner", "email"] as const;
+type Pflichtfeld = (typeof PFLICHTFELDER)[number];
+type FeldFehler = Partial<Record<Pflichtfeld, string>>;
+
+const EMAIL_MUSTER = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+function validate(f: FormState): FeldFehler {
+  const fehler: FeldFehler = {};
+  if (!f.behoerde.trim()) fehler.behoerde = "Bitte Behörde angeben.";
+  if (!f.einwohner) fehler.einwohner = "Bitte Einwohnerzahl wählen.";
+  if (!f.ansprechpartner.trim())
+    fehler.ansprechpartner = "Bitte Ansprechpartner angeben.";
+  if (!f.email.trim()) {
+    fehler.email = "Bitte E-Mail-Adresse angeben.";
+  } else if (!EMAIL_MUSTER.test(f.email.trim())) {
+    fehler.email = "E-Mail-Adresse ungültig, Beispiel: name@gemeinde.de";
+  }
+  return fehler;
+}
+
+/** Inline-Fehlertext unter einem Feld, per aria-describedby verknuepft. */
+function FeldFehlerText({ id, text }: { id: string; text?: string }) {
+  if (!text) return null;
+  return (
+    <p id={id} className="mt-1.5 flex items-center gap-1.5 text-xs text-red-200">
+      <CircleAlert size={12} strokeWidth={2} aria-hidden="true" className="shrink-0" />
+      {text}
+    </p>
+  );
+}
+
+/** Zusatzklasse fuer ungueltige Felder (! schlaegt die Border aus INPUT_ON_DARK). */
+const INVALID_CLS = "!border-red-300/80";
 
 const initial: FormState = {
   behoerde: "",
@@ -58,6 +94,10 @@ const inputCls = INPUT_ON_DARK;
 export function Kontakt() {
   const [form, setForm] = useState<FormState>(initial);
   const [status, setStatus] = useState<SubmitStatus>({ kind: "idle" });
+  const [errors, setErrors] = useState<FeldFehler>({});
+  // Fehler erst nach dem ersten Absende-Versuch zeigen, danach live
+  // nachfuehren (Meldung verschwindet, sobald das Feld stimmt).
+  const [versucht, setVersucht] = useState(false);
 
   const update =
     (k: keyof FormState) =>
@@ -65,8 +105,11 @@ export function Kontakt() {
       e: ChangeEvent<
         HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
       >,
-    ) =>
-      setForm({ ...form, [k]: e.target.value });
+    ) => {
+      const next = { ...form, [k]: e.target.value };
+      setForm(next);
+      if (versucht) setErrors(validate(next));
+    };
 
   // Bescheid-CTAs (z.B. in der Bescheid-Sektion) feuern dieses Event statt
   // eines Router-Umbaus — schlankste Variante fuer die Vorbelegung.
@@ -91,6 +134,19 @@ export function Kontakt() {
     )?.value;
     if (honeypot) {
       setStatus({ kind: "success" });
+      return;
+    }
+
+    // Client-Validierung: nichts an Formspree senden, solange Pflichtfelder
+    // fehlen. Fokus auf das erste fehlerhafte Feld.
+    const fehler = validate(form);
+    setVersucht(true);
+    setErrors(fehler);
+    const erstesFeld = PFLICHTFELDER.find((k) => fehler[k]);
+    if (erstesFeld) {
+      formEl
+        .querySelector<HTMLElement>(`[name="${erstesFeld}"]`)
+        ?.focus();
       return;
     }
 
@@ -119,8 +175,12 @@ export function Kontakt() {
       });
 
       if (res.ok) {
-        setStatus({ kind: "success" });
+        // E-Mail vor dem Zuruecksetzen merken, sonst zeigt die
+        // Erfolgsmeldung nur den Platzhalter.
+        setStatus({ kind: "success", email: form.email.trim() });
         setForm(initial);
+        setErrors({});
+        setVersucht(false);
         return;
       }
 
@@ -159,7 +219,7 @@ export function Kontakt() {
           <p className="text-xs font-semibold uppercase tracking-wider text-teal">
             Kontakt
           </p>
-          <h2 className="mt-3 text-3xl font-bold md:text-4xl">
+          <h2 className={`mt-3 ${H2}`}>
             In zwei Minuten zur Demo-Anfrage.
           </h2>
           <p className="mt-4 text-white/70 md:text-lg">
@@ -188,7 +248,7 @@ export function Kontakt() {
                   <p className="mt-2 text-sm text-white/75">
                     Vielen Dank für Ihre Anfrage. Wir melden uns innerhalb von
                     einem Werktag bei{" "}
-                    <span className="font-mono">{form.email || "Ihrer E-Mail"}</span>.
+                    <span className="font-mono">{status.email || "Ihrer E-Mail"}</span>.
                   </p>
                   <button
                     type="button"
@@ -208,35 +268,47 @@ export function Kontakt() {
               className="mt-10 grid gap-5 md:grid-cols-2"
               noValidate
             >
-              <label className="md:col-span-2">
-                <span className="text-sm text-white/70">Behörde *</span>
-                <input
-                  required
-                  disabled={submitting}
-                  value={form.behoerde}
-                  onChange={update("behoerde")}
-                  autoComplete="organization"
-                  className={`mt-1 ${inputCls}`}
-                />
-              </label>
+              <div className="md:col-span-2">
+                <label className="block">
+                  <span className="text-sm text-white/70">Behörde *</span>
+                  <input
+                    required
+                    name="behoerde"
+                    disabled={submitting}
+                    value={form.behoerde}
+                    onChange={update("behoerde")}
+                    autoComplete="organization"
+                    aria-invalid={errors.behoerde ? true : undefined}
+                    aria-describedby={errors.behoerde ? "fehler-behoerde" : undefined}
+                    className={`mt-1 ${inputCls} ${errors.behoerde ? INVALID_CLS : ""}`}
+                  />
+                </label>
+                <FeldFehlerText id="fehler-behoerde" text={errors.behoerde} />
+              </div>
 
-              <label>
-                <span className="text-sm text-white/70">Einwohnerzahl *</span>
-                <select
-                  required
-                  disabled={submitting}
-                  value={form.einwohner}
-                  onChange={update("einwohner")}
-                  className={`mt-1 ${inputCls}`}
-                >
-                  <option value="">Bitte wählen</option>
-                  <option>bis 3.000</option>
-                  <option>3.000 – 8.000</option>
-                  <option>8.000 – 15.000</option>
-                  <option>15.000 – 30.000</option>
-                  <option>über 30.000</option>
-                </select>
-              </label>
+              <div>
+                <label className="block">
+                  <span className="text-sm text-white/70">Einwohnerzahl *</span>
+                  <select
+                    required
+                    name="einwohner"
+                    disabled={submitting}
+                    value={form.einwohner}
+                    onChange={update("einwohner")}
+                    aria-invalid={errors.einwohner ? true : undefined}
+                    aria-describedby={errors.einwohner ? "fehler-einwohner" : undefined}
+                    className={`mt-1 ${inputCls} ${errors.einwohner ? INVALID_CLS : ""}`}
+                  >
+                    <option value="">Bitte wählen</option>
+                    <option>bis 3.000</option>
+                    <option>3.000 – 8.000</option>
+                    <option>8.000 – 15.000</option>
+                    <option>15.000 – 30.000</option>
+                    <option>über 30.000</option>
+                  </select>
+                </label>
+                <FeldFehlerText id="fehler-einwohner" text={errors.einwohner} />
+              </div>
 
               <div className="md:col-span-2">
                 <span className="text-sm text-white/70">Anliegen *</span>
@@ -280,30 +352,47 @@ export function Kontakt() {
                 Interesse am Bescheidmodul
               </label>
 
-              <label>
-                <span className="text-sm text-white/70">Ansprechpartner *</span>
-                <input
-                  required
-                  disabled={submitting}
-                  value={form.ansprechpartner}
-                  onChange={update("ansprechpartner")}
-                  autoComplete="name"
-                  className={`mt-1 ${inputCls}`}
+              <div>
+                <label className="block">
+                  <span className="text-sm text-white/70">Ansprechpartner *</span>
+                  <input
+                    required
+                    name="ansprechpartner"
+                    disabled={submitting}
+                    value={form.ansprechpartner}
+                    onChange={update("ansprechpartner")}
+                    autoComplete="name"
+                    aria-invalid={errors.ansprechpartner ? true : undefined}
+                    aria-describedby={
+                      errors.ansprechpartner ? "fehler-ansprechpartner" : undefined
+                    }
+                    className={`mt-1 ${inputCls} ${errors.ansprechpartner ? INVALID_CLS : ""}`}
+                  />
+                </label>
+                <FeldFehlerText
+                  id="fehler-ansprechpartner"
+                  text={errors.ansprechpartner}
                 />
-              </label>
+              </div>
 
-              <label>
-                <span className="text-sm text-white/70">E-Mail *</span>
-                <input
-                  required
-                  type="email"
-                  disabled={submitting}
-                  value={form.email}
-                  onChange={update("email")}
-                  autoComplete="email"
-                  className={`mt-1 ${inputCls}`}
-                />
-              </label>
+              <div>
+                <label className="block">
+                  <span className="text-sm text-white/70">E-Mail *</span>
+                  <input
+                    required
+                    type="email"
+                    name="email"
+                    disabled={submitting}
+                    value={form.email}
+                    onChange={update("email")}
+                    autoComplete="email"
+                    aria-invalid={errors.email ? true : undefined}
+                    aria-describedby={errors.email ? "fehler-email" : undefined}
+                    className={`mt-1 ${inputCls} ${errors.email ? INVALID_CLS : ""}`}
+                  />
+                </label>
+                <FeldFehlerText id="fehler-email" text={errors.email} />
+              </div>
 
               <label className="md:col-span-2">
                 <span className="text-sm text-white/70">Telefon (optional)</span>

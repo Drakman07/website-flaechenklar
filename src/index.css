@@ -20,6 +20,8 @@
   }
   html { scroll-behavior: smooth; }
   body { @apply bg-white text-ink antialiased font-sans; }
+  /* Keine Waisenwoerter in Ueberschriften (letzte Zeile mit nur einem Wort). */
+  h1, h2, h3 { text-wrap: balance; }
   section[id] { scroll-margin-top: 5rem; }
   option { @apply bg-white text-ink; }
 }

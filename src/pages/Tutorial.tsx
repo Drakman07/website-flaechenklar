@@ -8,6 +8,7 @@ import {
   BTN_PRIMARY_ON_LIGHT,
   CARD_BASE,
   FOCUS_RING,
+  H1,
   ICON_SIZE,
   LABEL,
   LEAD,
@@ -136,7 +137,7 @@ export function Tutorial() {
         <Reveal delay={80}>
           <div className="mt-6 max-w-3xl">
             <p className={LABEL}>Komplettes Tutorial</p>
-            <h1 className="mt-3 text-3xl font-bold text-navy md:text-5xl">
+            <h1 className={`mt-3 text-navy ${H1}`}>
               FlächenKlar in <TealUnderline>rund einer Stunde</TealUnderline>.
             </h1>
             <p className={`mt-4 ${LEAD}`}>

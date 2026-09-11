@@ -3,7 +3,7 @@ import { Reveal } from "@/components/Reveal";
 import { TealUnderline } from "@/components/TealUnderline";
 import { navigate } from "@/router";
 import { versionen } from "@/content/versionen";
-import { FOCUS_RING, ICON_SIZE, LABEL, LEAD } from "@/components/ui/tokens";
+import { FOCUS_RING, H1, ICON_SIZE, LABEL, LEAD } from "@/components/ui/tokens";
 
 /**
  * Öffentliche Versionshistorie als vertikaler Zeitstrahl.
@@ -37,7 +37,7 @@ export function Versionen() {
         <Reveal delay={80}>
           <div className="mt-6">
             <p className={LABEL}>Versionsverlauf</p>
-            <h1 className="mt-3 text-3xl font-bold text-navy md:text-5xl">
+            <h1 className={`mt-3 text-navy ${H1}`}>
               Was bei FlächenKlar <TealUnderline>dazukommt</TealUnderline>.
             </h1>
             <p className={`mt-4 ${LEAD}`}>

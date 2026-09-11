@@ -4,6 +4,7 @@ import { Home } from "./pages/Home";
 import { Tour } from "./pages/Tour";
 import { Tutorial } from "./pages/Tutorial";
 import { Versionen } from "./pages/Versionen";
+import { NotFound } from "./pages/NotFound";
 import { useRoute } from "./router";
 import { ScrollProgressBar } from "./components/animations/ScrollProgressBar";
 
@@ -26,6 +27,8 @@ export function App() {
           <Tutorial />
         ) : route === "versionen" ? (
           <Versionen />
+        ) : route === "notfound" ? (
+          <NotFound />
         ) : (
           <Home />
         )}

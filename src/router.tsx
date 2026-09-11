@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export type Route = "home" | "tour" | "tutorial" | "versionen";
+export type Route = "home" | "tour" | "tutorial" | "versionen" | "notfound";
 
 export type RoutePath = "/" | "/tour" | "/tutorial" | "/versionen";
 
@@ -9,6 +9,7 @@ const TITLES: Record<Route, string> = {
   tour: "FlächenKlar — Komplette Tour",
   tutorial: "FlächenKlar — Komplettes Tutorial (rund einer Stunde)",
   versionen: "FlächenKlar — Versionsverlauf",
+  notfound: "FlächenKlar — Seite nicht gefunden",
 };
 
 const DESCRIPTIONS: Record<Route, string> = {
@@ -16,13 +17,17 @@ const DESCRIPTIONS: Record<Route, string> = {
   tour: "Komplette Tour durch FlächenKlar: 4 Kapitel à 60 Sekunden zu Schnellstart, Vollgeschossen, mehrgeschossigen Gebäuden und Export.",
   tutorial: "Schritt-für-Schritt-Tutorial: FlächenKlar in 13 Kapiteln und rund einer Stunde — vom ersten Doppelklick bis zum fertigen Beitragsbescheid, inklusive Foto-Import und RIWA-Datenexport. Ersatz für die Vor-Ort-Einarbeitung.",
   versionen: "Versionsverlauf von FlächenKlar: alle Releases im Überblick — was in welcher Version dazugekommen ist, chronologisch und nachvollziehbar dokumentiert.",
+  notfound: "Diese Seite gibt es auf flaechenklar.de nicht. Weiter zur Startseite, zur Tour oder zum Tutorial.",
 };
 
 function pathToRoute(pathname: string): Route {
-  if (pathname === "/tour") return "tour";
-  if (pathname === "/tutorial") return "tutorial";
-  if (pathname === "/versionen") return "versionen";
-  return "home";
+  // Abschliessende Slashes ignorieren ("/tour/" == "/tour").
+  const path = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
+  if (path === "/" || path === "" || path === "/index.html") return "home";
+  if (path === "/tour") return "tour";
+  if (path === "/tutorial") return "tutorial";
+  if (path === "/versionen") return "versionen";
+  return "notfound";
 }
 
 export function useRoute(): Route {
