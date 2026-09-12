@@ -94,8 +94,17 @@ Davor: Design-Upgrade (PR #3, Merge `a803055`) — zentrales Token-System in `sr
 - **Bucket:** `flaechenklarvideos` (ENAM-Jurisdiction, kein EU-Lock — für
   öffentliche Marketing-Videos akzeptabel)
 - **Custom Domain:** `videos.flaechenklar.de` (verknüpft, SSL aktiv)
-- **CORS-Origins:** `https://flaechenklar.de`, `https://www.flaechenklar.de`
-- **CORS-Methods:** GET, HEAD
+- **CORS-Origins:** `https://flaechenklar.de`, `https://www.flaechenklar.de`,
+  `http://localhost:5173` (Vite-Dev), `http://localhost:8787` (wrangler dev) —
+  gesetzt am 12.09.2026 per `npx wrangler r2 bucket cors set flaechenklarvideos --file <json>`
+  (JSON-Format: `{"rules":[{"allowed":{"origins":[...],"methods":[...],"headers":[...]},"maxAgeSeconds":3600}]}`)
+- **CORS-Methods:** GET, HEAD — **CORS-Headers:** `Range`
+- **Achtung `<track>`:** Die CORS-Regel allein reicht nicht. Ein Cross-Origin-VTT
+  laedt der Browser nur, wenn das `<video>` `crossOrigin="anonymous"` traegt
+  (`src/components/VideoPlayer.tsx`, gesetzt sobald `captions` da ist). Dann laufen
+  MP4 und Poster ebenfalls im CORS-Modus. Beim Umschalten Asset-URLs per `?v=N`
+  neu versionieren, sonst kann der `immutable`-Cache eine alte Antwort ohne
+  `Access-Control-Allow-Origin` wiederverwenden. Details: `docs/video-assets.md`.
 - **CF-Account-ID:** `3604225b1ae285729146aa3a0c8fdf13`
 
 Asset-Konventionen (siehe `docs/video-assets.md`):
