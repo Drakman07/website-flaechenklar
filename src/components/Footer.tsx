@@ -25,7 +25,10 @@ const PRODUKT_LINKS: ReadonlyArray<
   { label: "Versionsverlauf", route: "/versionen" },
 ];
 
-const LINK_CLS = `rounded-sm transition-colors hover:text-white ${FOCUS_RING_DARK}`;
+// py-1.5 + inline-block: Tippflaeche mind. 24 px hoch (WCAG 2.2, 2.5.8).
+// Die Kontaktzeilen setzen zusaetzlich inline-flex, das gewinnt gegen
+// inline-block und behaelt die Icon-Ausrichtung.
+const LINK_CLS = `inline-block rounded-sm py-1.5 transition-colors hover:text-white ${FOCUS_RING_DARK}`;
 
 /** Router-Link ohne Vollreload; auf derselben Route nach oben scrollen. */
 function handleRouteClick(to: RoutePath) {
@@ -72,7 +75,7 @@ export function Footer() {
 
         <nav aria-label="Footer-Navigation">
           <p className={LABEL_ON_DARK}>Produkt</p>
-          <ul className="mt-4 space-y-2.5 text-sm">
+          <ul className="mt-3 space-y-0.5 text-sm">
             {PRODUKT_LINKS.map((l) =>
               "route" in l ? (
                 <li key={l.label}>
@@ -97,7 +100,7 @@ export function Footer() {
 
         <div>
           <p className={LABEL_ON_DARK}>Kontakt</p>
-          <ul className="mt-4 space-y-3 text-sm">
+          <ul className="mt-3 space-y-1.5 text-sm">
             <li>
               <a href={`mailto:${EMAIL}`} className={`inline-flex items-center gap-2.5 ${LINK_CLS}`}>
                 <Mail size={ICON_SIZE.inline} className="shrink-0 text-teal" aria-hidden="true" />
