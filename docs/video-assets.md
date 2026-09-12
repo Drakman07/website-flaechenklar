@@ -10,13 +10,26 @@ einem R2-Bucket mit Custom-Domain.
    (Cloudflare → R2 → Bucket → Settings → Custom Domains)
 3. CORS-Regel hinzufügen, damit VTT-Captions vom Browser geladen werden:
    ```json
-   [{
-     "AllowedOrigins": ["https://flaechenklar.de", "https://www.flaechenklar.de"],
-     "AllowedMethods": ["GET", "HEAD"],
-     "AllowedHeaders": ["Range"],
-     "MaxAgeSeconds": 3600
-   }]
+   {
+     "rules": [{
+       "allowed": {
+         "origins": [
+           "https://flaechenklar.de",
+           "https://www.flaechenklar.de",
+           "http://localhost:5173",
+           "http://localhost:8787"
+         ],
+         "methods": ["GET", "HEAD"],
+         "headers": ["Range"]
+       },
+       "maxAgeSeconds": 3600
+     }]
+   }
    ```
+
+   Setzen per `npx wrangler r2 bucket cors set flaechenklarvideos --file <datei>`,
+   pruefen per `npx wrangler r2 bucket cors list flaechenklarvideos`. Wrangler
+   erwartet genau dieses `rules`-Format; eine flache S3-Liste lehnt es ab.
 
    Wichtig (Befund 11.09.2026): Die CORS-Regel allein reicht nicht. Ein
    `<track>` mit Cross-Origin-`src` lädt der Browser nur, wenn das
@@ -26,12 +39,20 @@ einem R2-Bucket mit Custom-Domain.
    `captions` gesetzt ist; dann laufen auch MP4 und Poster im CORS-Modus.
    Folgen:
    - Lokal (`npm run dev` auf `localhost:5173`, `npm run preview` auf
-     `localhost:8787`) liefert R2 keinen `Access-Control-Allow-Origin` —
-     Teaser und Tour laden dort nicht, solange die Origin nicht in der
-     CORS-Regel steht.
+     `localhost:8787`) braucht die Origin einen Eintrag in der CORS-Regel.
+     Seit 12.09.2026 stehen beide drin; davor luden Teaser und Tour lokal nicht.
    - Beim Umstellen einer Quelle auf CORS die URL per `?v=N` neu versionieren.
      Die Objekte haben `max-age=31536000, immutable`; ein Browser könnte
      sonst eine früher ohne CORS gecachte Antwort wiederverwenden.
+   - Achtung Edge-Cache (Befund 12.09.2026): R2 setzt `Access-Control-Allow-Origin`
+     und `Vary: Origin` nur, wenn die Anfrage einen erlaubten `Origin`-Header
+     trägt. Eine Anfrage **ohne** `Origin` (Node-Skript, Crawler, `wget`) bekommt
+     eine Antwort ohne beide Header — und der Cloudflare-Cache hebt genau die
+     ein Jahr lang auf und liefert sie danach auch an Browser aus. Das Video
+     bricht dann mit `MEDIA_ERR_SRC_NOT_SUPPORTED`. Gegenmittel: neuen
+     `?v=N`-Schlüssel setzen und ihn **vor** dem Deploy einmal je erlaubter
+     Origin mit `Origin`-Header abrufen (vorwärmen). Prüfen lässt sich das an
+     `cf-cache-status`, `access-control-allow-origin` und `vary` der Antwort.
 
 ## Asset-Upload pro Video
 
