@@ -24,17 +24,26 @@ export function useCountUp<T extends Element = HTMLElement>(
   } = options;
   const ref = useRef<T>(null);
   const [value, setValue] = useState(enabled ? 0 : target);
+  // Spiegelt den zuletzt angezeigten Wert. Die Animation startet dort statt
+  // bei 0 — sonst springt die Zahl bei jedem Zielwechsel (Preis-Chip wechseln)
+  // erst auf 0 zurueck und zaehlt von vorne hoch.
+  const valueRef = useRef(enabled ? 0 : target);
 
   useEffect(() => {
     const node = ref.current;
     if (!node) return;
+
+    const apply = (next: number) => {
+      valueRef.current = next;
+      setValue(next);
+    };
 
     const reduce =
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (!enabled || reduce) {
-      setValue(target);
+      apply(target);
       return;
     }
 
@@ -45,10 +54,11 @@ export function useCountUp<T extends Element = HTMLElement>(
       obs.disconnect();
 
       const start = () => {
+        const from = valueRef.current;
         const t0 = performance.now();
         const tick = (now: number) => {
           const p = Math.min(1, (now - t0) / durationMs);
-          setValue(target * easeOutCubic(p));
+          apply(from + (target - from) * easeOutCubic(p));
           if (p < 1) raf = requestAnimationFrame(tick);
         };
         raf = requestAnimationFrame(tick);
@@ -70,6 +80,10 @@ export function useCountUp<T extends Element = HTMLElement>(
   }, [target, durationMs, enabled, startDelayMs]);
 
   const factor = Math.pow(10, decimals);
-  const displayValue = Math.round(value * factor) / factor;
+  // Bei `enabled: false` sofort den Zielwert liefern, ohne auf den Effekt zu
+  // warten — sonst blitzt fuer einen Frame der alte Wert (oder 0) auf.
+  const displayValue = enabled
+    ? Math.round(value * factor) / factor
+    : Math.round(target * factor) / factor;
   return [ref, displayValue] as const;
 }

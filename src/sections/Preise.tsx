@@ -20,6 +20,13 @@ export function Preise() {
   // Mobil (< md) zeigt nur die gewaehlte Stufe, statt fuenf Karten zu
   // stapeln. Ab md sind immer alle Karten sichtbar.
   const [aktiv, setAktiv] = useState(0);
+  // Die nicht gewaehlten Karten stehen auf `display:none`; ihr
+  // IntersectionObserver feuert erst beim Antippen des Chips. Die
+  // Counter-Animation wuerde dann bei jedem Wechsel erneut bei 0 EUR
+  // anfangen. Nach der ersten Chip-Auswahl zeigen die Karten den Preis
+  // darum sofort — die Zaehl-Animation ist ein Scroll-Reveal-Effekt, kein
+  // Feedback auf einen Tipp.
+  const [chipGewaehlt, setChipGewaehlt] = useState(false);
 
   return (
     <section id="preise" className="bg-slate-50/60 py-24">
@@ -58,7 +65,10 @@ export function Preise() {
                   key={stufe.einwohner}
                   type="button"
                   aria-pressed={active}
-                  onClick={() => setAktiv(i)}
+                  onClick={() => {
+                    setAktiv(i);
+                    setChipGewaehlt(true);
+                  }}
                   className={`rounded-full border px-4 py-2.5 text-sm font-medium transition-colors motion-reduce:transition-none ${FOCUS_RING} ${
                     active
                       ? "border-teal-ink bg-teal-ink text-white"
@@ -78,6 +88,7 @@ export function Preise() {
               key={stufe.einwohner}
               stufe={stufe}
               delay={i * 100}
+              animiert={!chipGewaehlt}
               className={i === aktiv ? "" : "hidden md:block"}
             />
           ))}
@@ -103,10 +114,13 @@ export function Preise() {
 function PreisCard({
   stufe,
   delay,
+  animiert = true,
   className = "",
 }: {
   stufe: Preisstufe;
   delay: number;
+  /** false = Preis sofort anzeigen, ohne Zaehl-Animation. */
+  animiert?: boolean;
   className?: string;
 }) {
   // Komplett-Paket = Aufmaßmodul + Bescheidmodul, aus den Rohwerten berechnet
@@ -120,11 +134,11 @@ function PreisCard({
   // Counter-Animation: Preise zaehlen beim Reveal hoch, staggered je Card.
   const [einmaligRef, einmaligValue] = useCountUp<HTMLSpanElement>(
     bescheidReleased ? komplettNumeric : stufe.einmaligNumeric,
-    { durationMs: 900, startDelayMs: delay },
+    { durationMs: 900, startDelayMs: delay, enabled: animiert },
   );
   const [wartungRef, wartungValue] = useCountUp<HTMLSpanElement>(
     bescheidReleased ? wartungKomplettNumeric : stufe.wartungNumeric,
-    { durationMs: 900, startDelayMs: delay + 150 },
+    { durationMs: 900, startDelayMs: delay + 150, enabled: animiert },
   );
 
   const Icon = stufe.icon;
