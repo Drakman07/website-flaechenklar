@@ -9,6 +9,7 @@ import { Bescheid } from "@/sections/Bescheid";
 import { Sicherheit } from "@/sections/Sicherheit";
 import { DemoBanner } from "@/sections/DemoBanner";
 import { Preise } from "@/sections/Preise";
+import { Argumente } from "@/sections/Argumente";
 import { FAQ } from "@/sections/FAQ";
 import { Kontakt } from "@/sections/Kontakt";
 
@@ -26,6 +27,7 @@ export function Home() {
       <Sicherheit />
       <DemoBanner />
       <Preise />
+      <Argumente />
       <FAQ />
       <Kontakt />
     </>
