@@ -10,14 +10,17 @@ import {
   LEAD,
 } from "@/components/ui/tokens";
 
-// ?v=2: Mit Untertiteln laedt der Player im CORS-Modus. R2 liefert die Assets
+// ?v=3: Mit Untertiteln laedt der Player im CORS-Modus. R2 liefert die Assets
 // mit "max-age=31536000, immutable" — ohne neuen Cache-Key koennte ein Browser
 // die frueher ohne CORS gecachte Antwort (ohne Access-Control-Allow-Origin)
 // wiederverwenden, und Video/Poster wuerden brechen.
+// Der Sprung von ?v=2 auf ?v=3 (12.09.2026) raeumt zwei Edge-Cache-Eintraege ab,
+// die ohne Origin-Header gefuellt wurden und darum keinen Vary-Origin-Schluessel
+// hatten: teaser.mp4 und teaser-poster.webp kamen dadurch ohne ACAO zurueck.
 const TEASER: VideoSource = {
-  src: "https://videos.flaechenklar.de/teaser.mp4?v=2",
-  poster: "https://videos.flaechenklar.de/teaser-poster.webp?v=2",
-  captions: "https://videos.flaechenklar.de/teaser.de.vtt?v=2",
+  src: "https://videos.flaechenklar.de/teaser.mp4?v=3",
+  poster: "https://videos.flaechenklar.de/teaser-poster.webp?v=3",
+  captions: "https://videos.flaechenklar.de/teaser.de.vtt?v=3",
   title: "FlächenKlar in 60 Sekunden",
 };
 
