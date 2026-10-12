@@ -1,18 +1,6 @@
 # FlächenKlar-Website — Session-Memory für Claude
 
-Letzter Stand: 2026-07-19, **Tutorial v1.3 komplett neu produziert** —
-13 Kapitel statt 10 (neues Drehbuch, s. `tutorial-spicker-v1.3.pdf`),
-alle Kapitel neu gedreht + geschnitten (ffmpeg, CRF 23 1080p) + auf R2
-hochgeladen (`tutorial-kapitel-{1..13}.mp4/-poster.webp`, gleiche
-Objekte überschrieben, `Tutorial.tsx`-KAPITEL-Array + Hero-Text
-aktualisiert). VTT-Untertitel bewusst ausgelassen diese Runde (alte
-Kapitel-1..10-VTTs passen inhaltlich nicht mehr zum neuen Video —
-`captions`-Feld komplett entfernt statt falsche Untertitel zu zeigen).
-Details in `docs/video-assets.md` → Abschnitt „Tutorial v1.3".
-
-Vorgänger-Stand 2026-06-25, **Welle 3 (Wow-Upgrade, PRs #10 + #11 gemerged)** — interaktives Aufmass-Tool im Hero (oben rechts, `src/components/PlanMessDemo.tsx`): vorgegebener L-Haus-Grundriss, Eckpunkte der Reihe nach abklicken → Messpolygon zeichnet sich → Flaeche 100,50 m² + Massketten → Aufmassblatt (`AufmassProtokoll`) entsteht darunter. Ersetzt die alte `PolygonDemo`. Dazu: choreografierter Hero-Auftritt (`fade-rise`), Zahlen-Mini-Viz (Ring/Sparkline/Balken auf den echten Stats 100 % / 0 / 1), editorial Typo-Skala + Micro-Interaktionen. PSI live (mobile): A11y 100 / BP 96 / SEO 100, LCP 423 ms, CLS 0,00. Null Animations-Lib (gsap war kurz für eine Scroll-Sequenz drin, wieder entfernt). Main-Bundle 82,95 KB gz.
-
-Vorgänger-Stand 2026-05-17, Tutorial-Release (PRs #7 + #8) — `/tutorial`-Route live mit allen 8 Kapitel-MP4s (~45 min Onboarding-Ersatz) auf R2. /tour bekam Footer-Funnel zum Tutorial. Welle 2 (PR #6): Founder-Story-Block + Alexander-Foto, 5-Tier-Preise mit Pilot-Banner + Counter-Animationen, Hero-H1-Word-Stagger, ScrollProgressBar, Hero-Parallax, Card-Hover-Glow. PSI Welle 2: Mobile 100/100/96/92, Desktop 100/97/96/92.
+VTT-Untertitel fehlen beim Tutorial bewusst (die alten Kapitel-VTTs passen nicht zum v1.3-Video, das `captions`-Feld ist entfernt). Details: `docs/video-assets.md` → Abschnitt „Tutorial v1.3“.
 
 ## Projekt-Kurzbeschreibung
 
@@ -26,29 +14,6 @@ führt zur Demo-Anfrage.
   Workers + R2
 - Auto-Deploy: GitHub Actions auf Push nach `main`
 - DSGVO-bewusst: keine Third-Party-Tracker, keine Cookies, keine Drittanbieter-Embeds
-
-## Aktueller Stand (Mai 2026)
-
-**Letzter Major-Schritt:** Welle 2 (PR #6 als Restore von PR #4 + Cleanup-Commit, Merge `3c9cf99`) — neuer Founder-Block (`src/sections/Founder.tsx`) zwischen ProblemChance und Funktionen mit Alexander-Portrait in Polaroid-Frame + Ghost-Panel, 5-Tier-Preise-Card-Grid (`Preise.tsx`) mit Pilot-Banner und `useCountUp`-animierten Preisen, Hero-H1-Word-Stagger via `.stagger-word`-CSS-Klasse, ScrollProgressBar (`src/components/animations/ScrollProgressBar.tsx`) fixed top, Hero-Parallax (`BlueprintGrid` bewegt sich 30 % langsamer beim Scrollen), Vollgeschoss-Counter auf Beispiel-Berechnung, Card-Hover-Glow-Token auf allen Card-Grids.
-
-Davor: Design-Upgrade (PR #3, Merge `a803055`) — zentrales Token-System in `src/components/ui/tokens.ts`, Bento-Grid für Funktionen, asymmetrische Layouts, Hero-PolygonDemo mit Ghost-Panel, TealUnderline-Highlights, animiertes FAQ-Akkordeon, Focus-Visible, IntersectionObserver-Active-Section-Nav, Skip-Link, theme-color.
-
-| Bereich | Status |
-|---|---|
-| Marketing-Sektionen (Hero, Funktionen, Preise, FAQ, Kontakt) | ✅ vollständig |
-| Kontaktformular via Formspree | ✅ aktiv |
-| Impressum, Datenschutz | ✅ separate Cloudflare-served HTML-Seiten |
-| 60-Sek-Teaser auf Homepage | ✅ live mit echten R2-URLs |
-| `/tour`-Route mit Walkthrough-Player | ✅ live mit echten R2-URLs |
-| 4 Walkthrough-Kapitel produziert | ✅ alle 4 hochgeladen + Tour.tsx aktualisiert |
-| `/tutorial`-Route mit 13-Kapitel-Player | ✅ live mit echten R2-URLs (v1.3-Neuproduktion 2026-07-19) |
-| 13 Tutorial-Kapitel produziert (~58 min, v1.3-Drehbuch) | ✅ alle 13 MP4s + 13 Poster auf R2, Player spielt ab |
-| VTT-Untertitel für Tutorial (BFSG-relevant) | ⏸ offen — Whisper-Transkription empfohlen, Modell-Download noch offen |
-| Zentrales Design-Token-System | ✅ `src/components/ui/tokens.ts` (Cards, Buttons, Focus-Rings, Typo, Icon-Sizes, Hover-Glow) |
-| Premium-Polish + a11y-Essentials | ✅ PR #3 merged, live |
-| Founder-Story-Block mit Foto | ✅ PR #6 merged, `public/alexander-portrait.webp` (87.9 KB) |
-| 5-Tier-Preise-Card-Grid + Pilot-Banner | ✅ PR #6 merged, mit Counter-Animationen |
-| Premium-Animationen (Stagger / Parallax / ScrollProgress / Counter) | ✅ PR #6 merged, live |
 
 ## Architektur-Eckpunkte
 
@@ -134,36 +99,6 @@ Reihenfolge.
 Upload-Workflow: Dashboard-Drag&Drop oder Wrangler CLI (`wrangler login`
 nötig). Details in `docs/video-assets.md`.
 
-## Wichtige Dateien
-
-| Pfad | Zweck |
-|---|---|
-| `src/App.tsx` | Layout-Shell mit Router + Skip-to-Content-Link + `<main id="main">` + `<ScrollProgressBar />` |
-| `src/router.tsx` | Mini-Router (useRoute, navigate, RoutePath) |
-| `src/components/ui/tokens.ts` | Zentrales Design-Token-System (Cards, Buttons, Focus, Typo, Icons, Hover-Glow) |
-| `src/components/VideoPlayer.tsx` | Custom HTML5-Player |
-| `src/components/Nav.tsx` | Route-aware Anchor-Nav + IntersectionObserver-basierte aktive-Section-Highlight |
-| `src/components/Reveal.tsx` | Scroll-triggered Fade-Slide-In, IntersectionObserver-basiert |
-| `src/components/TealUnderline.tsx` | In-View-getriggerte teal Underline-Animation für Headline-Akzente |
-| `src/components/BlueprintGrid.tsx` | Drift-animiertes Hintergrund-Grid, optionaler `style`-Prop für Parallax |
-| `src/components/PlanMessDemo.tsx` | **Interaktives Hero-Aufmass-Tool** (Welle 3): Haus-Grundriss als Vorlage, Eckpunkte abklicken → Fläche → Aufmassblatt. Ersetzt `PolygonDemo` (gelöscht) |
-| `src/components/animations/planSvg.tsx` | Geometrie der Aufmass-Demo (`MEASURE_POLYGON`, `AREA_M2`, `TEILFLAECHEN`, `polyPathD`) — nur Flächen, kein €/Beitrag |
-| `src/components/animations/AufmassProtokoll.tsx` | Aufmassblatt-Karte (Teilflächen + Gesamtfläche in m²), erscheint nach Abschluss |
-| `src/lib/easing.ts` | Geteilte Easing-Helfer (`easeOutCubic`, `clamp01`, `lerp`) für `useCountUp` + Demo |
-| `src/components/animations/ScrollProgressBar.tsx` | rAF-throttled Scroll-Progress-Bar fixed top |
-| `src/sections/Founder.tsx` | Founder-Story-Block, Portrait-Foto in Polaroid-Frame + Ghost-Panel |
-| `src/hooks/useCountUp.ts` | Counter-Animation mit Options-Object (enabled, startDelayMs, decimals) |
-| `public/alexander-portrait.webp` | Portrait Alexander Geitner (B&W, 600×800, 87.9 KB) |
-| `scripts/build-portrait.mjs` | sharp-basiertes Optimierungs-Script für das Portrait (`npm run build-portrait`) |
-| `src/pages/Home.tsx` | Homepage mit allen Sektionen |
-| `src/pages/Tour.tsx` | `/tour`-Seite mit 4-Kapitel-Player + Footer-Hinweis zum Tutorial |
-| `src/pages/Tutorial.tsx` | `/tutorial`-Seite mit 8-Kapitel-Player (~28 min Onboarding-Ersatz) + CTA-Block (Demo + Kontakt-Mail) |
-| `src/sections/TeaserSection.tsx` | Teaser-Block direkt nach Hero (live!) |
-| `wrangler.toml` | CF-Workers-Config, SPA-Fallback aktiv |
-| `.github/workflows/deploy.yml` | Auto-Deploy auf Push → main |
-| `docs/video-assets.md` | R2-Upload-Workflow + Asset-Liste |
-| `docs/superpowers/plans/2026-05-15-vorstellungsvideos.md` | Implementation-Plan für die Videos |
-
 ## Conventions
 
 - **Commits:** Deutsche Botschaften, ASCII-only-Subject (keine Umlaute),
@@ -207,28 +142,9 @@ Es gibt einen Cloudflare-MCP-Server der R2-Verwaltung kann
 
 Der frühere Statusdump (Roadmap-Kopf + PR-Historie bis 2026-05-17) ist am 20.08.2026 nach `memory\project_website_status_verlauf.md` ausgelagert (Kern-Schicht-Diät, Welle 2 des Anweisungs-Audits) — reine Textmigration, kein Wissensverlust, nur seltener geladen.
 
-## Bei nächster Session-Aufnahme
-
-1. `git log --oneline -10` für letzten Stand
-2. `npm run typecheck` als Smoke
-3. Diese CLAUDE.md lesen
-4. Live-Seite https://flaechenklar.de checken
-5. Mit User klären was als nächstes — wahrscheinlich Walkthrough-Produktion
-   oder ein anderer Marketing-Block
-
-## Lokale Pfade
-
-- Repo-Wurzel: `F:\Geschaeft\Unternehmen\Claude Code\FlaechenKlar\website\`
-- Tool-Schwester-Repo: `F:\Geschaeft\Unternehmen\Claude Code\FlaechenKlar\tool\`
-  (eigene CLAUDE.md dort)
-- Implementation-Plan: `docs/superpowers/plans/2026-05-15-vorstellungsvideos.md`
-
 ## GitHub
 
 - Repo: https://github.com/Drakman07/website-flaechenklar (private)
-- Letzter Merge: PR #11 (interaktives Hero-Aufmass-Tool, Scroll-Sequenz entfernt) → Merge-Commit `8ef72ae`
-- Davor: PR #10 (Welle-3 Wow-Upgrade: Hero-Choreografie + Scroll-Scrub-Sequenz + Feinschliff) → `2ebba51`
-- Auto-Deploy nach beiden Merges grün (GitHub Actions → Cloudflare)
 - Selbst-Merge via `gh pr merge` lief in dieser Session durch (nicht mehr blockiert); Merge dennoch nur auf ausdrückliche Freigabe
 
 ## Erkenntnisse aus diesem Projektabschnitt
