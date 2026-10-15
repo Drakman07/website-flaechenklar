@@ -53,19 +53,31 @@ export const versionen: readonly Version[] = [
     punkte: [
       {
         titel: "Lange Aufmaßprotokolle brechen jetzt sauber auf die nächste Seite um: Bei vie…",
-        text: "Lange Aufmaßprotokolle brechen jetzt sauber auf die nächste Seite um: Bei vielen Geschossen, Abzugsposten oder Teilflächen lief die Tabelle bisher über den unteren Seitenrand hinaus, und die Zeile GESAMTFLÄCHE konnte im Protokoll fehlen. Die Seitenzahl zählt die zusätzlichen Seiten mit.",
+        text: "Lange Aufmaßprotokolle brechen jetzt sauber auf die nächste Seite um: Bei vielen Geschossen, Abzugsposten oder Teilflächen lief die Tabelle bisher über den unteren Seitenrand hinaus, und die Zeile GESAMTFLÄCHE konnte im Protokoll fehlen. Die Seitenzahl zählt die zusätzlichen Seiten mit. Die Abzugsposten eines Geschosses stehen jetzt immer einzeln, bis zu sechs; weitere fasst eine Zeile mit ihrer Summe zusammen.",
       },
       {
-        titel: "Das Vollgeschoss-Beurteilungsblatt läuft bei langem Kommentar oder vielen Hinweisen auf einer Fortsetzungsseite weiter",
-        text: "Bisher konnte der Kommentar unter die Fußzeile laufen und der Methodik-Hinweis den Kommentar überdecken.",
+        titel: "Das Vollgeschoss-Beurteilungsblatt läuft bei langem Kommentar oder vielen Hin…",
+        text: "Das Vollgeschoss-Beurteilungsblatt läuft bei langem Kommentar oder vielen Hinweisen auf einer Fortsetzungsseite weiter, und Kommentare werden in ihrer Druckschrift umbrochen. Bisher konnte der Kommentar unter die Fußzeile oder über den rechten Rand hinaus laufen, und der Methodik-Hinweis konnte ihn überdecken.",
       },
       {
-        titel: "Kommentare im Vollgeschoss-Blatt werden in ihrer Druckschrift umbrochen und r…",
-        text: "Kommentare im Vollgeschoss-Blatt werden in ihrer Druckschrift umbrochen und reichen nicht mehr über den rechten Rand hinaus.",
+        titel: "Der Diagnose-Bericht für den Support enthält keine Dateinamen der Bauantrags-…",
+        text: "Der Diagnose-Bericht für den Support enthält keine Dateinamen der Bauantrags-PDFs und keine Freitexte (Bezeichnungen, Kommentare, Begründungen von Korrekturen) mehr. Dateinamen erscheinen als Platzhalter, nur die Endung bleibt. Voreingestellt ist jetzt die Stufe „Standard“ statt „Mit Projekt-Snapshot“.",
       },
       {
-        titel: "Die Abzugsposten eines Geschosses stehen im Aufmaßblatt jetzt immer einzeln,…",
-        text: "Die Abzugsposten eines Geschosses stehen im Aufmaßblatt jetzt immer einzeln, bis zu sechs; weitere fasst eine Zeile mit ihrer Summe zusammen. Bisher wurden bei knappem Platz alle Posten eines Geschosses zu einer Zeile zusammengefasst.",
+        titel: "Beim schnellen Wechsel zwischen zwei PDFs konnte die Seiten-Analyse der vorhe…",
+        text: "Beim schnellen Wechsel zwischen zwei PDFs konnte die Seiten-Analyse der vorher angezeigten PDF in die aktuelle schreiben und zum Beispiel den falschen Maßstab vorschlagen. Analyse, Anzeige und Lade-Meldungen beziehen sich jetzt immer auf die PDF, die tatsächlich angezeigt wird. Außerdem gilt das Umbenennen einer PDF jetzt als ungespeicherte Änderung; die Sicherheitsabfrage vor „Neu“ und „Öffnen“ greift damit auch hier.",
+      },
+      {
+        titel: "In der Seitenleiste stehen Flächen und Plan-Ausschnitte zweizeilig",
+        text: "Name und PDF-Name sind wieder lesbar, Fläche, Seite und Maßstab stehen in der zweiten Zeile. Den vollen Namen zeigt ein Tooltip.",
+      },
+      {
+        titel: "Beitragsbescheid: Der Hinweis, die Fälligkeit auf Feiertage zu prüfen, ersche…",
+        text: "Beitragsbescheid: Der Hinweis, die Fälligkeit auf Feiertage zu prüfen, erscheint jetzt auch, wenn das Programm die Fälligkeit nach Eingabe des Versanddatums selbst vorschlägt.",
+      },
+      {
+        titel: "Scheitert der Start über FlaechenKlar.bat, bleibt das nicht mehr unbemerkt: D…",
+        text: "Scheitert der Start über FlaechenKlar.bat, bleibt das nicht mehr unbemerkt: Das Startfenster ist sichtbar, der Ablauf steht in der Datei FlaechenKlar-Start.log neben der FlaechenKlar.bat (ersatzweise im Temp-Ordner), und bei einem Fehler öffnet sich FlächenKlar ersatzweise direkt im Browser. Bisher konnte der Start ohne jede Meldung scheitern, etwa nach einer neuen IT-Richtlinie.",
       },
     ],
   },
