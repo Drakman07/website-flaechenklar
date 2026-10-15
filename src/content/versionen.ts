@@ -45,6 +45,31 @@ export const versionen: readonly Version[] = [
   // Im Internet erscheinen aber nur Einträge mit oeffentlich !== false.
   // Eilpatches bekommen `oeffentlich: false` (siehe 1.2.1).
   {
+    version: "1.5.4",
+    datum: "15.10.2026",
+    iso: "2026-10-15",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich.
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Lange Aufmaßprotokolle brechen jetzt sauber auf die nächste Seite um: Bei vie…",
+        text: "Lange Aufmaßprotokolle brechen jetzt sauber auf die nächste Seite um: Bei vielen Geschossen, Abzugsposten oder Teilflächen lief die Tabelle bisher über den unteren Seitenrand hinaus, und die Zeile GESAMTFLÄCHE konnte im Protokoll fehlen. Die Seitenzahl zählt die zusätzlichen Seiten mit.",
+      },
+      {
+        titel: "Das Vollgeschoss-Beurteilungsblatt läuft bei langem Kommentar oder vielen Hinweisen auf einer Fortsetzungsseite weiter",
+        text: "Bisher konnte der Kommentar unter die Fußzeile laufen und der Methodik-Hinweis den Kommentar überdecken.",
+      },
+      {
+        titel: "Kommentare im Vollgeschoss-Blatt werden in ihrer Druckschrift umbrochen und r…",
+        text: "Kommentare im Vollgeschoss-Blatt werden in ihrer Druckschrift umbrochen und reichen nicht mehr über den rechten Rand hinaus.",
+      },
+      {
+        titel: "Die Abzugsposten eines Geschosses stehen im Aufmaßblatt jetzt immer einzeln,…",
+        text: "Die Abzugsposten eines Geschosses stehen im Aufmaßblatt jetzt immer einzeln, bis zu sechs; weitere fasst eine Zeile mit ihrer Summe zusammen. Bisher wurden bei knappem Platz alle Posten eines Geschosses zu einer Zeile zusammengefasst.",
+      },
+    ],
+  },
+  {
     version: "1.5.3",
     datum: "20.08.2026",
     iso: "2026-08-20",
