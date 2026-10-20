@@ -45,6 +45,23 @@ export const versionen: readonly Version[] = [
   // Im Internet erscheinen aber nur Einträge mit oeffentlich !== false.
   // Eilpatches bekommen `oeffentlich: false` (siehe 1.2.1).
   {
+    version: "1.5.5",
+    datum: "20.10.2026",
+    iso: "2026-10-20",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich.
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Ersatzneubau: Das Aufmaßblatt zeigt jetzt den Saldo aus der neuen Gesamtfläch…",
+        text: "Ersatzneubau: Das Aufmaßblatt zeigt jetzt den Saldo aus der neuen Gesamtfläche und der für den Altbestand bereits abgerechneten Fläche, auch negativ, wenn das alte Gebäude größer war. Die bereits abgerechnete Fläche tragen Sie in der Seitenleiste unter der Geschossliste ein, optional mit einem Nachweis (zum Beispiel dem Aktenzeichen des früheren Bescheids). Das Aufmaßprotokoll weist unter der Gesamtfläche den abzuziehenden Bestand und den Saldo aus; Datenexport (JSON, CSV) enthält die Werte ebenfalls. Ohne Eintrag bleiben Aufmaßprotokoll und CSV-Export wie bisher, bestehende Projekte laden ohne Änderung.",
+      },
+      {
+        titel: "Aufmaßprotokoll: Ein langes Bauvorhaben (oder eine lange Bauherr-Anschrift) läuft nicht mehr in die Zeile darunter",
+        text: "Das Feld bricht in eine zweite Zeile um, die Karte wächst mit, und die folgenden Felder rücken nach unten. Kurze Angaben sehen aus wie bisher.",
+      },
+    ],
+  },
+  {
     version: "1.5.4",
     datum: "15.10.2026",
     iso: "2026-10-15",
