@@ -59,6 +59,14 @@ export const versionen: readonly Version[] = [
         titel: "Beitragsbescheid: Der Ansprechpartner steht neben der Anschrift",
         text: "In der Word-Ausgabe stand der Block „Ihr Ansprechpartner“ bisher als eigener Absatz über dem Anschriftenfeld. Er steht jetzt rechts neben der Anschrift auf gleicher Höhe; die Anordnung ist eine Tabelle ohne sichtbare Linien. Im PDF stand der Block bisher oben im Briefkopf und überdruckte bei einem langen Behördennamen, etwa dem eines Zweckverbands, den Namen. Auch dort steht er jetzt neben dem Anschriftenfeld. Lange Anschriften und lange E-Mail-Adressen brechen um, statt sich zu überlagern.",
       },
+      {
+        titel: "Beitragsbescheid: Beitragssätze erscheinen mit bis zu vier Nachkommastellen",
+        text: "Der Bescheid druckt einen Beitragssatz wie 19,305 EUR/m² jetzt vollständig. Bisher stand er auf zwei Stellen gerundet (19,31) im Bescheid, obwohl mit 19,305 gerechnet wurde. Auch die Masken für Stammdaten und Bescheid zeigen die Sätze mit allen Stellen und runden sie beim Speichern nicht mehr auf zwei Stellen. Ein Satz mit mehr als vier Nachkommastellen lässt sich nicht vollständig drucken; die Prüfung vor dem Export lehnt ihn ab.",
+      },
+      {
+        titel: "Beitragsbescheid: Hinweis bei Projekten mit einem früher erstellten Bescheid",
+        text: "Wurde für ein Projekt schon ein Bescheid mit einer Version vor 1.5.6 erstellt, zeigt die Bescheidmaske einen Hinweis, dass ein erneut erzeugter Bescheid wegen der Rundung der Flächen um wenige Cent abweichen kann. Der Hinweis verschwindet, sobald im Projekt ein Bescheid mit Version 1.5.6 oder neuer erstellt wurde.",
+      },
     ],
   },
   {
