@@ -45,6 +45,23 @@ export const versionen: readonly Version[] = [
   // Im Internet erscheinen aber nur Einträge mit oeffentlich !== false.
   // Eilpatches bekommen `oeffentlich: false` (siehe 1.2.1).
   {
+    version: "1.5.6",
+    datum: "21.10.2026",
+    iso: "2026-10-21",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich.
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Beitragsbescheid: Der Betrag wird aus der gedruckten Fläche berechnet",
+        text: "Das Aufmaß speichert Flächen mit drei Nachkommastellen, der Bescheid druckt sie mit zwei. Bisher rechnete das Programm den Betrag mit der ungerundeten Fläche: Aus 185,695 m², gedruckt als 185,70 m², ergaben sich bei 19,30 EUR/m² 3.583,91 EUR, obwohl sich aus den gedruckten Zahlen 3.584,01 EUR ergeben. Jetzt rundet das Programm die Flächen zuerst kaufmännisch auf zwei Nachkommastellen (ab 5 in der dritten Stelle wird aufgerundet) und berechnet den Betrag aus diesen gedruckten Werten. Bei einer Nacherhebung ist die Mehrfläche die Differenz der beiden gedruckten Flächen. Jede Zahl im Bescheid lässt sich damit aus den danebenstehenden Faktoren nachrechnen. Bitte beachten Sie: Bescheidbeträge können sich dadurch gegenüber früheren Versionen um wenige Cent ändern. Bescheide, die Sie bereits versandt haben, ändert die neue Version nicht. Der Betrag wird bei jedem Export neu berechnet; erzeugen Sie einen Bescheid aus einem gespeicherten Projekt erneut, kann er um diese wenigen Cent abweichen.",
+      },
+      {
+        titel: "Beitragsbescheid: Der Ansprechpartner steht neben der Anschrift",
+        text: "In der Word-Ausgabe stand der Block „Ihr Ansprechpartner“ bisher als eigener Absatz über dem Anschriftenfeld. Er steht jetzt rechts neben der Anschrift auf gleicher Höhe; die Anordnung ist eine Tabelle ohne sichtbare Linien. Im PDF stand der Block bisher oben im Briefkopf und überdruckte bei einem langen Behördennamen, etwa dem eines Zweckverbands, den Namen. Auch dort steht er jetzt neben dem Anschriftenfeld. Lange Anschriften und lange E-Mail-Adressen brechen um, statt sich zu überlagern.",
+      },
+    ],
+  },
+  {
     version: "1.5.5",
     datum: "20.10.2026",
     iso: "2026-10-20",
