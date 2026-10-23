@@ -39,8 +39,8 @@ export function Preise() {
               <TealUnderline>Einwohnerklasse</TealUnderline>.
             </h2>
             <p className={`mt-4 ${LEAD}`}>
-              Einmalkauf nach Einwohnerklasse. Wartung im ersten Jahr inklusive,
-              ab dem zweiten Jahr{" "}
+              Einmalkauf nach Einwohnerklasse. Wartung bis zum 31.12. des
+              Jahres nach der Auslieferung inklusive, danach{" "}
               {bescheidReleased
                 ? "10 % auf Lizenz und gebuchte Module p. a."
                 : "10 % p. a."}
@@ -96,14 +96,17 @@ export function Preise() {
 
         <Reveal delay={700}>
           <p className="mx-auto mt-8 max-w-2xl text-center text-sm text-ink/60">
-            Wartung im ersten Jahr inklusive. Ab Jahr 2{" "}
+            Wartung bis zum 31.12. des Jahres nach der Auslieferung inklusive,
+            danach{" "}
             {bescheidReleased
-              ? "10 % auf Lizenz und gebuchte Module, "
-              : ""}
-            jährlich kündbar. Enthält Updates, Rechtsanpassungen und
-            E-Mail-Support. Als Kleinunternehmer nach § 19 UStG weise ich
-            keine Umsatzsteuer aus — die genannten Preise sind zugleich die
-            Endpreise.
+              ? "10 % auf Lizenz und gebuchte Module "
+              : "10 % "}
+            je Kalenderjahr, jährlich kündbar. Enthält Updates,
+            Rechtsanpassungen und E-Mail-Support. Als Kleinunternehmer nach
+            § 19 UStG weise ich für Leistungen bis 31.12.2026 keine
+            Umsatzsteuer aus. Ab 01.01.2027 bin ich umsatzsteuerpflichtig: Die
+            Wartung für Lizenzen aus 2026 beginnt am 01.01.2028 und wird nach
+            der ab 2027 gültigen Preisliste netto zzgl. 19 % USt berechnet.
           </p>
         </Reveal>
       </div>

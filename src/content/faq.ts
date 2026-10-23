@@ -28,7 +28,7 @@ export const faq: readonly FaqItem[] = [
   },
   {
     q: "Was kostet FlächenKlar für eine Kommune?",
-    a: "Einmalkauf gestaffelt nach Einwohnerklasse: 1.600 Euro netto für Kommunen bis 3.000 Einwohner, 3.100 Euro netto für 3.000 bis 8.000 Einwohner, 5.800 Euro netto für 8.000 bis 15.000 Einwohner, 10.500 Euro netto für 15.000 bis 30.000 Einwohner und 14.500 Euro netto über 30.000 Einwohner. Als Kleinunternehmer nach § 19 UStG weise ich keine Umsatzsteuer aus — die genannten Beträge sind zugleich die Endpreise, es kommt nichts hinzu. Die Wartung im ersten Jahr ist enthalten, ab dem zweiten Jahr 10 Prozent pro Jahr, jährlich kündbar.",
+    a: "Einmalkauf gestaffelt nach Einwohnerklasse: 1.600 Euro netto für Kommunen bis 3.000 Einwohner, 3.100 Euro netto für 3.000 bis 8.000 Einwohner, 5.800 Euro netto für 8.000 bis 15.000 Einwohner, 10.500 Euro netto für 15.000 bis 30.000 Einwohner und 14.500 Euro netto über 30.000 Einwohner. Als Kleinunternehmer nach § 19 UStG weise ich für Leistungen bis 31.12.2026 keine Umsatzsteuer aus. Ab 01.01.2027 bin ich umsatzsteuerpflichtig. Die Wartung ist bis zum 31.12. des Jahres nach der Auslieferung enthalten; danach kostet sie 10 Prozent des Listenpreises je Kalenderjahr, jährlich kündbar. Für Lizenzen aus 2026 beginnt sie am 01.01.2028 und wird nach der ab 2027 gültigen Preisliste netto zzgl. 19 Prozent USt berechnet.",
   },
   {
     q: "Kann FlächenKlar auch den Beitragsbescheid erstellen?",
