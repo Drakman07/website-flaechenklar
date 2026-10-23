@@ -45,6 +45,19 @@ export const versionen: readonly Version[] = [
   // Im Internet erscheinen aber nur Einträge mit oeffentlich !== false.
   // Eilpatches bekommen `oeffentlich: false` (siehe 1.2.1).
   {
+    version: "1.5.7",
+    datum: "23.10.2026",
+    iso: "2026-10-23",
+    // Patch-Release: intern dokumentiert, aber nicht öffentlich.
+    oeffentlich: false,
+    punkte: [
+      {
+        titel: "Sehr detailreiche Pläne werden vollständig geladen",
+        text: "Pläne mit mehreren Millionen Zeichenbefehlen, etwa großformatige Eingabepläne mit vielen Ansichten auf einem Blatt, brachen bisher nach 20 Sekunden mit einer Fehlermeldung ab und ließen sich nicht vermessen. Jetzt bereitet das Programm sie vollständig auf; bei solchen Plänen kann das eine halbe bis einige Minuten dauern. Nach zwei Sekunden zeigt das Ladefenster die verstrichene Zeit und den Fortschritt, mit „Abbrechen“ kehrt das Programm zum vorherigen Stand zurück. Die Aufbereitung läuft im Hintergrund, das Programm reagiert dabei weiter. Erst nach zehn Minuten ohne Ergebnis bricht es ab und empfiehlt, die Seite in kleinere Bereiche aufzuteilen. Steht die Hintergrund-Aufbereitung im Browser nicht zur Verfügung, überspringt das Programm bei solchen Plänen die automatische Maßstab-Erkennung; den Maßstab messen Sie dann per Referenzstrecke.",
+      },
+    ],
+  },
+  {
     version: "1.5.6",
     datum: "21.10.2026",
     iso: "2026-10-21",
