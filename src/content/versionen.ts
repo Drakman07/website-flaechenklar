@@ -55,6 +55,22 @@ export const versionen: readonly Version[] = [
         titel: "Sehr detailreiche Pläne werden vollständig geladen",
         text: "Pläne mit mehreren Millionen Zeichenbefehlen, etwa großformatige Eingabepläne mit vielen Ansichten auf einem Blatt, brachen bisher nach 20 Sekunden mit einer Fehlermeldung ab und ließen sich nicht vermessen. Jetzt bereitet das Programm sie vollständig auf; bei solchen Plänen kann das eine halbe bis einige Minuten dauern. Nach zwei Sekunden zeigt das Ladefenster die verstrichene Zeit und den Fortschritt, mit „Abbrechen“ kehrt das Programm zum vorherigen Stand zurück. Die Aufbereitung läuft im Hintergrund, das Programm reagiert dabei weiter. Erst nach zehn Minuten ohne Ergebnis bricht es ab und empfiehlt, die Seite in kleinere Bereiche aufzuteilen. Steht die Hintergrund-Aufbereitung im Browser nicht zur Verfügung, überspringt das Programm bei solchen Plänen die automatische Maßstab-Erkennung; den Maßstab messen Sie dann per Referenzstrecke.",
       },
+      {
+        titel: "Gemessene Flächen bleiben maßhaltig, wenn sich die Aufteilung des Programmfensters ändert",
+        text: "Wurde die Arbeitsfläche schmaler oder breiter, ohne dass sich die Größe des Browserfensters änderte, zeigte das Programm den Plan bisher verzerrt an. Das geschah etwa beim Schließen des Start-Hinweises oder wenn die Werkzeugleiste in eine zweite Zeile umbrach. Klicks landeten dann neben dem gemeinten Planpunkt, gemessene Flächen konnten zwischen 5 % zu klein und 10 % zu groß sein. Jetzt passt sich die Anzeige jeder solchen Änderung sofort an, Klicks treffen den sichtbaren Punkt. Flächen, die Sie mit einer früheren Version nach einer solchen Änderung gemessen haben, prüfen Sie bitte stichprobenartig nach: Vergleichen Sie die angezeigten Kantenmaße mit der Bemaßung im Plan. Das Update ändert bereits gespeicherte Messungen nicht.",
+      },
+      {
+        titel: "Umbenennen einer PDF: Der neue Name erscheint sofort auch bei den Plan-Ausschnitten in der Seitenleiste",
+        text: "Bisher stand dort der alte Name, bis die Liste aus anderem Grund neu aufgebaut wurde.",
+      },
+      {
+        titel: "Ein Klick auf einen Plan-Ausschnitt, der auf einer anderen PDF liegt, zeigt jetzt direkt dessen Seite",
+        text: "Bisher blieb etwa beim Wechsel von Seite 2 der einen PDF zu einem Ausschnitt auf Seite 2 der anderen deren Seite 1 stehen, und der Maßstab-Vorschlag bezog sich auf die falsche Seite.",
+      },
+      {
+        titel: "Der Maßstab-Vorschlag gehört zur geöffneten Akte",
+        text: "Wurde nach einem Vorschlag eine andere Akte geöffnet, neu angelegt oder wiederhergestellt, blieb der Vorschlag der vorigen Akte stehen. „Übernehmen“ trug ihn dann in die Historie der neuen Akte ein. Jetzt schließt sich der Vorschlag beim Aktenwechsel.",
+      },
     ],
   },
   {
