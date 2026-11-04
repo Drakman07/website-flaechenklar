@@ -7,9 +7,19 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-export type Preisstufe = {
+type PreisstufeBasis = {
   icon: LucideIcon;
   einwohner: string;
+};
+
+/**
+ * Oberste Einwohnerklasse ohne Listenpreis: "Preis auf Anfrage"
+ * (Entscheidung 04.11.2026, die Spanne über 30.000 reicht bis 1,5 Mio.).
+ */
+export type PreisstufeAufAnfrage = PreisstufeBasis & { aufAnfrage: true };
+
+export type PreisstufeMitPreis = PreisstufeBasis & {
+  aufAnfrage?: false;
   einmalig: string;
   einmaligNumeric: number;
   wartung: string;
@@ -23,8 +33,11 @@ export type Preisstufe = {
   wartungMitModulNumeric: number;
 };
 
+export type Preisstufe = PreisstufeMitPreis | PreisstufeAufAnfrage;
+
 /**
- * 5-Tier-Pricing fuer kommunale Bauaemter, gestaffelt nach Einwohnerzahl.
+ * 5-Tier-Pricing fuer kommunale Bauaemter, gestaffelt nach Einwohnerzahl;
+ * die fuenfte Klasse (ueber 30.000) ohne Preis, auf Anfrage.
  * - `einmalig` / `wartung`: formatierte Anzeige-Strings ("1.600 €")
  * - `einmaligNumeric` / `wartungNumeric`: rohe Zahlen fuer useCountUp-Counter
  * - `icon`: visueller Anker pro Tier (Skalen-Progression Home -> Castle)
@@ -81,13 +94,6 @@ export const preise: readonly Preisstufe[] = [
   {
     icon: Castle,
     einwohner: "über 30.000",
-    einmalig: "14.500 €",
-    einmaligNumeric: 14500,
-    wartung: "1.450 €",
-    wartungNumeric: 1450,
-    bescheidModul: "2.200 €",
-    bescheidModulNumeric: 2200,
-    wartungMitModul: "1.670 €",
-    wartungMitModulNumeric: 1670,
+    aufAnfrage: true,
   },
 ] as const;

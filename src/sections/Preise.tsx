@@ -1,5 +1,9 @@
 import { useState } from "react";
-import type { Preisstufe } from "@/content/preise";
+import type {
+  Preisstufe,
+  PreisstufeAufAnfrage,
+  PreisstufeMitPreis,
+} from "@/content/preise";
 import { preise } from "@/content/preise";
 import { bescheidReleased } from "@/content/bescheid";
 import { Reveal } from "@/components/Reveal";
@@ -125,6 +129,71 @@ function PreisCard({
   /** false = Preis sofort anzeigen, ohne Zaehl-Animation. */
   animiert?: boolean;
   className?: string;
+}) {
+  // Zwei Komponenten statt eines Zweigs: die Listenpreis-Karte ruft
+  // useCountUp, Hooks duerfen nicht hinter einer Bedingung stehen.
+  if (stufe.aufAnfrage) {
+    return <AnfrageCard stufe={stufe} delay={delay} className={className} />;
+  }
+  return (
+    <ListenpreisCard
+      stufe={stufe}
+      delay={delay}
+      animiert={animiert}
+      className={className}
+    />
+  );
+}
+
+function AnfrageCard({
+  stufe,
+  delay,
+  className,
+}: {
+  stufe: PreisstufeAufAnfrage;
+  delay: number;
+  className: string;
+}) {
+  const Icon = stufe.icon;
+  return (
+    <Reveal delay={delay} className={className}>
+      <article
+        className={`group relative flex h-full flex-col rounded-lg border border-outline bg-white p-6 shadow-card ${CARD_ACCENT_BORDER} ${CARD_HOVER} ${CARD_HOVER_GLOW}`}
+      >
+        <div className="flex h-11 w-11 items-center justify-center rounded bg-teal/10 text-teal transition-colors group-hover:bg-teal/20">
+          <Icon size={ICON_SIZE.feature} />
+        </div>
+        <p className={`mt-4 ${LABEL}`}>{stufe.einwohner}</p>
+        <p className="mt-1 text-3xl font-bold text-navy md:text-4xl">
+          Preis auf Anfrage
+        </p>
+        <p className="mt-2 text-xs text-ink/55">
+          Für Kommunen über 30.000 Einwohner erstelle ich ein Einzelangebot.
+        </p>
+
+        <div className="mt-auto border-t border-outline pt-4">
+          <a
+            href="#kontakt"
+            className={`text-sm font-semibold text-teal-ink underline-offset-4 hover:underline ${FOCUS_RING}`}
+          >
+            Angebot anfragen
+          </a>
+        </div>
+      </article>
+    </Reveal>
+  );
+}
+
+function ListenpreisCard({
+  stufe,
+  delay,
+  animiert,
+  className,
+}: {
+  stufe: PreisstufeMitPreis;
+  delay: number;
+  animiert: boolean;
+  className: string;
 }) {
   // Komplett-Paket = Aufmaßmodul + Bescheidmodul, aus den Rohwerten berechnet
   // (keine hartkodierten Summen) — der prominente Anker-Preis, sobald das
