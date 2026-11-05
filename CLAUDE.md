@@ -10,9 +10,6 @@ Website ist die Sales-Frontline: erklärt das Tool, fängt Interessenten ab,
 führt zur Demo-Anfrage.
 
 - Live: https://flaechenklar.de
-- Stack: React 19 + TypeScript (strict) + Tailwind 3 + Vite + Cloudflare
-  Workers + R2
-- Auto-Deploy: GitHub Actions auf Push nach `main`
 - DSGVO-bewusst: keine Third-Party-Tracker, keine Cookies, keine Drittanbieter-Embeds
 
 ## Architektur-Eckpunkte
