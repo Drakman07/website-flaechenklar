@@ -67,7 +67,7 @@ statische Marketing-Site mit 2 Routen. Gate stattdessen:
 
 ### Verhältnis zum Prüf-Gate des Hauptordners
 
-- `website/src/content/` ist Änderungsklasse **Bagatelle** (kein Review, kein Gate); die übrigen Website-Dateien haben keinen zugeordneten Prüf-Agent (Quelle: `../.claude/hooks/pruef_mapping.py`).
+- `website/` ist ganz Änderungsklasse **Bagatelle** (kein Review, kein Gate; Quelle: `../.claude/hooks/pruef_mapping.py`). Bis 06.11.2026 galt das nur für `src/content/`, der Astro-Code war „normal ohne Agent“. Entscheidung Alexander 06.11.2026: bewusst Bagatelle, weil die Seite keinen Login, keine Daten und keine Zahlung hat und ein Fehler als Layout sichtbar wird, nicht still.
 - Wird aus einer Session im Hauptordner committet/gepusht, läuft trotzdem `../.claude/hooks/fk_pruef_gate.py` (PreToolUse) — es blockt nur, wenn seit dem letzten Marker Pfade mit Prüf-Agent editiert wurden.
 - Vor `git push`: `py fk.py done` im Hauptordner (Lint, Source↔Live, offene Prüfungen). Regeln: `../CLAUDE.md`, Abschnitte „Prüf-Pflicht“ und „Änderungs-Klassen“.
 
