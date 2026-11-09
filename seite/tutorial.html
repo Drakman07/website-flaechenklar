@@ -15,6 +15,10 @@
   .kino__jetzt { margin-top: var(--s-4); display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-4); align-items: baseline; }
   .kino__jetzt .marke { color: var(--teal-hell); }
   .kino__jetzt strong { font: 700 var(--t-lg)/1.2 var(--font-anzeige); letter-spacing: -0.015em; }
+  /* Hinweis, wenn der Film nach Play nicht startet (Behördennetze sperren teils MP4, gemessen 09.11.2026 im Markt Postbauer-Heng). */
+  .kino__hinweis { margin-top: var(--s-4); padding: var(--s-3) var(--s-4); border-left: 2px solid var(--teal); background: var(--navy-hell);
+    font-size: var(--t-sm); line-height: 1.55; color: #DCE4EF; max-width: 66ch; }
+  .kino__hinweis[hidden] { display: none; }
   .kapitel { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--linie); max-height: min(70vh, 44rem); overflow-y: auto; scrollbar-width: thin;
     scrollbar-color: color-mix(in oklab, #FFFFFF 28%, transparent) transparent; }
   .kapitel button { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) auto; gap: var(--s-3); align-items: baseline; width: 100%;
@@ -69,6 +73,7 @@
           <!-- preload="none": der Film lädt erst, wenn Sie ihn starten; vorher nur das Standbild. -->
           <video id="film" controls preload="none" playsinline></video>
           <p class="kino__jetzt" aria-live="polite"><span class="marke" id="jetzt-nr"></span><strong id="jetzt-titel"></strong></p>
+          <p class="kino__hinweis" id="film-hinweis" role="status" hidden>Das Video startet nicht? Manche Behördennetze sperren Videodateien. Bitten Sie Ihre IT, videos.flaechenklar.de freizugeben, oder sehen Sie das Tutorial auf einem anderen Gerät an.</p>
         </div>
         <ol class="kapitel" id="kapitel" aria-label="13 Kapitel"></ol>
       </div>
@@ -170,6 +175,19 @@
     });
     if (abspielen) { var p = film.play(); if (p && p.catch) p.catch(function () {}); }
   }
+
+  // Startet der Film 6 s nach Play nicht (oder meldet einen Fehler), steht der Hinweis unter dem Player. Anlass: Am Arbeits-PC
+  // im Markt Postbauer-Heng blieb das Standbild stehen, das Netz lässt MP4 nicht durch (09.11.2026). Läuft der Film, geht er weg.
+  var hinweis = document.getElementById('film-hinweis');
+  var startFrist = 0;
+  function zeigeHinweis() { clearTimeout(startFrist); hinweis.hidden = false; }
+  film.addEventListener('play', function () {
+    clearTimeout(startFrist);
+    startFrist = setTimeout(zeigeHinweis, 6000);
+  });
+  film.addEventListener('playing', function () { clearTimeout(startFrist); hinweis.hidden = true; });
+  film.addEventListener('pause', function () { clearTimeout(startFrist); });
+  film.addEventListener('error', zeigeHinweis);
 
   // Am Kapitelende das nächste Kapitel bereitlegen, aber nicht von selbst starten.
   film.addEventListener('ended', function () { if (aktiv < KAPITEL.length - 1) waehle(aktiv + 1, false); });
