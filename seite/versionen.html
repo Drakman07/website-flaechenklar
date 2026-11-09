@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FlächenKlar · Versionsverlauf</title>
+<meta name="description" content="Versionsverlauf von FlächenKlar: was in welcher Version dazugekommen ist, chronologisch und nachvollziehbar.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230F2D5A'/><path d='M8 8h16v10h-7v6H8z' fill='none' stroke='%231EA596' stroke-width='2.4'/></svg>">
+<link rel="stylesheet" href="seiten.css">
+<style>
+  /* Zeitleiste als Lineal: senkrechter Teal-Strich, je Version ein langer Strich wie in der Rückblick-Leiste der Startseite. */
+  .zeitleiste { list-style: none; margin: 0; padding: 0; position: relative; max-width: 88rem; }
+  .zeitleiste::before { content: ""; position: absolute; left: 0; top: 0.4rem; bottom: 0; width: 2px; background: var(--teal); }
+  .version { position: relative; display: grid; grid-template-columns: minmax(0, clamp(12rem, 18vw, 18rem)) minmax(0, 1fr); gap: var(--s-6);
+    padding: 0 0 var(--s-8) var(--s-6); }
+  .version::before { content: ""; position: absolute; left: 0; top: 0.95rem; width: 1.25rem; height: 2px; background: var(--teal); }
+  .version__kopf { display: grid; gap: var(--s-2); align-content: start; font-weight: inherit; }
+  .version__nr { font: 800 var(--t-xl)/1 var(--font-anzeige); letter-spacing: -0.02em; color: #FFFFFF; font-variant-numeric: tabular-nums; }
+  .version__kopf time { font-size: var(--t-sm); color: var(--tinte-weich); }
+  .version:first-child .version__nr { color: var(--teal-hell); }
+  .version__punkte { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-4); max-width: 66ch; }
+  .version__punkte li { display: grid; gap: 0.2rem; }
+  .version__punkte strong { font: 700 var(--t-base)/1.35 var(--font-anzeige); letter-spacing: -0.01em; }
+  .version__punkte span { font-size: var(--t-sm); line-height: 1.55; color: #DCE4EF; }
+  .stand { margin-top: var(--s-4); font-size: var(--t-sm); color: var(--tinte-weich); max-width: 60ch; }
+
+  @media (max-width: 860px) {
+    .version { grid-template-columns: minmax(0, 1fr); gap: var(--s-4); padding-left: var(--s-5); }
+  }
+</style>
+</head>
+<body>
+<a class="springmarke" href="#inhalt">Zum Inhalt springen</a>
+<header class="seitenkopf">
+  <div class="kopf">
+    <a class="wortmarke" href="index.html">Flächen<span>Klar</span></a>
+    <nav aria-label="Hauptnavigation"><a href="tutorial.html">Tutorial</a><a href="versionen.html" aria-current="page">Versionen</a><a class="kopf-link" href="demo.html">Demo anfragen</a></nav>
+  </div>
+  <div class="seitenkopf__satz">
+    <span class="marke">Versionsverlauf</span>
+    <h1 class="anzeige">Was bei FlächenKlar <span>dazukommt</span>.</h1>
+    <p class="lede">Jede Version bringt konkrete Verbesserungen aus dem Bauamtsalltag. Hier sehen Sie, was wann dazugekommen ist, chronologisch und nachvollziehbar.</p>
+    <p class="stand">Aktuelle Programmversion: 1.5.7 vom 23.10.2026. Zwischenversionen mit Korrekturen und kleineren Verbesserungen stehen hier nicht einzeln.</p>
+  </div>
+  <div class="lineal" aria-hidden="true"></div>
+</header>
+
+<main id="inhalt" class="inhalt">
+  <div class="inhalt__innen">
+    <h2 class="sr-only">Alle Versionen, neueste zuerst</h2>
+    <ol class="zeitleiste" reversed>
+<!-- VERSIONEN:START -->
+        <li class="version" data-quelle="versionen.ts">
+          <h2 class="version__kopf"><span class="version__nr">Version 1.5.0</span> <time datetime="2026-08-12">12.08.2026</time></h2>
+          <ul class="version__punkte">
+            <li><strong>Ein Klick für Programmstart und Updates</strong><span>FlächenKlar startet jetzt über eine einzelne Datei im Programmordner, die beim Start automatisch prüft, ob eine neue Version vorliegt, und sie bei Bedarf mit einem Klick anbietet. Der bisherige Weg über den Programmordner und eine separate Update-Datei entfällt.</span></li>
+            <li><strong>Änderungsübersicht beim Update</strong><span>Der Update-Hinweis zeigt jetzt zusätzlich kurz, was sich seit der installierten Version geändert hat, statt nur die neue Versionsnummer.</span></li>
+          </ul>
+        </li>
+        <li class="version" data-quelle="versionen.ts">
+          <h2 class="version__kopf"><span class="version__nr">Version 1.4.0</span> <time datetime="2026-07-26">26.07.2026</time></h2>
+          <ul class="version__punkte">
+            <li><strong>Schritt-für-Schritt-Führung durch den Arbeitsablauf</strong><span>Eine durchgängige Ablauf-Leiste zeigt, wo man im Arbeitsablauf gerade steht und was als Nächstes ansteht — von der PDF-Übernahme bis zum fertigen Aufmaßprotokoll.</span></li>
+            <li><strong>Eigener Dialog für Abzugsflächen</strong><span>Abzugsflächen werden jetzt über ein Formular im Tool-Design erfasst statt über ein Browser-Eingabefenster — übersichtlicher und ohne Bruch im Bedienerlebnis.</span></li>
+            <li><strong>Bescheidmaske als geführter Wizard</strong><span>Der Beitragsbescheid entsteht jetzt in vier klaren Schritten — Empfänger &amp; Grundstück, Beitragssätze, Zahlung &amp; Unterschrift, Texte prüfen — mit einem Zähler für offene Pflichtfelder je Schritt.</span></li>
+            <li><strong>Abweichender Unterzeichner je Bescheid</strong><span>Der Bescheid kann wahlweise einen vom Sachbearbeiter abweichenden Unterzeichner tragen, etwa den Bürgermeister, mit optionalem Zeichnungsvermerk „i. A.“ oder „i. V.“ über dem Unterschriftsstrich — pflegbar je Gemeinde-Profil, im Einzelfall überschreibbar.</span></li>
+          </ul>
+        </li>
+        <li class="version" data-quelle="versionen.ts">
+          <h2 class="version__kopf"><span class="version__nr">Version 1.3.0</span> <time datetime="2026-07-15">15.07.2026</time></h2>
+          <ul class="version__punkte">
+            <li><strong>Bescheidmodul (Add-on)</strong><span>Erstellt aus den Berechnungsergebnissen und den Angaben der gemeindlichen Satzung Entwürfe für Herstellungsbeitragsbescheide nach Art. 5 KAG Bayern — orientiert am amtlichen Muster. Die fachliche Prüfung und der Erlass verbleiben bei der Gemeinde.</span></li>
+            <li><strong>Foto-Import mit Entzerrung</strong><span>Auch ein Handyfoto eines Papierplans reicht: vier Eckpunkte eines bekannten Rechtecks anklicken, Maße eintragen — FlächenKlar rechnet die Perspektive heraus und kalibriert die Fläche automatisch. Danach funktionieren Polygon-Aufmaß, Vollgeschoss-Beurteilung und Aufmaßprotokoll wie bei einem PDF.</span></li>
+          </ul>
+        </li>
+        <li class="version" data-quelle="versionen.ts">
+          <h2 class="version__kopf"><span class="version__nr">Version 1.2.0</span> <time datetime="2026-06-21">21.06.2026</time></h2>
+          <ul class="version__punkte">
+            <li><strong>Vektor-Snapping (Magnet)</strong><span>Beim Zeichnen rasten die Punkte an den Linien maßhaltiger CAD-Pläne ein — schneller und genauer. Mit gedrückter Umschalttaste lässt sich der Magnet kurz aussetzen.</span></li>
+            <li><strong>Maßstab automatisch aus den Maßketten</strong><span>Bei vermaßten Vektor-Plänen liest FlächenKlar die Maßketten aus und schlägt den passenden Maßstab selbst vor. Das manuelle Kalibrieren entfällt, wo der Plan die Maße schon mitbringt.</span></li>
+            <li><strong>Rechteck-Werkzeug</strong><span>Rechteckige Flächen entstehen mit zwei Klicks über die Diagonale statt mit vier einzelnen Eckpunkten.</span></li>
+            <li><strong>Plan mit der Leertaste verschieben</strong><span>Der Plan lässt sich jetzt auch während einer laufenden Zeichnung mit gedrückter Leertaste und der Maus verschieben.</span></li>
+          </ul>
+        </li>
+        <li class="version" data-quelle="versionen.ts">
+          <h2 class="version__kopf"><span class="version__nr">Version 1.1.0</span> <time datetime="2026-06-15">15.06.2026</time></h2>
+          <ul class="version__punkte">
+            <li><strong>Maßstab-Direkteingabe</strong><span>Bei maßhaltigen CAD- und Vektor-PDFs lässt sich der Maßstab direkt eingeben (1:50 bis 1:1000), ohne Referenzstrecke. Bei erkannten Scans bleibt die Referenzstrecke verpflichtend.</span></li>
+            <li><strong>Variable Grenzhöhe</strong><span>Die anrechenbare Grenzhöhe folgt der kommunalen Satzung und ist frei einstellbar (Standard 2,30 m). Die Vollgeschoss-Beurteilung nach Art. 83 Abs. 7 BayBO bleibt davon unberührt.</span></li>
+            <li><strong>Rechenweg im Aufmaßprotokoll</strong><span>Auf Wunsch zeigt das Protokoll jede Teilfläche als nachvollziehbare Herleitung — als Länge × Breite oder als Koordinatentabelle. Das schafft Transparenz gegenüber Bürgern.</span></li>
+          </ul>
+        </li>
+        <li class="version" data-quelle="versionen.ts">
+          <h2 class="version__kopf"><span class="version__nr">Version 1.0.0</span> <time datetime="2026-05-16">16.05.2026</time></h2>
+          <ul class="version__punkte">
+            <li><strong>Erstauslieferung</strong><span>FlächenKlar startet als Aufmaß-Werkzeug für bayerische Bauämter — komplett offline im Browser, ohne Installation.</span></li>
+            <li><strong>Vollgeschoss-Berechnung</strong><span>Ermittlung nach Art. 83 Abs. 7 BayBO direkt aus dem Aufmaß, inklusive Diagrammen zur Plausibilitätsprüfung.</span></li>
+            <li><strong>Lizenz und automatische Updates</strong><span>Lizenzierter Betrieb mit eingebautem Update-Mechanismus über download.flaechenklar.de.</span></li>
+          </ul>
+        </li>
+<!-- VERSIONEN:ENDE -->
+    </ol>
+  </div>
+</main>
+
+<div class="fuss-rahmen">
+  <footer class="fuss">
+    <span>FlächenKlar · Alexander Geitner · Postbauer-Heng</span>
+    <nav aria-label="Rechtliches"><a href="versionen.html">Versionen</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></nav>
+    <p class="fuss__stand">Version 1.5.7 vom 23.10.2026. Änderungen öffentlich unter <span class="fuss__ziel"><a href="versionen.html">flaechenklar.de/versionen</a>.</span></p>
+  </footer>
+</div>
+</body>
+</html>

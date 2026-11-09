@@ -1,33 +1,53 @@
 # website-flaechenklar
 
-Marketing-Seite für **FlächenKlar** — das Aufmaß-Werkzeug für bayerische
-Bauämter. PDF rein, Polygon zeichnen, druckreifes Aufmaßprotokoll als
-Berechnungsgrundlage für den Herstellungsbeitrag nach Art. 5 KAG Bayern.
+Marketing-Seite für **FlächenKlar**, das Aufmaß-Werkzeug für bayerische
+Bauämter: Geschossflächen aus dem Bauantrags-PDF messen, Aufmaßprotokoll für
+die Akte, Bescheid-Entwurf nach Art. 5 KAG Bayern auf Wunsch.
 
 ## Stack
 
-- Vite 5 + React 19 + TypeScript (strict)
-- Tailwind CSS 3 mit Theme-Tokens via CSS-Variablen
-- Cloudflare Workers (Static Assets binding)
-- Deploy via GitHub Actions
+- Statische Seiten in `seite/` (HTML, CSS, Scroll-Engine `scrollcraft.js`), seit 09.11.2026
+- Bau-Skript `scripts/baue-seite.mjs` (Node, ohne Abhängigkeiten)
+- Cloudflare Workers (Static Assets binding), Deploy via GitHub Actions
+
+Die frühere React-/Vite-/Tailwind-Seite liegt im Tag `react-letzter-stand`.
 
 ## Entwicklung
 
 ```bash
 npm install
-npm run dev          # Vite dev server (http://localhost:5173)
-npm run typecheck    # TS check
+npm run dev          # baut dist/ und startet wrangler dev (http://localhost:8787)
+npm run typecheck    # TS-Check für src/content und worker
 ```
 
-## Lokaler Worker-Test
+Nach Änderungen in `seite/` oder `src/content/` neu bauen (`npm run build`), wrangler
+übernimmt `dist/` dann von selbst.
 
-```bash
-npm run build
-npm run preview      # wrangler dev (http://localhost:8787)
-```
+## Was das Bau-Skript macht
 
-Im lokalen Worker-Modus funktionieren die Routen `/`, `/impressum` und
-`/datenschutz` exakt wie in Produktion.
+- kopiert `public/` und `seite/` nach `dist/`
+- füllt aus `src/content/versionen.ts` die Versionsliste (`/versionen`), den Block
+  „Neu in Version“ (`/tutorial`) und die Programmversion in jeder Fußzeile
+- füllt aus `src/content/preise.ts` den Preiswähler der Startseite und das Angebot im JSON-LD
+- schreibt Links auf saubere Adressen um (`demo.html` → `/demo`, `assets/` → `/assets/`)
+- ergänzt je Seite canonical, Open Graph, Twitter-Karte und Favicons, auf der Startseite JSON-LD
+
+`src/content/versionen.ts` bleibt an diesem Ort: das Release-Werkzeug des Programms
+(`tool/tools/bump-version.js`) schreibt dort bei jedem Release einen Eintrag hinein.
+
+## Adressen
+
+| Adresse | Inhalt |
+|---|---|
+| `/` | Startseite (`/#kontakt` aus alten Mails leitet auf `/demo`) |
+| `/demo` | Demo- und Angebotsanfrage (Formspree) |
+| `/tutorial` | Tutorial in 13 Kapiteln (Videos von `videos.flaechenklar.de`) |
+| `/versionen` | Versionsverlauf |
+| `/impressum`, `/datenschutz` | Rechtstexte |
+
+Der Worker leitet per 301 um: `www.` und `http:` auf `https://flaechenklar.de`,
+`/tour` auf `/tutorial`, `/<seite>.html` und `/<seite>/` auf `/<seite>`.
+Unbekannte Adressen bekommen `404.html` mit Status 404.
 
 ## Deployment
 
@@ -47,15 +67,11 @@ npm run deploy
 ## Struktur
 
 ```
-src/
-├── sections/       # Sektionen der Landing Page
-├── components/     # Wiederverwendbare Bausteine
-└── content/        # Listen-Daten (Funktionen, Sicherheit, Preise)
-public/
-├── impressum.html  # statisch, vom Worker unter /impressum ausgeliefert
-└── datenschutz.html
-worker/
-└── index.ts        # Routing für Legal-Pages
+seite/              # die Seiten (Quelle), Assets und Schriften
+src/content/        # versionen.ts und preise.ts (Datenquellen für den Bau)
+public/             # Favicons, OG-Bild, robots.txt, sitemap.xml
+scripts/            # baue-seite.mjs, Favicon- und OG-Bild-Erzeugung
+worker/index.ts     # Canonical-Host, Weiterleitungen
 ```
 
 ## Lizenz

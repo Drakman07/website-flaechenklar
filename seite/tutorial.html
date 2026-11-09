@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FlächenKlar · Tutorial in 13 Kapiteln</title>
+<meta name="description" content="FlächenKlar in 13 Kapiteln und rund einer Stunde: vom ersten Doppelklick bis zum fertigen Beitragsbescheid, inklusive Foto-Import und RIWA-Datenexport.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230F2D5A'/><path d='M8 8h16v10h-7v6H8z' fill='none' stroke='%231EA596' stroke-width='2.4'/></svg>">
+<link rel="stylesheet" href="seiten.css">
+<style>
+  /* Kino: Film links, Kapitelliste rechts; unter 1100 px untereinander. */
+  .kino { display: grid; grid-template-columns: minmax(0, 1fr) minmax(19rem, 26rem); gap: var(--s-6); align-items: start; }
+  .kino__film { position: relative; }
+  .kino video { width: 100%; aspect-ratio: 16 / 9; background: var(--navy-tief); border-radius: 6px; border: 1px solid var(--linie); }
+  .kino__jetzt { margin-top: var(--s-4); display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-4); align-items: baseline; }
+  .kino__jetzt .marke { color: var(--teal-hell); }
+  .kino__jetzt strong { font: 700 var(--t-lg)/1.2 var(--font-anzeige); letter-spacing: -0.015em; }
+  .kapitel { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--linie); max-height: min(70vh, 44rem); overflow-y: auto; scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, #FFFFFF 28%, transparent) transparent; }
+  .kapitel button { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) auto; gap: var(--s-3); align-items: baseline; width: 100%;
+    min-height: 44px; padding: 0.7rem 0.6rem 0.7rem 0.75rem; background: transparent; border: 0; border-bottom: 1px solid var(--linie);
+    color: #FFFFFF; font: 400 var(--t-sm)/1.35 var(--font-text); text-align: left; cursor: pointer;
+    transition: background-color var(--d-fast) var(--ease-out); }
+  .kapitel button:hover { background: var(--navy-hell); }
+  .kapitel button:focus-visible { outline-offset: -2px; }
+  .kapitel__nr { font: 600 var(--t-xs)/1 var(--font-text); letter-spacing: 0.08em; color: var(--teal-hell); font-variant-numeric: tabular-nums; }
+  .kapitel__dauer { font-size: var(--t-xs); color: var(--tinte-weich); font-variant-numeric: tabular-nums; }
+  /* Aktives Kapitel: Teal-Strich links wie die Lineal-Striche, Grund etwas heller. */
+  .kapitel button[aria-current="true"] { background: var(--navy-hell); box-shadow: inset 3px 0 0 var(--teal); font-weight: 600; }
+
+  .neu { border-left: 2px solid var(--teal); padding-left: var(--s-5); max-width: 66ch; }
+  .neu__kopf { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-4); align-items: baseline; }
+  .neu__kopf time { font-size: var(--t-xs); color: var(--tinte-weich); }
+  .version__punkte { list-style: none; margin: var(--s-4) 0 0; padding: 0; display: grid; gap: var(--s-4); }
+  .version__punkte li { display: grid; gap: 0.2rem; }
+  .version__punkte strong { font: 700 var(--t-base)/1.35 var(--font-anzeige); letter-spacing: -0.01em; }
+  .version__punkte span { font-size: var(--t-sm); line-height: 1.55; color: #DCE4EF; }
+  .weiter { display: inline-block; margin-top: var(--s-5); font-weight: 600; font-size: var(--t-sm); }
+  .zeile-knoepfe { display: flex; flex-wrap: wrap; gap: var(--s-4) var(--s-6); align-items: center; margin-top: var(--s-5); }
+  .zeile-knoepfe a:not(.knopf) { font-weight: 600; font-size: var(--t-sm); }
+
+  @media (max-width: 1100px) {
+    .kino { grid-template-columns: minmax(0, 1fr); }
+    .kapitel { max-height: none; }
+  }
+</style>
+</head>
+<body>
+<a class="springmarke" href="#inhalt">Zum Inhalt springen</a>
+<header class="seitenkopf">
+  <div class="kopf">
+    <a class="wortmarke" href="index.html">Flächen<span>Klar</span></a>
+    <nav aria-label="Hauptnavigation"><a href="tutorial.html" aria-current="page">Tutorial</a><a href="versionen.html">Versionen</a><a class="kopf-link" href="demo.html">Demo anfragen</a></nav>
+  </div>
+  <div class="seitenkopf__satz">
+    <span class="marke">Tutorial</span>
+    <h1 class="anzeige">FlächenKlar in <span>rund einer Stunde</span>.</h1>
+    <p class="lede">13 aufeinander aufbauende Kapitel, vom ersten Doppelklick bis zum fertigen Beitragsbescheid. So ausführlich, dass eine Vor-Ort-Einarbeitung nicht mehr nötig ist. Jedes Kapitel ist auch allein verständlich.</p>
+  </div>
+  <div class="lineal" aria-hidden="true"></div>
+</header>
+
+<main id="inhalt" class="inhalt">
+  <div class="inhalt__innen">
+    <section aria-labelledby="kino-titel">
+      <h2 class="sr-only" id="kino-titel">Kapitel ansehen</h2>
+      <div class="kino">
+        <div class="kino__film">
+          <!-- preload="none": der Film lädt erst, wenn Sie ihn starten; vorher nur das Standbild. -->
+          <video id="film" controls preload="none" playsinline></video>
+          <p class="kino__jetzt" aria-live="polite"><span class="marke" id="jetzt-nr"></span><strong id="jetzt-titel"></strong></p>
+        </div>
+        <ol class="kapitel" id="kapitel" aria-label="13 Kapitel"></ol>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="neu-titel" style="margin-top: var(--s-8);">
+      <div class="block__kopf">
+        <span class="marke">Versionen</span>
+        <h2 class="anzeige" id="neu-titel">Was zuletzt dazukam.</h2>
+        <p>Die Kapitel zeigen den Ablauf, neue Funktionen stehen im Versionsverlauf.</p>
+      </div>
+      <div>
+<!-- NEU:START -->
+          <div class="neu" data-quelle="versionen.ts">
+            <p class="neu__kopf"><span class="marke">Neu in Version 1.5.0</span><time datetime="2026-08-12">12.08.2026</time></p>
+            <ul class="version__punkte">
+              <li><strong>Ein Klick für Programmstart und Updates</strong><span>FlächenKlar startet jetzt über eine einzelne Datei im Programmordner, die beim Start automatisch prüft, ob eine neue Version vorliegt, und sie bei Bedarf mit einem Klick anbietet. Der bisherige Weg über den Programmordner und eine separate Update-Datei entfällt.</span></li>
+              <li><strong>Änderungsübersicht beim Update</strong><span>Der Update-Hinweis zeigt jetzt zusätzlich kurz, was sich seit der installierten Version geändert hat, statt nur die neue Versionsnummer.</span></li>
+            </ul>
+          </div>
+<!-- NEU:ENDE -->
+        <a class="weiter" href="versionen.html">Alle Versionen ansehen</a>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="frage-titel">
+      <div class="block__kopf">
+        <span class="marke">Fragen</span>
+        <h2 class="anzeige" id="frage-titel">Fragen oder bereit für eine Demo?</h2>
+      </div>
+      <div class="text">
+        <p>Sie sind bereits Kunde und stoßen auf eine Frage, die das Tutorial nicht beantwortet? Oder möchten Sie FlächenKlar 14 Tage kostenlos im echten Bauamtsalltag testen? Beides geht schnell.</p>
+        <div class="zeile-knoepfe">
+          <a class="knopf" href="demo.html">Kostenlose Demo anfragen</a>
+          <a href="mailto:info@flaechenklar.de">info@flaechenklar.de</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div class="fuss-rahmen">
+  <footer class="fuss">
+    <span>FlächenKlar · Alexander Geitner · Postbauer-Heng</span>
+    <nav aria-label="Rechtliches"><a href="versionen.html">Versionen</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></nav>
+    <p class="fuss__stand">Version 1.5.7 vom 23.10.2026. Änderungen öffentlich unter <span class="fuss__ziel"><a href="versionen.html">flaechenklar.de/versionen</a>.</span></p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  // Kapitel und Cache-Schlüssel wie src/pages/Tutorial.tsx der Website (Stand v1.4, 26.07.2026).
+  // Dauer per ffprobe aus den Dateien auf videos.flaechenklar.de gemessen (08.11.2026), gerundet auf Sekunden; zusammen 3.656 s.
+  var R2 = 'https://videos.flaechenklar.de/tutorial-kapitel-';
+  var KAPITEL = [
+    ['Einstieg & Installation', 4, '2:32'],
+    ['Bauantrags-PDF importieren', 5, '2:28'],
+    ['Projektdaten erfassen', 4, '1:45'],
+    ['Geschoss & Ausschnitt anlegen', 5, '2:09'],
+    ['Maßstab messen', 5, '2:44'],
+    ['Foto statt PDF', 4, '8:30'],
+    ['Flächen zeichnen', 5, '9:33'],
+    ['Vollgeschoss-Beurteilung', 4, '6:14'],
+    ['Aufmaßprotokoll exportieren', 4, '4:21'],
+    ['Datenexport RIWA', 4, '0:41'],
+    ['Bescheid-Stammdaten einrichten', 5, '5:24'],
+    ['Beitragsbescheid erstellen', 5, '9:58'],
+    ['Speichern, Updates, Hilfe & Schlusswort', 4, '4:35']
+  ];
+  var film = document.getElementById('film');
+  var liste = document.getElementById('kapitel');
+  var nr = document.getElementById('jetzt-nr');
+  var titel = document.getElementById('jetzt-titel');
+  var aktiv = 0;
+
+  KAPITEL.forEach(function (k, i) {
+    var li = document.createElement('li');
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.innerHTML = '<span class="kapitel__nr">' + String(i + 1).padStart(2, '0') + '</span><span></span><span class="kapitel__dauer"></span>';
+    b.children[1].textContent = k[0];
+    b.children[2].textContent = k[2];
+    b.children[2].setAttribute('aria-label', 'Dauer ' + k[2].replace(':', ' Minuten ') + ' Sekunden');
+    b.addEventListener('click', function () { waehle(i, true); });
+    li.appendChild(b);
+    liste.appendChild(li);
+  });
+
+  function waehle(i, abspielen) {
+    aktiv = i;
+    var k = KAPITEL[i];
+    film.poster = R2 + (i + 1) + '-poster.webp?v=' + k[1];
+    film.src = R2 + (i + 1) + '.mp4?v=' + k[1];
+    film.setAttribute('aria-label', 'Kapitel ' + (i + 1) + ': ' + k[0]);
+    nr.textContent = 'Kapitel ' + (i + 1) + ' von ' + KAPITEL.length;
+    titel.textContent = k[0];
+    Array.prototype.forEach.call(liste.querySelectorAll('button'), function (b, j) {
+      if (j === i) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+    });
+    if (abspielen) { var p = film.play(); if (p && p.catch) p.catch(function () {}); }
+  }
+
+  // Am Kapitelende das nächste Kapitel bereitlegen, aber nicht von selbst starten.
+  film.addEventListener('ended', function () { if (aktiv < KAPITEL.length - 1) waehle(aktiv + 1, false); });
+
+  // Sprung per Link: tutorial.html#kapitel-7
+  var m = location.hash.match(/^#kapitel-(\d+)$/);
+  waehle(m ? Math.min(Math.max(parseInt(m[1], 10), 1), KAPITEL.length) - 1 : 0, false);
+})();
+</script>
+</body>
+</html>

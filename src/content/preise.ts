@@ -1,14 +1,9 @@
-import {
-  Home,
-  Building,
-  Building2,
-  Landmark,
-  Castle,
-} from "lucide-react";
-import type { LucideIcon } from "lucide-react";
-
+/*
+ * Quelle der Preise für flaechenklar.de: scripts/baue-seite.mjs liest diese
+ * Datei beim Bauen und schreibt Preiswähler (Startseite) und JSON-LD-Angebot.
+ * Seit der statischen Seite (09.11.2026) ohne Icons, sonst unverändert.
+ */
 type PreisstufeBasis = {
-  icon: LucideIcon;
   einwohner: string;
 };
 
@@ -39,12 +34,9 @@ export type Preisstufe = PreisstufeMitPreis | PreisstufeAufAnfrage;
  * 5-Tier-Pricing fuer kommunale Bauaemter, gestaffelt nach Einwohnerzahl;
  * die fuenfte Klasse (ueber 30.000) ohne Preis, auf Anfrage.
  * - `einmalig` / `wartung`: formatierte Anzeige-Strings ("1.600 €")
- * - `einmaligNumeric` / `wartungNumeric`: rohe Zahlen fuer useCountUp-Counter
- * - `icon`: visueller Anker pro Tier (Skalen-Progression Home -> Castle)
- */
+ * - `einmaligNumeric` / `wartungNumeric`: rohe Zahlen fuer useCountUp-Counter */
 export const preise: readonly Preisstufe[] = [
   {
-    icon: Home,
     einwohner: "bis 3.000",
     einmalig: "1.600 €",
     einmaligNumeric: 1600,
@@ -56,7 +48,6 @@ export const preise: readonly Preisstufe[] = [
     wartungMitModulNumeric: 185,
   },
   {
-    icon: Building,
     einwohner: "3.000 – 8.000",
     einmalig: "3.100 €",
     einmaligNumeric: 3100,
@@ -68,7 +59,6 @@ export const preise: readonly Preisstufe[] = [
     wartungMitModulNumeric: 360,
   },
   {
-    icon: Building2,
     einwohner: "8.000 – 15.000",
     einmalig: "5.800 €",
     einmaligNumeric: 5800,
@@ -80,7 +70,6 @@ export const preise: readonly Preisstufe[] = [
     wartungMitModulNumeric: 670,
   },
   {
-    icon: Landmark,
     einwohner: "15.000 – 30.000",
     einmalig: "10.500 €",
     einmaligNumeric: 10500,
@@ -92,7 +81,6 @@ export const preise: readonly Preisstufe[] = [
     wartungMitModulNumeric: 1210,
   },
   {
-    icon: Castle,
     einwohner: "über 30.000",
     aufAnfrage: true,
   },

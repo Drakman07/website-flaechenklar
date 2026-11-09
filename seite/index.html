@@ -1,0 +1,1695 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Übernahme (09.11.2026): Mails und Vorlagen verlinken noch flaechenklar.de/#kontakt (alte Startseite). Den Abschnitt gibt
+     es nicht mehr, die Anfrage steht auf der Demo-Seite. Vor dem ersten Bild weiterleiten, ohne Eintrag im Verlauf. -->
+<script>if (location.hash === '#kontakt') location.replace('demo.html');</script>
+<title>FlächenKlar · Geschossflächen aus dem digitalen Bauantrag</title>
+<meta name="description" content="Geschossflächen aus dem Bauantrags-PDF messen, Aufmaßprotokoll für die Akte, Bescheid-Entwurf auf Wunsch. Lokal, ohne Cloud.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230F2D5A'/><path d='M8 8h16v10h-7v6H8z' fill='none' stroke='%231EA596' stroke-width='2.4'/></svg>">
+<!-- Schritt 6: Schriften vorab laden. Ohne preload tauschte der Browser genau beim Einblenden der Hero-Pillen auf Archivo um,
+     ein Bild hing 198 ms und die Staffel 0/60/120 ms ging verloren (hero.cjs). -->
+<link rel="preload" href="fonts/archivo-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/archivo-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/archivo-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="scrollcraft.css">
+<style>
+  /* Schritt 6 (08.11.2026): Archivo lokal (OFL, @fontsource/archivo 5.3.0) statt Google Fonts; die Datenschutzerklärung sagt „keine externen Schriftarten“. */
+  @font-face { font-family: "Archivo"; src: url("fonts/archivo-latin-500-normal.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+  @font-face { font-family: "Archivo"; src: url("fonts/archivo-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+  @font-face { font-family: "Archivo"; src: url("fonts/archivo-latin-800-normal.woff2") format("woff2"); font-weight: 800; font-display: swap; }
+  @font-face { font-family: "Geist"; src: url("fonts/geist-sans-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+  @font-face { font-family: "Geist"; src: url("fonts/geist-sans-latin-600-normal.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+
+  :root {
+    --navy: #0F2D5A;
+    --navy-tief: #0A2246;
+    --teal: #1EA596;
+    --teal-hell: #5CCFC2;
+    --papier: #E7ECF2;
+
+    --sc-canvas: var(--navy);
+    --sc-surface: #14386C;
+    --sc-ink: #FFFFFF;
+    --sc-ink-soft: #B9C6DA;
+    --sc-accent: var(--teal);
+    --sc-accent-ink: var(--navy);
+    --sc-font-display: "Archivo", "Geist", system-ui, sans-serif;
+    --sc-font-text: "Geist", "Helvetica Neue", system-ui, sans-serif;
+    --sc-shadow-color: 215 60% 10%;
+    --l: 50;           /* Lage der Trennlinie in Prozent, schreibt das Skript */
+    --linie: color-mix(in oklab, #FFFFFF 12%, transparent);
+  }
+  body { background: var(--navy); }
+  h1, h2, h3, p, figure, dl, dd, ul, ol { margin: 0; }
+  .anzeige { font-family: var(--sc-font-display); font-weight: 800; letter-spacing: -0.035em; line-height: 0.98; text-wrap: balance; }
+  .marke { display: block; font-size: var(--sc-t-xs); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* ------------------------------------------------------------ Bühne --- */
+  /* Kein eigenes position: .sc-stage setzt sticky, sonst pinnt der Akt nicht. */
+  .buehne { height: 100svh; overflow: clip; }
+
+  .seite { position: absolute; inset: 0; }
+  .seite--heute { background: var(--papier); color: var(--navy);
+    --sc-ink: var(--navy); --sc-ink-soft: #46597A; }
+  .seite--morgen { background: var(--navy); color: #FFFFFF;
+    clip-path: inset(0 0 0 calc(var(--l) * 1%)); }
+  /* Planblatt (Runde 13, Alexander 06.11.): Millimeterraster, jede fünfte Linie kräftiger, Teal-Schein an der Trennlinie.
+     Raster steht still; der blasse Grundriss des Musterhauses (8 Ecken wie im Film) driftet langsam mit --sc-p. */
+  .seite--morgen {
+    --raster: 12px;
+    background:
+      radial-gradient(ellipse 55% 70% at calc(var(--l) * 1%) 32%, color-mix(in oklab, var(--teal) 20%, transparent), transparent 70%),
+      repeating-linear-gradient(to right, color-mix(in oklab, #FFFFFF 8%, transparent) 0 1px, transparent 1px calc(var(--raster) * 5)),
+      repeating-linear-gradient(to bottom, color-mix(in oklab, #FFFFFF 8%, transparent) 0 1px, transparent 1px calc(var(--raster) * 5)),
+      repeating-linear-gradient(to right, color-mix(in oklab, #FFFFFF 4%, transparent) 0 1px, transparent 1px var(--raster)),
+      repeating-linear-gradient(to bottom, color-mix(in oklab, #FFFFFF 4%, transparent) 0 1px, transparent 1px var(--raster)),
+      var(--navy); }
+  /* Oberkante unter den Schritt-Knöpfen, der Rest läuft unten aus dem Bild: so kreuzt keine Linie den Text.
+     Eigene Klasse (Runde 15): .planblatt gehört dem Protokoll-SVG in Runde 2, der Name färbte dort das rote Polygon um. */
+  .grundriss-deko.ist-eng { display: none; }
+  .grundriss-deko { position: absolute; right: 7vw; top: var(--plan-oben, 76%); width: min(36vw, 40rem); height: auto; pointer-events: none;
+    /* ab 0,25 gehalten, vor dem Schluss (p 0,88 bis 0,90) ganz aus: dort liegt sonst die Oberkante über der Rückblick-Leiste. */
+    opacity: clamp(0, min(max(0.25, 1 - var(--sc-p, 0) * 8), (0.9 - var(--sc-p, 0)) * 12), 1); translate: 0 calc(var(--sc-p, 0) * -6vh); }
+  .grundriss-deko path { fill: color-mix(in oklab, var(--teal) 6%, transparent); stroke: var(--teal-hell); stroke-opacity: 0.5; stroke-width: 2; vector-effect: non-scaling-stroke; }
+  .grundriss-deko circle { fill: var(--teal-hell); fill-opacity: 0.7; }
+  html.ist-ruhig .grundriss-deko { translate: none; }
+
+  /* Trennlinie: die einzige Navigation. Beschriftung oben, Lineal-Striche als Fortschritt. */
+  .teiler { position: absolute; inset: 0; pointer-events: none; z-index: 5;
+    transform: translateX(calc(var(--l) * 1%)); }
+  .teiler__strich { position: absolute; left: -1px; top: 0; bottom: 0; width: 2px; background: var(--teal); }
+  .teiler__schild { position: absolute; top: clamp(1.25rem, 3vh, 2rem); font: 600 var(--sc-t-xs)/1 var(--sc-font-text);
+    letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
+  /* Papier-Plakette: das Schild liegt ab Runde 3 auf dem Foto; #46597A auf --papier hat 5,9:1 (WCAG AA). */
+  .teiler__schild--heute { left: 0; transform: translateX(calc(-100% - 1rem)); color: #46597A;
+    background: var(--papier); padding: 0.3em 0.45em; margin-top: -0.3em; border-radius: 3px; }
+  .teiler__schild--morgen { left: 1rem; color: var(--teal-hell); }
+  .teiler__skala { position: absolute; left: 0; top: 20%; bottom: 20%; display: flex; flex-direction: column; justify-content: space-between; }
+  /* Strich wächst per scaleX statt width (nur transform/opacity animieren): volle Länge 26 px, kurz 10/26. Ursprung Mitte,
+     weil der Strich mittig auf der Linie sitzt (translateX -50 %); so bleibt die Optik wie vorher (10 px auf 26 px, mittig). */
+  .teiler__skala i { display: block; width: 26px; height: 2px; background: var(--teal); transform: translateX(-50%) scaleX(0.3846); transform-origin: 50% 50%; opacity: 0.4;
+    transition: transform var(--sc-d-base) var(--sc-ease-out), opacity var(--sc-d-base) var(--sc-ease-out); }
+  .teiler__skala i.ist-da { transform: translateX(-50%); opacity: 1; }
+
+  /* ---------------------------------------------------- Seite „Heute“ --- */
+  .heute__inhalt { position: absolute; left: var(--sc-gutter); top: 0; width: min(31vw, 30rem); height: 58%;
+    display: grid; grid-template-columns: minmax(0, 1fr); align-items: end; padding-bottom: var(--sc-5); }
+  .runde-l { grid-area: 1 / 1; align-self: end; }
+  .runde-l .anzeige { font-size: var(--sc-t-2xl); }
+  .runde-l p.text { font-size: var(--sc-t-lg); line-height: 1.4; letter-spacing: -0.01em; }
+  .runde-l p.beleg { margin-top: var(--sc-4); font-size: var(--sc-t-sm); line-height: 1.5; color: #46597A; max-width: 40ch; }
+  .runde-l .marke { color: #46597A; margin-bottom: var(--sc-3); }
+
+  /* Fotos je Runde: Büroalltag „Heute“, oben in der Spalte, unten in den Papierton auslaufend.
+     Breite 50 %: was über die Linie ragt, deckt die rechte Seite ab. */
+  .fotos, .hero-rahmen { position: absolute; left: 0; top: 0; width: 50%; height: 48%; overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent 96%); mask-image: linear-gradient(to bottom, #000 50%, transparent 96%); }
+  .fotos img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
+  /* Hero-Text ist höher als die Runden: unter das Foto rücken, der Stapel kommt erst ab Runde 1. */
+  .runde-l--hero { position: relative; top: 26vh; }
+
+  /* Hero mit Ebenen (Spec §5). --h (0..1) schreibt das Skript auf #buehne. Ebene C bewegt sich über die
+     Eigenschaft translate, weil die Engine transform des Cue-Elements selbst schreibt. */
+  .hero-ebenen { position: absolute; inset: 0; pointer-events: none; }
+  /* Das Poster liegt als Hintergrund im Rahmen: Standbild unter Reduced Motion und schmal, Rückfall, solange der Clip lädt. */
+  .hero-rahmen { background: url("assets/hero-a.webp") 50% 60% / cover no-repeat var(--papier); }
+  .ebene--a { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%;
+    transform: translateY(calc(var(--h, 0) * -2%)) scale(calc(1 + var(--h, 0) * 0.04)); }
+  /* D: Stahllineal auf dem Papier. Das Bild hat keinen Alphakanal; die Maske läuft als Band längs des Lineals
+     (26° im Bild) und blendet die Stirnseite weich ein, so verschwinden die Rechteckkanten im Papierton. */
+  /* Lage: Stirnseite rechts neben dem Beleg und unter der Überschrift, der Körper läuft nach rechts unten unter die Linie.
+     Die Stirnseite sitzt bei 25 % / 32 % des Bildes; left rechnet sie auf 320px + 14,6vw (1920: 600, 1440: 530).
+     top: 1080 hoch 743px, 900 hoch 658px, damit die Spitze auf niedrigen Schirmen unter der letzten Beleg-Zeile bleibt. */
+  .ebene--d { position: absolute; left: calc(320px + 5.5vw); top: calc(47% + 235px); width: 36vw; height: auto; transform-origin: 30% 30%;
+    transform: translateY(calc(var(--h, 0) * -24%)) rotate(calc(var(--h, 0) * -3deg));
+    -webkit-mask-image: linear-gradient(26deg, transparent 42%, #000 46.5%, #000 59.5%, transparent 63%), linear-gradient(116deg, transparent 22%, #000 27%);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(26deg, transparent 42%, #000 46.5%, #000 59.5%, transparent 63%), linear-gradient(116deg, transparent 22%, #000 27%);
+    mask-composite: intersect; }
+  .runde-l--hero { translate: 0 calc(var(--h, 0) * -16%); }
+  /* Überschrift höchstens zwei Zeilen (Spec §5): Bruch nach dem ersten Satz, der erste Satz passt in eine Zeile
+     (gemessen rund 13,2 em breit). Breiter als die Textspalte, die Beleg-Zeilen bleiben bei 40ch. */
+  @media (min-width: 861px) {
+    .runde-l--hero .anzeige { font-size: min(var(--sc-t-2xl), 3vw); width: calc(50vw - var(--sc-gutter) - 2.5rem); }
+  }
+  html.ist-ruhig .ebene--a, html.ist-ruhig .ebene--d { display: none; }
+  html.ist-ruhig .runde-l--hero, html.ist-ruhig .datei { translate: none; }
+  html.ist-ruhig .datei { scale: none; }
+
+  /* Signatur: der Papierstapel */
+  .stapel { position: absolute; left: var(--sc-gutter); bottom: 7%; width: min(24vw, 21rem); height: 30%; }
+  .blatt { position: absolute; left: 0; bottom: 0; width: 100%; aspect-ratio: 1.414 / 1; max-height: 100%;
+    background: #FFFFFF; color: var(--navy); border-radius: 3px; padding: 0.9rem 1rem;
+    box-shadow: 0 1px 2px hsl(215 40% 20% / 0.18), 0 10px 22px -8px hsl(215 40% 20% / 0.30);
+    font-size: 0.78rem; line-height: 1.35; opacity: 0; will-change: transform, opacity; overflow: hidden; }
+  .blatt b { display: block; font-weight: 600; margin-bottom: 0.35rem; }
+  .blatt span { color: #46597A; }
+  .blatt::after { content: ""; position: absolute; left: 1rem; right: 1rem; bottom: 0.9rem; height: 28%;
+    background: repeating-linear-gradient(to bottom, #DCE3EC 0 1px, transparent 1px 9px); }
+
+  /* -------------------------------------------- Seite „Mit FlächenKlar“ --- */
+  .morgen__kopf { position: absolute; top: clamp(1rem, 2.6vh, 1.75rem); right: var(--sc-gutter); display: flex; gap: var(--sc-6); align-items: baseline; }
+  .wortmarke { font: 800 1.15rem/1 var(--sc-font-display); letter-spacing: -0.02em; }
+  .wortmarke span { color: var(--teal); }
+  .kopf-link { color: var(--teal-hell); font-weight: 600; font-size: var(--sc-t-sm); text-underline-offset: 0.3em; }
+  /* Inhalt folgt der Linie: Mitte der blauen Fläche, wächst mit ihr. --s und --dy schreibt das Skript
+     (Blau-Breite / 50 %, höchstens 1,2, und nur so groß, wie zwischen Kopfzeile und Datei Platz ist). */
+  .morgen__inhalt { position: absolute; left: calc((var(--l) + 100) / 2 * 1%); top: 10%; bottom: 15%; width: min(41vw, 40rem); display: grid;
+    --s: 1; --dy: 0px; transform: translate(-50%, var(--dy)) scale(var(--s)); }
+  .runde-r { grid-area: 1 / 1; align-self: center; }
+  .runde-r h1.anzeige { font-size: var(--sc-t-3xl); }
+  .runde-r h2.anzeige { font-size: var(--sc-t-xl); }
+  .runde-r .lede { margin-top: var(--sc-5); font-size: var(--sc-t-lg); line-height: 1.45; color: var(--sc-ink-soft); max-width: 34ch; }
+  .runde-r .klein { font-size: var(--sc-t-sm); color: var(--sc-ink-soft); max-width: 46ch; }
+  .runde-r .wert { font: 800 var(--sc-t-2xl)/1 var(--sc-font-display); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; color: var(--teal-hell); }
+  .runde-r .wert small { font-size: 0.45em; font-weight: 500; margin-left: 0.2em; color: var(--sc-ink-soft); }
+  .runde-r svg { width: 100%; height: auto; max-height: 24vh; margin-top: var(--sc-4); overflow: visible; }
+  .zeile { display: flex; gap: var(--sc-6); align-items: end; margin-top: var(--sc-3); }
+
+  /* Belegte Faktenzeilen je Runde, Quelle: Website-Inhalte */
+  .fakten-liste { list-style: none; padding: 0; margin-top: var(--sc-5); display: grid; gap: 0.5rem; max-width: 52ch;
+    border-top: 1px solid var(--linie); padding-top: var(--sc-4); font-size: var(--sc-t-sm); line-height: 1.45; color: #DCE4EF; }
+  .fakten-liste li { display: grid; grid-template-columns: 1.1rem 1fr; }
+  .fakten-liste li::before { content: ""; width: 0.55rem; height: 2px; background: var(--teal); margin-top: 0.68em; }
+
+  /* Beleg-Rückgrat je Runde (Spec §7), einspaltig: Faktenzeilen und darunter die eine Beleg-Zeile.
+     Die Programm-Ausschnitte „Aus dem Programm“ sind entfallen (Runde 2, 03.11.): im geteilten Bereich trägt die Zeichnung. */
+  .belege { margin-top: var(--sc-5); }
+  .belege .fakten-liste { margin-top: 0; }
+  .belege__text > :first-child { margin-top: 0; }
+  .runde-r--bescheid .belege .beleg-zeile { margin-top: 0; }
+  /* Runde 3: Belege so breit wie der Bescheid darüber. */
+  .runde-r--bescheid .belege { max-width: 31rem; }
+  .beleg-zeile { margin-top: var(--sc-3); padding-left: 0.7rem; border-left: 2px solid var(--teal); max-width: 52ch;
+    font-size: var(--sc-t-sm); line-height: 1.45; color: #FFFFFF; text-wrap: pretty; }
+
+  .schritte { display: flex; flex-wrap: wrap; gap: var(--sc-2); margin-top: var(--sc-5); }
+  .schritte span { border: 1px solid color-mix(in oklab, #FFFFFF 22%, transparent); border-radius: 999px; padding: 0.35rem 0.8rem; font-size: var(--sc-t-sm); }
+  .schritte b { color: var(--teal-hell); margin-right: 0.35rem; }
+  /* Die drei Pillen kommen beim Laden nacheinander (Spec §5, Stagger 60 ms); ist-da setzt das Skript. */
+  .schritte span { opacity: 0; transition: opacity var(--sc-d-base) var(--sc-ease-out); }
+  .schritte span:nth-child(2) { transition-delay: 60ms; }
+  .schritte span:nth-child(3) { transition-delay: 120ms; }
+  .schritte span.ist-da { opacity: 1; }
+  html.ist-ruhig .schritte span { opacity: 1; transition: none; }
+
+  .runde-r .marke--teal { color: var(--teal-hell); margin-bottom: var(--sc-3); }
+
+  /* Runde 1: Grundriss mit Eckpunkten und Maßketten */
+  .runde-r svg.grundriss { max-height: 32vh; }
+  .runde-r--bescheid .fakten-liste { display: none; }
+  .grundriss text { font: 600 6.4px var(--sc-font-text); fill: #DCE4EF; stroke: none; }
+  .mass { opacity: 0; transition: opacity var(--sc-d-base) var(--sc-ease-out); }
+  .mass.ist-da { opacity: 1; }
+  .ecke circle { fill: var(--navy); stroke: var(--teal-hell); stroke-width: 1; }
+  .ecke text { fill: var(--teal-hell); font-size: 5.6px; }
+  .ecke { opacity: 0; transform: scale(0.2); transform-box: fill-box; transform-origin: center;
+    transition: opacity 160ms var(--sc-ease-out), transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .ecke.ist-da { opacity: 1; transform: scale(1); }
+  .ecke.ist-da circle { fill: var(--teal); }
+
+  /* Runde 6: Schema Datensicherheit in der Runde Sicherheit */
+  .runde-r svg.sicher { max-height: 26vh; }
+  .sicher text { font: 500 5px var(--sc-font-text); fill: #B9C6DA; stroke: none; }
+  .sicher .sicher__titel { font-weight: 600; fill: var(--teal-hell); letter-spacing: 0.04em; }
+  .sicher .sicher__ring { font-size: 3.6px; font-weight: 600; fill: #DCE4EF; }
+  .sicher .sicher__klein { font-size: 4.4px; }
+  .sicher .sicher__neben { font-size: 4.2px; fill: #8FA1BC; }
+  .sicher .sicher__hinweis { font-size: 4.4px; font-weight: 600; fill: var(--teal-hell); }
+
+  /* Runde 3: Bescheid-Entwurf als Briefblatt, unten angeschnitten */
+  .bescheid { position: relative; margin-top: var(--sc-4); background: #FFFFFF; color: #1E2C44; border-radius: 3px; padding: 1rem 1.2rem 0;
+    font-size: 0.66rem; line-height: 1.42; box-shadow: var(--sc-e3); max-width: 31rem; max-height: 44vh; overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, #000 88%, transparent); mask-image: linear-gradient(to bottom, #000 88%, transparent); }
+  .bescheid p { margin-top: 0.45rem; }
+  .bescheid__kopf { display: flex; justify-content: space-between; gap: 1rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--navy); }
+  .bescheid__kopf b { color: var(--navy); font-weight: 600; }
+  .bescheid__kopf span { text-align: right; color: #46597A; }
+  .bescheid__an { color: #1E2C44; }
+  .bescheid__betreff { font-weight: 600; color: var(--navy); font-size: 0.74rem; }
+  .bescheid__klein { color: #46597A; margin-top: 0.1rem !important; }
+  .bescheid__ziffer { font-weight: 600; color: var(--navy); margin-top: 0.7rem !important; }
+  .bescheid__betrag { text-align: center; font-weight: 700; font-size: 0.86rem; }
+  .bescheid__tabelle { width: 100%; border-collapse: collapse; margin-top: 0.35rem; font-variant-numeric: tabular-nums; }
+  .bescheid__tabelle th { text-align: left; font-weight: 600; color: #46597A; border-bottom: 1px solid #C9D3E0; padding: 0.2rem 0.3rem 0.2rem 0; }
+  .bescheid__tabelle td { padding: 0.25rem 0.3rem 0.25rem 0; border-bottom: 1px solid #E3E9F0; white-space: nowrap; }
+  .bescheid__tabelle th:nth-child(n+2), .bescheid__tabelle td:nth-child(n+2) { text-align: right; }
+  .bescheid__tabelle .summe td { font-weight: 700; border-bottom: 0; border-top: 1.5px solid var(--navy); }
+  .bescheid__stempel { position: absolute; right: 1rem; top: 3.4rem; transform: rotate(-8deg); border: 2px solid var(--teal); color: #11786D;
+    font: 800 0.9rem/1 var(--sc-font-display); letter-spacing: 0.12em; text-transform: uppercase; padding: 0.3rem 0.55rem; border-radius: 3px; opacity: 0.85; }
+  .bescheid__betrag { position: relative; }
+  .bescheid__stempel--schmal { display: none; }
+  .uebernommen { background: color-mix(in oklab, var(--teal) 22%, transparent); box-shadow: inset 0 -2px 0 var(--teal); padding: 0 0.2em; border-radius: 2px; }
+  .bescheid-fuss { margin-top: var(--sc-2); font-size: var(--sc-t-xs); color: var(--sc-ink-soft); max-width: 31rem; display: flex; align-items: center; gap: 0.5rem; }
+  .uebernommen-zeichen { flex: none; width: 1.2rem; height: 0.7rem; background: color-mix(in oklab, var(--teal) 40%, transparent); box-shadow: inset 0 -2px 0 var(--teal); border-radius: 2px; }
+
+  /* Runde 4: Blatt „Plan-Ausschnitte“ links, rechts daneben Beleg-Zeile und Erklärsatz (seit Runde 2 ohne Programm-Ausschnitt;
+     das Blatt ist etwas breiter, die Runde wird kürzer und wächst dadurch mit --s). */
+  .protokoll-buehne { display: flex; gap: var(--sc-5); align-items: flex-start; margin-top: var(--sc-4); }
+  /* Blatt unten beschnitten (viewBox bis 228 mm), läuft aus wie der Bescheid; die Fußzeile bleibt im Code für ein volles Blatt. */
+  .runde-r svg.planblatt { flex: none; width: min(calc(68% - var(--sc-5)), calc(min(46vh, 31rem) * 210 / 228)); height: auto; max-height: none; aspect-ratio: 210 / 228; margin-top: 0;
+    overflow: hidden; border-radius: 3px 3px 0 0; -webkit-mask-image: linear-gradient(#000 86%, transparent); mask-image: linear-gradient(#000 86%, transparent); }
+  .runde-r--protokoll .fakten-liste { display: none; }
+  .protokoll-seite { flex: 1 1 0; min-width: 0; }
+  .protokoll-seite .beleg-zeile { margin-top: var(--sc-4); }
+  .protokoll-text { margin-top: var(--sc-5); }
+
+  .offline { display: grid; gap: var(--sc-1); margin-top: var(--sc-5); font: 800 var(--sc-t-lg)/1.15 var(--sc-font-display); letter-spacing: -0.02em; }
+  .offline span { color: var(--teal-hell); }
+
+  /* Die eine Datei, die rechts liegen bleibt */
+  /* Flache Leiste am unteren Rand, damit sie keinen Rundentext überdeckt. */
+  .datei { position: absolute; left: calc(var(--ld, var(--l)) * 1% + 2.25rem); right: var(--sc-gutter); bottom: 3.5%; background: var(--navy-tief);
+    border: 1px solid color-mix(in oklab, #FFFFFF 14%, transparent); border-radius: 8px; padding: var(--sc-3) var(--sc-4);
+    box-shadow: var(--sc-e2), var(--sc-edge); font-size: var(--sc-t-xs); display: flex; flex-wrap: wrap; align-items: center; gap: var(--sc-2) var(--sc-5);
+    /* Im Hero liegt sie unter dem Rand und steigt zwischen 0,02 und 0,08 an ihren Platz (--auf schreibt das Skript).
+       Eigene Höhe plus 6vh: der Abstand zum Rand (3,5 %) ist damit immer überbrückt. translate statt transform,
+       weil data-sc-tilt transform schreibt; offsetTop bleibt unberührt (passeInhaltAn).
+       Beim Umkippen (0,60 bis 0,66) schreibt das Skript --dx, --dy und --ds: die Datei fährt in die Mitte der Navy-Fläche
+       und wird etwas größer. --ld hält ihren Kasten auf der Breite von vor dem Kippen. */
+    translate: var(--dx, 0px) calc((1 - var(--auf, 1)) * (100% + 6vh) + var(--dy, 0px)); scale: var(--ds, 1); }
+  .datei__name { display: flex; align-items: center; gap: var(--sc-2); font-weight: 600; font-size: var(--sc-t-sm); white-space: nowrap; }
+  .datei__name svg { width: 16px; height: 20px; flex: none; }
+  .datei ul { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 0.25rem var(--sc-4); }
+  .datei li { display: flex; gap: var(--sc-2); color: var(--sc-ink-soft); opacity: 0.25; transition: opacity var(--sc-d-base) var(--sc-ease-out); }
+  .datei li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--teal); margin-top: 0.55em; flex: none; }
+  .datei li.ist-da { opacity: 1; color: #FFFFFF; }
+
+  /* Höhepunkt (Spec §6): Fenster des echten Programms mittig auf Navy, etwa 72 % der Bühnenbreite, die drei Zeilen darunter
+     nebeneinander. --w (0..1) und --z schreibt das Skript. Kein Cue-Element, transform gehört also dieser Regel.
+     Ausschnitt = Teil der Zeichenfläche des Programms: x 240 bis 1834, y 222 bis 1030 der 1920er-Aufnahme (ohne Demo-Leiste,
+     Kopf-, Werkzeug- und Ablaufzeile, Seitenleiste und Statuszeile). Oben ohne die Planüberschrift „Erdgeschoss“, die schon in
+     der Aufnahme an der Kante der Zeichenfläche abgeschnitten ist; rechts endet er im weißen Rand hinter dem Planblatt, vor der
+     Bemaßung des Nachbarblatts. So steht keine Beschriftung halb am Rand.
+     Der Clip selbst ist auf diesen Ausschnitt zugeschnitten (1594 × 808); das Standbild ist die volle Aufnahme.
+     Die Breite ist zusätzlich an die Höhe gebunden: Fenster plus Zeilen bleiben unter etwa 80 % der Bühnenhöhe. */
+  .werkzeug { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 4;
+    width: min(72vw, 1350px, calc((100svh - 15rem) * 1.97));
+    display: grid; grid-template-columns: minmax(0, 1fr); row-gap: clamp(1.25rem, 2.6vh, 2rem);
+    opacity: var(--w, 0); visibility: hidden; }
+  .werkzeug__bild { position: relative; aspect-ratio: 1594 / 808; overflow: hidden; border-radius: 6px; background: #F4F6F9;
+    box-shadow: 0 18px 40px -16px hsl(215 60% 10% / 0.6), 0 0 0 1px color-mix(in oklab, #FFFFFF 10%, transparent); }
+  /* Kamera: --z 1 bis 1,6 um x 1151 / y 621 der Aufnahme. Bei 1,6 liegt das Polygon samt Maßen (x 765 bis 1400, y 383 bis 865)
+     mittig im Fenster, der rechte Rand fällt auf x 1578 (hinter der Maßkette, vor der nächsten Beschriftungsspalte), und die
+     Flächenangabe „220,43 m²“ (12,5 px in der Aufnahme, Runde 12 neu gedreht) steht bei 1920 mit rund 16,9 px. */
+  .werkzeug__film, .werkzeug__stand { position: absolute; height: auto; max-width: none; display: block; }
+  /* Clip = Ausschnitt selbst. */
+  .werkzeug__film { left: 0; top: 0; width: 100%; transform-origin: 57.152% 49.381%; transform: scale(var(--z, 1)); }
+  /* Standbild: volle Aufnahme, Endzustand in der Endeinstellung der Kamera, ohne Bewegung. */
+  .werkzeug__stand { display: none; left: -15.056%; top: -27.475%; width: 120.452%; transform-origin: 59.948% 57.5%; transform: scale(1.6); }
+  .werkzeug__zeilen { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: clamp(1.5rem, 2.5vw, 3rem); counter-reset: z; }
+  .werkzeug__zeilen li { counter-increment: z; padding-top: var(--sc-3); border-top: 2px solid var(--teal);
+    font: 700 min(var(--sc-t-xl), 1.75vw)/1.12 var(--sc-font-display); letter-spacing: -0.02em; color: #FFFFFF;
+    text-wrap: balance; opacity: 0; translate: 0 0.6rem;
+    transition: opacity var(--sc-d-slow) var(--sc-ease-out), translate var(--sc-d-slow) var(--sc-ease-out); }
+  .werkzeug__zeilen li::before { content: counter(z, decimal-leading-zero); display: block; margin-bottom: var(--sc-2);
+    font: 600 var(--sc-t-xs)/1 var(--sc-font-text); letter-spacing: 0.08em; color: var(--teal-hell); }
+  .werkzeug__zeilen li.ist-da { opacity: 1; translate: none; }
+  .werkzeug__quelle { margin-top: var(--sc-4); font-size: var(--sc-t-xs); line-height: 1.5; color: var(--teal-hell); }
+  @media (min-width: 861px) and (max-width: 1279px) { .werkzeug { width: min(86vw, calc((100svh - 15rem) * 1.97)); } .werkzeug__zeilen li { font-size: var(--sc-t-lg); } }
+  /* Ruhige Fassung (Spec §10): Standbild des Endzustands, die Zeilen stehen gleich da. */
+  html.ist-ruhig .werkzeug__film { display: none; }
+  html.ist-ruhig .werkzeug__stand { display: block; }
+  html.ist-ruhig .werkzeug__zeilen li { opacity: 1; translate: none; transition: none; }
+
+  /* ---------------------------------------------------- Schluss --------- */
+  /* Runde 3: zwei Reihen (Satz mit Preiswahl, darunter die Rückblick-Leiste), gemeinsam senkrecht mittig. Ohne align-content
+     teilte das Raster die freie Höhe auf beide Reihen auf. */
+  .finale { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; row-gap: clamp(var(--sc-6), 6.5vh, var(--sc-8));
+    padding: 5rem var(--sc-gutter) 3rem; z-index: 6; }
+  /* Überschrift (seit Texter-Audit 06.11.: „Was es Ihre Gemeinde kostet und wie Sie anfangen.“; vorher drei Zeilen
+     Vom Plan zum / Bescheid-Entwurf / in drei Schritten.): breitere linke Spalte, und ab 1280 px
+     bricht „Bescheid-Entwurf“ nicht am Bindestrich (vorher 6 Zeilen bei 1920, „Vom“ allein). Darunter darf er brechen,
+     sonst ragt das Wort bis etwa 1220 px in die Preis-Spalte. */
+  .finale__satz { width: min(100%, 72rem); display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: var(--sc-8); align-items: center; }
+  .finale h2 { font-size: var(--sc-t-3xl); color: #FFFFFF; text-wrap: balance; }
+  /* Runde 2: ab 1600 px nutzt der Schluss die Breite wie der Fließteil (bei 1920 etwa 88 %), die Überschrift wächst mit. */
+  @media (min-width: 1600px) {
+    .finale__satz { width: min(100%, 106rem); gap: var(--sc-10); }
+    /* 9em: „Bescheid-Entwurf in“ passt nicht mehr in eine Zeile, es bleibt bei den drei Zeilen wie unter 1600 px. */
+    .finale h2 { font-size: min(6rem, 5vw); max-width: 9em; }
+    .finale .preiswahl { max-width: 40rem; }
+  }
+  .finale h2 span { color: var(--teal); }
+  @media (min-width: 1280px) { .finale h2 span { white-space: nowrap; } }
+  /* Porträt groß, damit man den Entwickler erkennt: Kopf-Schulter-Ausschnitt aus alexander-portrait.webp (400×500). */
+  .person { display: flex; gap: var(--sc-5); align-items: center; margin-top: var(--sc-6); color: var(--sc-ink-soft); max-width: 48ch; font-size: var(--sc-t-sm); }
+  /* Runde 14 (Alexander 06.11.): Kreis mit Teal-Ring statt Rechteck; Ausschnitt oben, damit der Kopf mittig sitzt. */
+  .person img { width: 132px; height: 132px; border-radius: 50%; object-fit: cover; object-position: 50% 18%; flex: none;
+    outline: 2px solid var(--teal); outline-offset: 4px; }
+  .preiswahl fieldset { border: 0; padding: 0; margin: 0; }
+  .preiswahl legend { font-size: var(--sc-t-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--sc-ink-soft); margin-bottom: var(--sc-3); }
+  .klassen { display: flex; flex-wrap: wrap; gap: var(--sc-2); }
+  .klassen button { background: transparent; color: #FFFFFF; border: 1px solid color-mix(in oklab, #FFFFFF 28%, transparent); border-radius: 6px;
+    padding: 0.5rem 0.75rem; font-size: var(--sc-t-sm); cursor: pointer;
+    transition: background-color var(--sc-d-fast) var(--sc-ease-out), border-color var(--sc-d-fast) var(--sc-ease-out), transform 120ms var(--sc-ease-out); }
+  .klassen button:hover { border-color: var(--teal); }
+  .klassen button:active { transform: scale(0.97); }
+  /* 09.11.2026 (Alexander): Navy-tief statt Navy, Navy auf Teal hatte 4,46:1, so 5,17:1 (wie demo.html). */
+  .klassen button[aria-pressed="true"] { background: var(--teal); border-color: var(--teal); color: var(--navy-tief); font-weight: 600; }
+  .preise { margin-top: var(--sc-5); }
+  .preise div { display: flex; justify-content: space-between; gap: var(--sc-4); padding: 0.5rem 0; border-bottom: 1px solid var(--linie); }
+  .preise dt { color: var(--sc-ink-soft); }
+  .preise dd { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .preise div:first-child dd { font: 800 var(--sc-t-xl)/1 var(--sc-font-display); letter-spacing: -0.02em; }
+  .preise__anfrage { display: grid; gap: var(--sc-2); padding: 0.5rem 0 var(--sc-3); border-bottom: 1px solid var(--linie); }
+  .preise__anfrage[hidden] { display: none; }
+  .preise__anfrage strong { font: 800 var(--sc-t-xl)/1 var(--sc-font-display); letter-spacing: -0.02em; }
+  .preise__anfrage span { color: var(--sc-ink-soft); }
+  .knopf { display: inline-flex; margin-top: var(--sc-6); background: var(--teal); color: var(--navy); font: 700 1.2rem/1 var(--sc-font-display);
+    padding: 1rem 1.6rem; border-radius: 6px; text-decoration: none; box-shadow: var(--sc-e2);
+    transition: background-color var(--sc-d-fast) var(--sc-ease-out), transform 120ms var(--sc-ease-out); }
+  .knopf:hover { background: var(--teal-hell); }
+  .knopf:active { transform: translateY(1px); }
+  /* Runde 10: „So starten Sie“ im Finale. Titel wie die Legende der Klassenwahl, drei Schritte nebeneinander. */
+  .wege__titel { margin-top: var(--sc-5); font-size: var(--sc-t-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--sc-ink-soft); }
+  .wege { list-style: none; padding: 0; margin: var(--sc-3) 0 0; counter-reset: w; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sc-4); }
+  .wege li { counter-increment: w; display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 0.5rem; align-items: baseline; }
+  .wege li::before { content: counter(w); grid-row: 1 / span 2; font: 800 var(--sc-t-lg)/1 var(--sc-font-display); color: var(--teal-hell); font-variant-numeric: tabular-nums; }
+  .wege strong { font: 700 var(--sc-t-sm)/1.3 var(--sc-font-display); }
+  .wege span { grid-column: 2; font-size: var(--sc-t-xs); line-height: 1.45; color: var(--sc-ink-soft); }
+  /* Niedrige Fenster (1440x900 und kleiner): nur die drei Stichworte, sonst ragt das Finale unten aus dem Bild. */
+  @media (max-height: 960px) { .wege span { display: none; } }
+  .finale__klein { margin-top: var(--sc-4); font-size: var(--sc-t-xs); line-height: 1.5; color: var(--sc-ink-soft); max-width: 46ch; }
+  .finale__weiter { margin-top: var(--sc-2); font-size: var(--sc-t-xs); color: var(--teal-hell); }
+  /* Rückblick-Leiste (Runde 3): löst die drei Schritte der Überschrift mit den Ergebniszahlen der Runden ein. Oben ein Lineal
+     wie an der Trennlinie (Grundstrich mit kurzen Strichen), je Schritt ein langer Strich, der durch das Lineal bis zur Zahl
+     läuft, rechts der Hinweis auf die Beispieldaten. Das Lineal zieht sich beim Hochzählen von links auf (--rb, schreibt das
+     Skript). */
+  .rueckblick { width: min(100%, 72rem); display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--sc-4); align-items: end; --rb: 1; }
+  .rueckblick__lineal { height: 14px;
+    background:
+      linear-gradient(var(--teal), var(--teal)) left bottom / 100% 2px no-repeat,
+      repeating-linear-gradient(90deg, color-mix(in oklab, var(--teal-hell) 45%, transparent) 0 1px, transparent 1px 24px) left bottom / 100% 7px no-repeat;
+    clip-path: inset(0 calc((1 - var(--rb)) * 100%) 0 0); }
+  .rueckblick__hinweis { font-size: var(--sc-t-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--sc-ink-soft); line-height: 1; white-space: nowrap; }
+  /* margin-top in Höhe des Lineals: der Strich je Schritt beginnt an dessen Oberkante. */
+  .rueckblick__schritte { grid-column: 1 / -1; list-style: none; margin: -14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .rueckblick__schritte li { border-left: 2px solid var(--teal); padding: calc(14px + var(--sc-4)) var(--sc-5) 0; }
+  .rueckblick__name { display: block; font-size: var(--sc-t-xs); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #FFFFFF; }
+  .rueckblick__name b { color: var(--teal-hell); margin-right: 0.5rem; }
+  .rueckblick__wert { margin-top: var(--sc-3); font: 800 var(--sc-t-2xl)/1 var(--sc-font-display); letter-spacing: -0.03em; font-variant-numeric: tabular-nums;
+    color: var(--teal-hell); white-space: nowrap; }
+  .rueckblick__wert small { font-size: 0.45em; font-weight: 500; margin-left: 0.2em; letter-spacing: 0; color: var(--sc-ink-soft); }
+  .rueckblick__zeile { margin-top: var(--sc-2); font-size: var(--sc-t-sm); line-height: 1.45; color: var(--sc-ink-soft); }
+  /* Modul je Schritt, eigene Zeile über der Erklärung: verknüpft die Leiste mit der Preisliste darüber. */
+  .rueckblick__modul { display: block; font-size: var(--sc-t-xs); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--teal-hell); }
+  @media (min-width: 1600px) { .rueckblick { width: min(100%, 106rem); } }
+
+  /* ------------------------------------------- Die Fakten (nach dem Kippen) --- */
+  .fakten { background: var(--navy); color: #FFFFFF; padding: clamp(4rem, 10vh, 7rem) var(--sc-gutter) var(--sc-8); }
+  /* Volle Breite (Runde 2, 03.11.): der Inhalt läuft bis an den Seitenrand (gutter); der Deckel greift erst jenseits von 1920 px.
+     Breite wird über das Raster genutzt, nicht über längere Zeilen: Kopfspalte breiter, Daten, Zitate und Fragen in Spalten. */
+  .fakten__innen { max-width: 112rem; margin: 0 auto; }
+  .block { display: grid; grid-template-columns: minmax(0, clamp(18rem, 22vw, 26rem)) minmax(0, 1fr); gap: var(--sc-8); padding: var(--sc-8) 0; border-top: 1px solid var(--linie); }
+  .block:first-of-type { border-top: 0; padding-top: 0; }
+  .block__kopf .marke { color: var(--teal-hell); margin-bottom: var(--sc-3); }
+  .block__kopf h2 { font-size: var(--sc-t-xl); line-height: 1.05; hyphens: auto; }
+  .block__kopf p { margin-top: var(--sc-4); color: var(--sc-ink-soft); font-size: var(--sc-t-sm); line-height: 1.55; }
+  /* Schritt 6: Link zum Tutorial im Fragen-Block; ohne Regel wäre er Browser-Blau auf Navy. */
+  .block__kopf p a { color: var(--teal-hell); text-underline-offset: 0.25em; }
+
+  /* Funktionen als Streifen (Spec §9): sechs Bildschirmfotos im festen Rahmen, drei sichtbar, Pfeile; mobil untereinander.
+     Kopf links, Pfeile rechts in einer Zeile, darunter die Liste über die ganze Breite. */
+  .block--streifen { grid-template-columns: minmax(0, 1fr) auto; gap: var(--sc-6); align-items: end; }
+  .block--streifen > .streifen { grid-column: 1 / -1; }
+  .streifen__pfeile { display: flex; gap: var(--sc-3); }
+  .streifen__pfeil { display: grid; place-items: center; width: 3rem; height: 3rem; padding: 0; border-radius: 50%; cursor: pointer;
+    background: transparent; color: #FFFFFF; border: 1px solid color-mix(in oklab, #FFFFFF 38%, transparent);
+    transition: opacity var(--sc-d-fast) var(--sc-ease-out); }
+  .streifen__pfeil:hover:not(:disabled) { background: var(--teal); border-color: var(--teal); color: var(--navy); }
+  .streifen__pfeil:active:not(:disabled) { transform: translateY(1px); }
+  .streifen__pfeil:focus-visible, .streifen:focus-visible { outline: 2px solid var(--teal-hell); outline-offset: 3px; }
+  .streifen__pfeil:disabled { opacity: 0.3; cursor: default; }
+  .streifen { display: flex; gap: var(--sc-5); list-style: none; margin: 0; padding: 0 0 var(--sc-4); counter-reset: f;
+    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+    scrollbar-width: thin; scrollbar-color: color-mix(in oklab, #FFFFFF 28%, transparent) transparent; }
+  .streifen > li { flex: 0 0 calc((100% - 2 * var(--sc-5)) / 3); min-width: 0; scroll-snap-align: start; }
+  /* Ab 1600 px vier Karten: so bleibt jede Karte etwa so breit wie bei 1440 (rund 420 px). */
+  @media (min-width: 1600px) { .streifen > li { flex-basis: calc((100% - 3 * var(--sc-5)) / 4); } }
+  .streifen img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 50%;
+    background: #FFFFFF; border-radius: 6px; border: 1px solid var(--linie); }
+  .streifen > li:nth-child(4) img { object-position: 50% 100%; }   /* Vollgeschoss: 1600 x 1148, oben kürzen, die Ergebniszeile unten bleibt */
+  .streifen h3 { margin-top: var(--sc-4); font: 700 var(--sc-t-base)/1.25 var(--sc-font-display); letter-spacing: -0.01em; }
+  .streifen h3::before { content: counter(f, decimal-leading-zero); counter-increment: f; display: block; color: var(--teal-hell); font: 600 var(--sc-t-xs)/1 var(--sc-font-text); letter-spacing: 0.08em; margin-bottom: var(--sc-2); }
+  .streifen p { margin-top: var(--sc-2); color: var(--sc-ink-soft); font-size: var(--sc-t-sm); line-height: 1.5; max-width: 42ch; }
+
+  /* Runde 8 (04.11.): Praxis. Ein großes Zitat, daneben die übrigen als Randspalte (Stichwort | Zitat), ab 1600 px
+     nebeneinander, darunter untereinander (bei 1440 wäre die Randspalte zu schmal). Wortlaut unverändert. */
+  .praxis__name { margin-top: var(--sc-3); font-size: var(--sc-t-xs); letter-spacing: 0.06em; text-transform: uppercase; color: var(--teal-hell); }
+  .praxis { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sc-7); align-items: start; }
+  @media (min-width: 1600px) { .praxis { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: var(--sc-8); } }
+  .praxis__kern { margin: 0; }
+  .praxis__kern blockquote { margin: 0; font: 700 var(--sc-t-xl)/1.18 var(--sc-font-display); letter-spacing: -0.02em; color: #FFFFFF; max-width: 26ch; }
+  .praxis__kern figcaption { margin-top: var(--sc-5); padding-top: var(--sc-3); border-top: 2px solid var(--teal); display: inline-block;
+    font-size: var(--sc-t-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal-hell); }
+  .praxis__notizen { margin: 0; }
+  .praxis__notizen div { display: grid; grid-template-columns: minmax(0, 10rem) minmax(0, 1fr); gap: var(--sc-5); padding: var(--sc-4) 0; border-top: 1px solid var(--linie); }
+  .praxis__notizen div:last-child { border-bottom: 1px solid var(--linie); }
+  .praxis__notizen dt { padding-top: 0.2em; font-size: var(--sc-t-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal-hell); }
+  .praxis__notizen dd { margin: 0; font-size: var(--sc-t-base); line-height: 1.5; color: #FFFFFF; max-width: 52ch; }
+  .praxis__zusatz { display: block; margin-top: var(--sc-2); font-size: var(--sc-t-sm); color: var(--sc-ink-soft); max-width: 50ch; }
+
+  /* Runde 8: Prüfbogen für die IT. Frage | kurze Antwort | Erläuterung, Grundlinien bündig wie auf einem Formular. */
+  .pruefbogen { width: 100%; border-collapse: collapse; }
+  .pruefbogen th, .pruefbogen td { text-align: left; vertical-align: baseline; padding: var(--sc-4) var(--sc-5) var(--sc-4) 0; border-bottom: 1px solid var(--linie); }
+  .pruefbogen tr:first-child > * { border-top: 1px solid var(--linie); }
+  .pruefbogen th { width: 32%; font: 600 var(--sc-t-base)/1.4 var(--sc-font-text); color: #FFFFFF; }
+  .pruefbogen__kurz { width: 14%; font: 800 var(--sc-t-lg)/1.2 var(--sc-font-display); letter-spacing: -0.015em; color: var(--teal-hell); white-space: nowrap; }
+  .pruefbogen td:last-child { padding-right: 0; font-size: var(--sc-t-sm); line-height: 1.55; color: var(--sc-ink-soft); }
+
+
+  /* Runde 8: das Blatt am Ende der Seite. Weiß auf Navy, Navy-Schrift, nicht gedreht (es soll gelesen werden).
+     Runde 10 (05.11.): „So starten Sie“ steht jetzt im Finale beim Preis. Das Blatt steht allein, zentriert und so breit
+     wie vorher die linke Spalte (wie ein Dokument auf dem Tisch, nicht als Band über die ganze Seite). */
+  .block--unterschrift { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+  .block--unterschrift .beschluss { width: min(100%, 70rem); }
+  .beschluss { background: #FFFFFF; color: var(--navy); border-top: 4px solid var(--teal); border-radius: 3px; padding: clamp(1.75rem, 3.2vw, 3.5rem);
+    box-shadow: 0 34px 70px -34px hsl(var(--sc-shadow-color) / 0.75); }
+  .beschluss__kopf { display: flex; justify-content: space-between; gap: var(--sc-4); padding-bottom: var(--sc-3); border-bottom: 1px solid #C9D3E0;
+    font-size: var(--sc-t-xs); letter-spacing: 0.08em; text-transform: uppercase; color: #46597A; }
+  /* Runde 9: Leiste über dem Blatt (Klasse, Modul), dann die Vorlage, darunter Kopieren und Word-Datei. */
+  .beschluss { padding: 0; overflow: hidden; }
+  .vorlage-leiste { display: grid; gap: var(--sc-3); padding: var(--sc-5) clamp(1.75rem, 3.2vw, 3.5rem); background: #EEF3F8; border-bottom: 1px solid #C9D3E0; }
+  .vorlage-leiste__titel { font: 800 var(--sc-t-xl)/1.1 var(--sc-font-display); letter-spacing: -0.02em; color: var(--navy); }
+  .vorlage-leiste__wahl { display: flex; flex-wrap: wrap; gap: var(--sc-2); }
+  .vorlage-leiste__wahl button { background: #FFFFFF; color: var(--navy); border: 1px solid #A9B8CB; border-radius: 6px; padding: 0.45rem 0.75rem;
+    font: 500 var(--sc-t-sm)/1.2 var(--sc-font-text); cursor: pointer; transition: border-color 160ms ease-out, background-color 160ms ease-out; }
+  .vorlage-leiste__wahl button:hover { border-color: var(--navy); }
+  .vorlage-leiste__wahl button:active { transform: scale(0.97); }
+  .vorlage-leiste__wahl button[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: #FFFFFF; font-weight: 600; }
+  .vorlage-leiste__modul { display: inline-flex; align-items: center; gap: var(--sc-2); font-size: var(--sc-t-sm); color: #24406B; cursor: pointer; }
+  .vorlage-leiste__modul input { width: 1.1rem; height: 1.1rem; accent-color: var(--navy); }
+  .vorlage { padding: clamp(1.75rem, 3.2vw, 3.5rem) clamp(1.75rem, 3.2vw, 3.5rem) 0; }
+  .vorlage__betreff { margin-top: var(--sc-5); font-size: var(--sc-t-xs); letter-spacing: 0.08em; text-transform: uppercase; color: #46597A; }
+  .feld { background: #E3F4F1; color: var(--navy); border-bottom: 2px solid var(--teal); border-radius: 2px; padding: 0 0.2em; outline: none;
+    /* Tab-Fokus scrollt das Feld samt Unterstrich ganz ins Bild, nicht nur bis zur Zeilenkante */
+    scroll-margin-block: 3rem; }
+  .feld:focus-visible { background: #CDEDE8; box-shadow: 0 0 0 2px var(--teal); }
+  .vorlage-fuss { padding: var(--sc-5) clamp(1.75rem, 3.2vw, 3.5rem) 0; }
+  .vorlage-fuss__knoepfe { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sc-3); }
+  .knopf-vorlage { background: var(--navy); color: #FFFFFF; border: 1px solid var(--navy); border-radius: 6px; min-height: 44px; padding: 0.6rem 1.1rem;
+    font: 700 var(--sc-t-base)/1 var(--sc-font-display); cursor: pointer; transition: background-color 160ms ease-out; }
+  .knopf-vorlage:hover { background: #1B3F78; }
+  .knopf-vorlage:active { transform: translateY(1px); }
+  .knopf-vorlage--zweit { background: #FFFFFF; color: var(--navy); }
+  .knopf-vorlage--zweit:hover { background: #EEF3F8; }
+  .vorlage-fuss__status { font-size: var(--sc-t-sm); color: #1B6E64; }
+  .vorlage-fuss__hinweis { margin-top: var(--sc-3); font-size: var(--sc-t-xs); line-height: 1.55; color: #46597A; max-width: 50ch; }
+  .beschluss .beschluss__fussnote { margin: var(--sc-5) clamp(1.75rem, 3.2vw, 3.5rem) clamp(1.75rem, 3.2vw, 3.5rem); }
+  .beschluss__titel { margin-top: var(--sc-2); font: 800 var(--sc-t-xl)/1.15 var(--sc-font-display); letter-spacing: -0.02em; color: var(--navy); max-width: 32ch; }
+  .beschluss__punkte { list-style: none; padding: 0; margin: var(--sc-6) 0 0; counter-reset: p; }
+  .beschluss__punkte > li { counter-increment: p; display: grid; grid-template-columns: 2.25rem minmax(0, 1fr); column-gap: var(--sc-3); row-gap: var(--sc-2);
+    padding: var(--sc-4) 0; border-top: 1px solid #E3E9F0; }
+  .beschluss__punkte > li::before { content: counter(p) "."; grid-row: 1 / span 2; font: 700 var(--sc-t-base)/1.4 var(--sc-font-display); color: var(--teal); font-variant-numeric: tabular-nums; }
+  .beschluss__punkte > li > * { grid-column: 2; }
+  .beschluss__punkte h3 { font: 700 var(--sc-t-base)/1.4 var(--sc-font-display); color: var(--navy); }
+  /* Runde 11: 52ch statt 56ch, mit dem längeren Sachverhalt lief eine Zeile auf 82 Zeichen (Grenze 80, breite.cjs). */
+  .beschluss__punkte p { font-size: var(--sc-t-base); line-height: 1.55; color: #24406B; max-width: 52ch; }
+  .beschluss__punkte p + p { margin-top: var(--sc-2); }
+  .beschluss__punkte strong { color: var(--navy); }
+  .beschluss__fussnote { margin-top: var(--sc-6); padding-top: var(--sc-3); border-top: 1px solid #E3E9F0; font-size: var(--sc-t-xs); line-height: 1.55; color: #46597A; max-width: 54ch; }
+
+  .faq details { border-bottom: 1px solid var(--linie); }
+  /* Ab 1280 px zwei Spalten; eine geöffnete Antwort verlängert nur ihre Reihe. Die Zellen einer Reihe sind gleich hoch,
+     so liegen die Trennlinien beider Spalten auf einer Höhe. */
+  @media (min-width: 1280px) { .faq { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--sc-7); } }
+  .faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: var(--sc-5); padding: var(--sc-4) 0;
+    font: 700 var(--sc-t-base)/1.35 var(--sc-font-display); letter-spacing: -0.01em; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; color: var(--teal-hell); font-weight: 500; font-size: 1.4em; line-height: 0.9; transition: transform var(--sc-d-fast) var(--sc-ease-out); }
+  .faq details[open] summary::after { transform: rotate(45deg); }
+  .faq details p { padding: 0 0 var(--sc-5); color: #DCE4EF; line-height: 1.6; max-width: 66ch; font-size: var(--sc-t-sm); }
+
+  .fuss { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--sc-4); padding-top: var(--sc-7); margin-top: var(--sc-8);
+    border-top: 1px solid var(--linie); font-size: var(--sc-t-xs); color: var(--sc-ink-soft); }
+  .fuss nav { display: flex; gap: var(--sc-5); }
+  .fuss a { color: inherit; }
+  .fuss__stand { flex: 1 0 100%; margin: 0; line-height: 1.5; }
+  .fuss__stand a { text-underline-offset: 0.25em; }
+  /* Link und Schlusspunkt bleiben zusammen, damit der Punkt nie allein in eine Zeile rutscht. */
+  .fuss__ziel { white-space: nowrap; }
+
+  /* ---------------------------------------------------- schmal ---------- */
+  @media (max-width: 860px) {
+    .seite--morgen { clip-path: inset(calc(var(--l) * 1%) 0 0 0); --raster: 10px; }
+    .grundriss-deko { display: none; }
+    .teiler { transform: translateY(calc(var(--l) * 1%)); }
+    .teiler__strich { left: 0; right: 0; top: -1px; bottom: auto; width: auto; height: 2px; }
+    .teiler__schild { top: auto; }
+    .teiler__schild--heute { left: var(--sc-gutter); transform: translateY(calc(-100% - 0.6rem)); }
+    .teiler__schild--morgen { left: var(--sc-gutter); transform: translateY(0.75rem); }
+    .teiler__skala { left: auto; right: var(--sc-gutter); top: 0; bottom: auto; flex-direction: row; gap: 10px; }
+    .teiler__skala i { width: 2px; height: 22px; transform: translateY(-50%) scaleY(0.4545); }
+    .teiler__skala i.ist-da { transform: translateY(-50%); }
+
+    .fotos, .hero-rahmen { width: 100%; height: 26svh; }
+    .runde-l--hero { top: 0; }
+    .heute__inhalt { width: auto; right: 38%; height: calc(var(--l) * 1% - 2.4rem); padding-bottom: 0.5rem; }
+    .runde-l .anzeige { font-size: var(--sc-t-xl); }
+    .runde-l p.text { font-size: var(--sc-t-sm); }
+    .runde-l p.beleg { display: none; }
+    .stapel { left: auto; right: var(--sc-gutter); top: 6%; bottom: auto; width: 32%; height: 20%; }
+    .blatt { font-size: 0.56rem; padding: 0.45rem 0.55rem; }
+    .blatt b { margin-bottom: 0.15rem; }
+
+    .morgen__kopf { top: auto; bottom: var(--sc-4); right: var(--sc-gutter); left: var(--sc-gutter); justify-content: space-between; }
+    .morgen__inhalt { left: var(--sc-gutter); right: var(--sc-gutter); width: auto; top: calc(var(--l) * 1% + 2.4rem); bottom: 3.6rem; transform: none; }
+    .runde-r { align-self: start; }
+    .runde-r h1.anzeige { font-size: var(--sc-t-2xl); }
+    .runde-r h2.anzeige { font-size: var(--sc-t-xl); }
+    .runde-r .lede { font-size: var(--sc-t-base); margin-top: var(--sc-3); }
+    .runde-r .klein { display: none; }
+    .runde-r svg { max-height: 14svh; margin-top: var(--sc-3); }
+    .runde-r .wert { font-size: var(--sc-t-xl); }
+    .fakten-liste { margin-top: var(--sc-3); padding-top: var(--sc-3); font-size: var(--sc-t-xs); gap: 0.3rem; }
+    .fakten-liste li:nth-child(n+3) { display: none; }
+    .schritte { margin-top: var(--sc-3); }
+    .schritte span { font-size: var(--sc-t-xs); padding: 0.25rem 0.6rem; }
+    .runde-r .marke--teal { margin-bottom: var(--sc-2); }
+    .runde-r svg.grundriss { max-height: 14svh; }
+    .runde-r svg.sicher { max-height: 21svh; }
+    .sicher text { font-size: 5.6px; }
+    .sicher .sicher__klein, .sicher .sicher__neben, .sicher .sicher__hinweis { font-size: 5px; }
+    .grundriss text { font-size: 8px; }
+    .ecke text { font-size: 7px; }
+    .runde-r--grundriss .fakten-liste, .runde-r--bescheid .fakten-liste { display: none; }
+    .bescheid { margin-top: var(--sc-3); padding: 0.6rem 0.75rem 0; font-size: 0.56rem; max-height: 19svh; }
+    .bescheid__an, .bescheid__anrede, .bescheid__klein, .bescheid__lang { display: none; }
+    .bescheid__stempel { display: none; }
+    .bescheid__stempel--schmal { display: block; top: -0.15rem; right: 0; font-size: 0.66rem; }
+    .bescheid-fuss { font-size: 0.62rem; }
+    .protokoll-buehne { margin-top: var(--sc-3); }
+    /* Belege mobil: Beleg-Zeile bleibt in jeder Runde sichtbar, die Faktenzeilen fallen weg (die Spalte ist voll). */
+    .belege { margin-top: var(--sc-3); }
+    .beleg-zeile { margin-top: var(--sc-2); font-size: var(--sc-t-xs); line-height: 1.4; }
+    .belege .fakten-liste { display: none; }
+    .runde-r svg.planblatt { height: auto; width: min(55%, 25svh); max-width: none; }
+    .protokoll-buehne { gap: var(--sc-3); }
+    .protokoll-seite .beleg-zeile { margin-top: var(--sc-2); }
+    .offline { font-size: var(--sc-t-lg); margin-top: var(--sc-3); }
+    .datei { display: none; }
+    /* Höhepunkt schmal: Standbild über die Breite, die drei Zeilen untereinander. Das Bild zeigt nur das fertige Polygon
+       (x 740 bis 1425, y 360 bis 890 der Aufnahme), damit es auf 390 px nicht winzig wird. */
+    .werkzeug { left: var(--sc-gutter); right: var(--sc-gutter); width: auto; max-width: none; transform: translateY(-50%); row-gap: var(--sc-5); }
+    .werkzeug__bild { aspect-ratio: 685 / 530; }
+    .werkzeug__stand { left: -108.029%; top: -67.925%; width: 280.292%; transform: none; }
+    .werkzeug__zeilen { grid-template-columns: minmax(0, 1fr); gap: var(--sc-3); }
+    .werkzeug__zeilen li { font-size: var(--sc-t-lg); padding-top: var(--sc-2); border-top-width: 1px; }
+    .werkzeug__zeilen li::before { margin-bottom: var(--sc-1); }
+    .werkzeug__quelle { margin-top: var(--sc-1); }
+
+    .finale { padding: 1.25rem var(--sc-gutter); align-items: center; }
+    .finale__satz { grid-template-columns: minmax(0, 1fr); gap: var(--sc-4); }
+    .finale h2 { font-size: var(--sc-t-2xl); }
+    .person { margin-top: var(--sc-3); font-size: var(--sc-t-xs); }
+    .person img { width: 80px; height: 80px; outline-offset: 3px; }
+    .preise { margin-top: var(--sc-3); font-size: var(--sc-t-sm); }
+    .preise div { padding: 0.3rem 0; }
+    .knopf { margin-top: var(--sc-4); }
+    /* Tap-Ziele mindestens 44 px (Spec §10); der Schluss hat mobil darunter genug Luft für die zwei Zeilen. */
+    .klassen button { padding: 0.35rem 0.5rem; font-size: var(--sc-t-xs); min-height: 44px; }
+    .kopf-link { display: inline-block; padding: 0.75rem 0; margin: -0.75rem 0; }
+    .finale__klein { display: none; }
+    /* „So starten Sie“ mobil nur als drei Stichworte in einer Reihe; die Erklärzeilen hätten im Pin keinen Platz. */
+    .wege__titel { margin-top: var(--sc-3); }
+    .wege { margin-top: var(--sc-2); gap: var(--sc-2); }
+    .wege span { display: none; }
+    .wege strong { font-size: var(--sc-t-xs); }
+    /* Leiste mobil kompakt: drei Werte in einer Reihe, ohne Erklärzeile, Name ohne Versalien (sonst läuft
+       „Aufmaßprotokoll“ über die Spalte). */
+    .finale { row-gap: var(--sc-4); }
+    /* Lineal über die ganze Breite, Hinweis darunter rechts (neben dem Lineal liefe der dritte Strich durch ihn). Zahlen
+       unten bündig, auch wenn ein Name zweizeilig bricht. */
+    .rueckblick__lineal { grid-column: 1 / -1; height: 10px; }
+    .rueckblick__hinweis { grid-row: 3; grid-column: 1 / -1; justify-self: end; margin-top: var(--sc-2); font-size: 0.6875rem; letter-spacing: 0.04em; }
+    .rueckblick__schritte { margin-top: -10px; }
+    .rueckblick__schritte li { display: flex; flex-direction: column; padding: calc(10px + var(--sc-2)) var(--sc-1) 0 var(--sc-2); }
+    .rueckblick__name { font-size: var(--sc-t-xs); letter-spacing: 0; text-transform: none; font-weight: 400; color: var(--sc-ink-soft); line-height: 1.25; }
+    .rueckblick__name b { margin-right: 0.3rem; }
+    .rueckblick__wert { margin-top: auto; padding-top: var(--sc-1); font-size: var(--sc-t-base); letter-spacing: -0.01em; }
+    .rueckblick__wert small { font-size: 0.65em; }
+    .rueckblick__zeile { display: none; }
+
+    .block { grid-template-columns: minmax(0, 1fr); gap: var(--sc-5); padding: var(--sc-7) 0; }
+    /* Runde 8 mobil: Zitat kleiner, Randspalte Stichwort über Zitat; Prüfbogen je Frage untereinander (Frage, kurze
+       Antwort, Erläuterung); im Blatt die Nummer neben der Überschrift, die Preistabelle über die volle Blattbreite und
+       ohne Mindestbreite (Einwohnerklasse bricht um), damit sie nicht seitlich läuft. */
+    .praxis__kern blockquote { font-size: var(--sc-t-lg); }
+    .praxis__notizen div { grid-template-columns: minmax(0, 1fr); gap: var(--sc-2); }
+    .pruefbogen, .pruefbogen tbody, .pruefbogen tr, .pruefbogen th, .pruefbogen td { display: block; width: auto; }
+    .pruefbogen tr { padding: var(--sc-4) 0; border-bottom: 1px solid var(--linie); }
+    .pruefbogen tr:first-child { border-top: 1px solid var(--linie); }
+    .pruefbogen th, .pruefbogen td, .pruefbogen tr:first-child > * { padding: 0; border: 0; }
+    .pruefbogen th { margin-bottom: var(--sc-2); }
+    .pruefbogen__kurz { font-size: var(--sc-t-base); margin-bottom: var(--sc-1); }
+    .vorlage-leiste, .vorlage-fuss { padding-left: var(--sc-4); padding-right: var(--sc-4); }
+    .vorlage { padding: var(--sc-5) var(--sc-4) 0; }
+    .beschluss .beschluss__fussnote { margin: var(--sc-5) var(--sc-4) var(--sc-5); }
+    .vorlage-leiste__titel { font-size: var(--sc-t-lg); }
+    .vorlage-leiste__wahl button { min-height: 44px; padding: 0.35rem 0.6rem; font-size: var(--sc-t-xs); }
+    .vorlage-leiste__modul { min-height: 44px; }
+    .vorlage-fuss__knoepfe .knopf-vorlage { flex: 1 1 100%; justify-content: center; }
+    .beschluss__kopf { flex-direction: column; gap: var(--sc-1); }
+    .beschluss__titel { font-size: var(--sc-t-lg); }
+    .beschluss__punkte > li { grid-template-columns: 1.75rem minmax(0, 1fr); }
+    .beschluss__punkte > li::before { grid-row: 1; }
+    .beschluss__punkte p { font-size: var(--sc-t-sm); }
+    .block--streifen { grid-template-columns: minmax(0, 1fr); align-items: start; }
+    .streifen__pfeile { display: none; }
+    .streifen { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sc-6); overflow: visible; scroll-snap-type: none; padding-bottom: 0; }
+    .streifen > li { flex: none; }
+    /* Tap-Ziele mindestens 44 px. Beim Link in der Vertrauenszeile gleicht ein negativer Rand das Polster aus,
+       damit die Zeile nicht auseinanderklafft; das Polster bleibt Trefferfläche. */
+    .fuss nav { flex-wrap: wrap; column-gap: var(--sc-5); row-gap: 0; }
+    .fuss nav a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; }
+    .fuss__stand a { display: inline-block; padding: 0.9rem 0; margin: -0.9rem 0; }
+    /* Schritt 6: Tutorial-Link im Fragen-Block, 44 px Trefferfläche; der negative Rand (Zeilenhöhe minus 44 px, halbiert) hält den Zeilenabstand. */
+    .block__kopf p a { display: inline-flex; align-items: center; min-height: 44px; margin-block: -0.75rem; margin-block: calc((1lh - 44px) / 2); }
+  }
+</style>
+</head>
+<body>
+
+<span data-sc-progress></span>
+<div class="sc-grain" aria-hidden="true"></div>
+
+<main>
+  <section id="vergleich" data-sc-act="pin" data-sc-span="13">
+    <div data-sc-stage class="sc-stage buehne" id="buehne">
+
+      <!-- ===================== LINKS: HEUTE ===================== -->
+      <div class="seite seite--heute">
+        <!-- Hero mit Ebenen (Spec §5): A Clip hinten, D Lineal auf dem Papier, C der Text darunter. Kein src im Markup:
+             das Skript lädt den Clip erst, wenn weder Reduced Motion noch schmal (ist-ruhig). -->
+        <div class="hero-ebenen" aria-hidden="true" data-sc-cue="0 0.10 0 0.2" data-sc-rise="0">
+          <div class="hero-rahmen"><video class="ebene ebene--a" muted playsinline preload="none" poster="assets/hero-a.webp" data-src="assets/hero-a.mp4" width="1920" height="1080"></video></div>
+          <img class="ebene ebene--d" data-src="assets/lineal-d.webp" alt="" width="1600" height="900" decoding="async">
+        </div>
+        <div class="fotos" aria-hidden="true">
+          <img src="assets/heute-1.webp" alt="" width="1200" height="1200" data-sc-cue="0.06 0.20 0.15 0.15" data-sc-rise="0">
+          <img src="assets/heute-2.webp" alt="" width="1200" height="1200" data-sc-cue="0.16 0.30 0.15 0.15" data-sc-rise="0">
+          <img src="assets/heute-3.webp" alt="" width="1200" height="1200" data-sc-cue="0.26 0.41 0.15 0.15" data-sc-rise="0">
+          <img src="assets/heute-4.webp" alt="" width="1200" height="1200" data-sc-cue="0.37 0.52 0.15 0.15" data-sc-rise="0">
+          <img src="assets/heute-5.webp" alt="" width="1200" height="1200" data-sc-cue="0.48 0.62 0.15 0.15" data-sc-rise="0">
+        </div>
+        <div class="heute__inhalt">
+          <div class="runde-l runde-l--hero" data-sc-cue="0 0.08 0 0.2">
+            <span class="marke">Das Problem</span>
+            <p class="anzeige">Der digitale Bauantrag ist da.<br> Das Lineal nicht.</p>
+            <p class="beleg">Seit 1. Januar 2025 gehen Bauanträge nach der Bayerischen Bauordnung direkt beim Landratsamt ein. Die Gemeinde wird digital beteiligt, der Vorgang landet als PDF in der Akte.</p>
+          </div>
+          <div class="runde-l" data-sc-cue="0.08 0.18 0.15 0.15"><span class="marke">Messen</span><p class="text">Der Plan kommt als PDF. Am Bildschirm hilft kein Lineal.</p><p class="beleg">Die Geschossflächen müssen aber trotzdem ermittelt werden: für den Herstellungsbeitrag, für die Akte, für jede Plan-Korrektur.</p></div>
+          <div class="runde-l" data-sc-cue="0.18 0.28 0.15 0.15"><span class="marke">Vollgeschoss</span><p class="text">Kniestock, Dachneigung, Gauben: und dann die Frage, ob das Dachgeschoss ein Vollgeschoss ist.</p><p class="beleg">Ein Dachgeschoss zählt als Vollgeschoss, wenn die Fläche mit lichter Höhe ab 2,30 m mehr als zwei Drittel der darunterliegenden Geschossfläche ausmacht.</p></div>
+          <div class="runde-l" data-sc-cue="0.28 0.39 0.15 0.15"><span class="marke">Bescheid</span><p class="text">Fläche, Beitragssatz, Flurstück, Anschrift: alles noch einmal von Hand in die Word-Vorlage.</p><p class="beleg">Ein Zahlendreher in der Geschossfläche steht dann im Bescheid. Ändert sich der Plan, rechnet man den Betrag neu und tippt ihn wieder ab.</p></div>
+          <div class="runde-l" data-sc-cue="0.39 0.50 0.15 0.15"><span class="marke">Akte</span><p class="text">Wer nicht nachvollziehen kann, wie seine Fläche zustande kommt, ruft an.</p><p class="beleg">Und wer die Akte in zehn oder fünfzehn Jahren aufschlägt, muss erkennen können, was schon abgerechnet ist und was nicht.</p></div>
+          <div class="runde-l" data-sc-cue="0.50 0.60 0.15 0.15"><span class="marke">Datenschutz</span><p class="text">Online-Werkzeuge laden Pläne und Bauherrendaten auf fremde Server.</p><p class="beleg">Vorher braucht es einen Vertrag zur Auftragsverarbeitung, die Freigabe der IT und meist ein Benutzerkonto je Mitarbeiter.</p></div>
+        </div>
+
+        <div class="stapel" aria-hidden="true">
+          <div class="blatt" data-blatt="0.10" data-dreh="-4"><b>Ausdruck EG, M 1:100</b><span>Bauantrag, Seite 3</span></div>
+          <div class="blatt" data-blatt="0.15" data-dreh="3"><b>Notizzettel</b><span>Maße abgegriffen, umgerechnet</span></div>
+          <div class="blatt" data-blatt="0.21" data-dreh="-2"><b>Skizze Dach</b><span>Kniestock, Neigung, Taschenrechner</span></div>
+          <div class="blatt" data-blatt="0.31" data-dreh="5"><b>Bescheid.docx</b><span>Werte von Hand übertragen</span></div>
+          <div class="blatt" data-blatt="0.43" data-dreh="-6"><b>Telefonnotiz</b><span>Rückfrage zur Fläche</span></div>
+          <div class="blatt" data-blatt="0.53" data-dreh="4"><b>AV-Vertrag</b><span>Cloud-Dienst, Freigabe der IT</span></div>
+        </div>
+      </div>
+
+      <!-- ===================== RECHTS: MIT FLÄCHENKLAR ===================== -->
+      <div class="seite seite--morgen">
+        <svg class="grundriss-deko" viewBox="-6 -6 136 109" aria-hidden="true" focusable="false">
+          <path d="M0 0H124V83.3H73V96.7H51V83.3H0Z"/>
+          <circle cx="0" cy="0" r="1.6"/><circle cx="124" cy="0" r="1.6"/><circle cx="124" cy="83.3" r="1.6"/><circle cx="73" cy="83.3" r="1.6"/>
+          <circle cx="73" cy="96.7" r="1.6"/><circle cx="51" cy="96.7" r="1.6"/><circle cx="51" cy="83.3" r="1.6"/><circle cx="0" cy="83.3" r="1.6"/>
+        </svg>
+        <div class="morgen__kopf" data-sc-cue="0 0.62 0">
+          <span class="wortmarke">Flächen<span>Klar</span></span>
+          <a class="kopf-link" href="demo.html">Demo anfragen</a>
+        </div>
+
+        <div class="morgen__inhalt">
+          <div class="runde-r" data-sc-cue="0 0.08 0 0.2">
+            <span class="marke marke--teal">Vom Praktiker für Praktiker</span>
+            <h1 class="anzeige">Das Lineal für den digitalen Bauantrag.</h1>
+            <p class="lede">Plan-PDF öffnen, Ecken abklicken: Fläche, Aufmaßprotokoll und auf Wunsch der Bescheid-Entwurf stehen. Lokal auf Ihrem Rechner, ohne Cloud, ohne Installation.</p>
+            <p class="schritte"><span><b>1</b>Flächen messen</span><span><b>2</b>Aufmaßprotokoll</span><span><b>3</b>Bescheid-Entwurf</span></p>
+          </div>
+
+          <div class="runde-r runde-r--grundriss" data-sc-cue="0.08 0.18 0.15 0.15">
+            <span class="marke marke--teal">Aufmaßmodul · Flächen messen</span>
+            <h2 class="anzeige">PDF laden, Polygon zeichnen.</h2>
+            <!-- Beispielgrundriss EG = Außenkontur EG des Demo-Musterplans (Runde 12), schematisch (Kontur wie ZUG im Skript);
+                 Maße wie die Maßketten des Plans, Fläche wie ECKEN im Skript. data-ab = Anteil am Umfang, an dem die Kante fertig ist. -->
+            <svg class="grundriss" viewBox="-24 -22 172 142" aria-label="Grundriss EG mit acht Eckpunkten und Außenmaßen 17,86 m, 12,00 m, 7,34 m, 1,93 m, 3,17 m, 1,93 m, 7,34 m und 12,00 m">
+              <path d="M0 0H124V83.3H73V96.7H51V83.3H0Z M3.6 3.6V79.7H54.6V93.1H69.4V79.7H120.4V3.6Z" fill="#FFFFFF" fill-opacity="0.13" fill-rule="evenodd"/>
+              <path d="M62 3.6V52 M3.6 34H51 M36 3.6V34 M73 34H120.4 M88 3.6V34 M51 52H73 M51 52V79.7 M73 52V79.7" fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="1.4"/>
+              <path id="r1-flaeche" d="M0 0H124V83.3H73V96.7H51V83.3H0Z" fill="#1EA596" fill-opacity="0" stroke="#1EA596" stroke-width="1.6" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" stroke-linejoin="round"/>
+              <g class="masse" fill="none" stroke="#B9C6DA" stroke-width="0.6">
+                <g class="mass" data-ab="0.2809"><path d="M0 -3V-13 M124 -3V-13 M0 -10H124 M-1.8 -8.2L1.8 -11.8 M122.2 -8.2L125.8 -11.8"/><text x="62" y="-12.5" text-anchor="middle">17,86 m</text></g>
+                <g class="mass" data-ab="0.4696"><path d="M127 0H137 M127 83.3H137 M134 0V83.3 M132.2 1.8L135.8 -1.8 M132.2 85.1L135.8 81.5"/><text transform="translate(141.5 41.65) rotate(-90)" text-anchor="middle">12,00 m</text></g>
+                <g class="mass" data-ab="0.5852"><path d="M124 86.3V115 M73 99.7V115 M73 112H124 M71.2 113.8L74.8 110.2 M122.2 113.8L125.8 110.2"/><text x="98.5" y="109.5" text-anchor="middle">7,34 m</text></g>
+                <g class="mass" data-ab="0.6155"><path d="M76 96.7H83 M80 83.3V96.7 M78.2 85.1L81.8 81.5 M78.2 98.5L81.8 94.9"/><text x="85" y="92.2">1,93 m</text></g>
+                <g class="mass" data-ab="0.6654"><path d="M51 99.7V115 M51 112H73 M49.2 113.8L52.8 110.2 M71.2 113.8L74.8 110.2"/><text x="62" y="109.5" text-anchor="middle">3,17 m</text></g>
+                <g class="mass" data-ab="0.6957"><path d="M41 96.7H48 M44 83.3V96.7 M42.2 85.1L45.8 81.5 M42.2 98.5L45.8 94.9"/><text x="39" y="92.2" text-anchor="end">1,93 m</text></g>
+                <g class="mass" data-ab="0.8113"><path d="M0 86.3V115 M0 112H51 M-1.8 113.8L1.8 110.2"/><text x="25.5" y="109.5" text-anchor="middle">7,34 m</text></g>
+                <g class="mass" data-ab="0.999"><path d="M-3 0H-13 M-3 83.3H-13 M-10 0V83.3 M-11.8 1.8L-8.2 -1.8 M-11.8 85.1L-8.2 81.5"/><text transform="translate(-13.5 41.65) rotate(-90)" text-anchor="middle">12,00 m</text></g>
+              </g>
+              <g class="ecken">
+                <g class="ecke" data-ab="0.001"><circle cx="0" cy="0" r="2.6"/><text x="6" y="10">P1</text></g>
+                <g class="ecke" data-ab="0.2809"><circle cx="124" cy="0" r="2.6"/><text x="118" y="10" text-anchor="end">P2</text></g>
+                <g class="ecke" data-ab="0.4696"><circle cx="124" cy="83.3" r="2.6"/><text x="118" y="77.3" text-anchor="end">P3</text></g>
+                <g class="ecke" data-ab="0.5852"><circle cx="73" cy="83.3" r="2.6"/><text x="79" y="77.3">P4</text></g>
+                <g class="ecke" data-ab="0.6155"><circle cx="73" cy="96.7" r="2.6"/><text x="77" y="104">P5</text></g>
+                <g class="ecke" data-ab="0.6654"><circle cx="51" cy="96.7" r="2.6"/><text x="47" y="104" text-anchor="end">P6</text></g>
+                <g class="ecke" data-ab="0.6957"><circle cx="51" cy="83.3" r="2.6"/><text x="45" y="77.3" text-anchor="end">P7</text></g>
+                <g class="ecke" data-ab="0.8113"><circle cx="0" cy="83.3" r="2.6"/><text x="6" y="77.3">P8</text></g>
+              </g>
+              <g id="r1-zeiger" fill="none" stroke="#FFFFFF" stroke-width="0.8" opacity="0"><circle r="4.5"/><path d="M-9 0H-3 M3 0H9 M0 -9V-3 M0 3V9"/></g>
+            </svg>
+            <div class="zeile"><p class="wert"><span id="r1-wert">0,00</span><small>m²</small></p><p class="klein">Außenkontur EG, acht Eckpunkte am Plan abgeklickt. Fiktiver Beispielplan.</p></div>
+            <div class="belege">
+              <div class="belege__text">
+                <ul class="fakten-liste">
+                  <li>PDF per Drag &amp; Drop laden. Keine Konvertierung, kein Drucken.</li>
+                  <li>Maßstab mit zwei Klicks auf eine eingezeichnete Bemaßung, mehrere Maßstäbe pro Seite.</li>
+                  <li>Magnet rastet an den Vektorlinien ein. Papierpläne gehen als Foto, mit Entzerrung.</li>
+                </ul>
+                <p class="beleg-zeile">Fläche nach der Gauß-Formel (Shoelace). Maßstab per Referenzstrecke, bei maßhaltigen Vektor-PDFs auch direkt.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="runde-r" data-sc-cue="0.18 0.28 0.15 0.15">
+            <span class="marke marke--teal">Aufmaßmodul · Vollgeschosse prüfen</span>
+            <h2 class="anzeige">Vollgeschoss nach Art. 83 Abs. 7 BayBO, im Aufmaßmodul.</h2>
+            <svg viewBox="0 0 160 84" aria-label="Dachquerschnitt mit Linie bei 2,30 m lichter Höhe">
+              <path d="M20 80V62L80 12L140 62V80Z" fill="#FFFFFF" fill-opacity="0.04" stroke="#FFFFFF" stroke-opacity="0.55" stroke-width="1"/>
+              <path id="r2-anteil" d="M41.6 44H118.4L80 12Z" fill="#1EA596" fill-opacity="0.35"/>
+              <path d="M8 44H152" stroke="#5CCFC2" stroke-width="0.8" stroke-dasharray="3 2"/>
+              <text x="152" y="41" text-anchor="end" fill="#5CCFC2" font-size="5.5" font-family="Geist">2,30 m lichte Höhe</text>
+              <text x="24" y="76" fill="#B9C6DA" font-size="5" font-family="Geist">Kniestock</text>
+            </svg>
+            <div class="zeile"><p class="wert"><span id="r2-wert">73,0</span><small>%</small></p><p class="klein">122,30 von 167,42 m² mit lichter Höhe ab 2,30 m. Vollgeschoss-Eigenschaft erfüllt (&gt; 2/3). Beispieldaten zur Veranschaulichung.</p></div>
+            <div class="belege">
+              <div class="belege__text">
+                <ul class="fakten-liste">
+                  <li>Kniestock, Dachneigung, Gauben links und rechts mit Breite, Trauf- und Ortgangabstand.</li>
+                  <li>Ergebnis: Anteil mit lichter Höhe ab 2,30 m und die Zwei-Drittel-Schwelle.</li>
+                  <li>Grundriss, Aufrisse und Querschnitt als Diagramm, geprüft gegen das gezeichnete Polygon.</li>
+                </ul>
+                <p class="beleg-zeile">Art. 83 Abs. 7 BayBO: Vollgeschoss, wenn die Fläche mit lichter Höhe ab 2,30 m mehr als zwei Drittel der Geschossfläche darunter ausmacht.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="runde-r runde-r--bescheid" data-sc-cue="0.28 0.39 0.15 0.15">
+            <span class="marke marke--teal">Bescheidmodul · Bescheid-Entwurf erstellen</span>
+            <h2 class="anzeige">Die Fläche geht direkt in den Bescheid. Kein Abtippen.</h2>
+            <!-- Aufbau nach tool/js/bescheid.js (Betreff, I. Festsetzung, II. Berechnung, III. Fälligkeit, Belehrung). -->
+            <div class="bescheid" role="img" aria-label="Bescheid-Entwurf über den Herstellungsbeitrag, fiktive Beispieldaten">
+              <span class="bescheid__stempel">Entwurf</span>
+              <div class="bescheid__kopf"><b>Gemeinde Musterhausen · Bauamt</b><span>Az. 60-118/2026<br>15.07.2026</span></div>
+              <p class="bescheid__an">Frau Erika Mustermann<br>Musterweg 4<br>92318 Neumarkt i.d.OPf.</p>
+              <p class="bescheid__betreff">Bescheid über den Herstellungsbeitrag zur öffentlichen Entwässerungseinrichtung</p>
+              <p class="bescheid__klein">Grundstück: Musterhausen, Flurstück 456/2 (Musterweg 4, 92318 Neumarkt i.d.OPf.)</p>
+              <p class="bescheid__anrede">Sehr geehrte Frau Mustermann,</p>
+              <p class="bescheid__ziffer">I. Festsetzung</p>
+              <p class="bescheid__lang">Für das oben bezeichnete Grundstück wird gegen Sie ein Herstellungsbeitrag zur öffentlichen Entwässerungseinrichtung in folgender Höhe festgesetzt:</p>
+              <p class="bescheid__betrag"><span class="uebernommen" id="r3-beitrag">0,00 €</span><span class="bescheid__stempel bescheid__stempel--schmal" aria-hidden="true">Entwurf</span></p>
+              <p class="bescheid__ziffer">II. Berechnung</p>
+              <table class="bescheid__tabelle">
+                <thead><tr><th>Bemessungsgrundlage</th><th>Wert</th><th>Beitragssatz</th><th>Betrag</th></tr></thead>
+                <tbody>
+                  <tr><td>Grundstücksfläche</td><td>620,00 m²</td><td>1,50 €/m²</td><td id="r3-grund">0,00 €</td></tr>
+                  <tr><td>Geschossfläche</td><td><span class="uebernommen" id="r3-gf">0,00 m²</span></td><td>7,50 €/m²</td><td id="r3-betrag">0,00 €</td></tr>
+                  <tr class="summe"><td>Beitrag gesamt</td><td></td><td></td><td id="r3-summe">0,00 €</td></tr>
+                </tbody>
+              </table>
+              <p class="bescheid__ziffer">III. Fälligkeit und Zahlung</p>
+              <p>Der festgesetzte Betrag von <span id="r3-faellig">0,00 €</span> wird einen Monat nach Bekanntgabe dieses Bescheids fällig.</p>
+              <p class="bescheid__ziffer">Rechtsbehelfsbelehrung</p>
+              <p>Gegen diesen Bescheid kann innerhalb eines Monats nach seiner Bekanntgabe entweder Widerspruch eingelegt (siehe Nr. 1) oder unmittelbar Klage erhoben (siehe Nr. 2) werden.</p>
+            </div>
+            <p class="bescheid-fuss"><span class="uebernommen-zeichen"></span>aus dem Aufmaß übernommen · Fiktive Beispieldaten. Prüfung, Unterschrift und Erlass durch Ihre Gemeinde.</p>
+            <div class="belege">
+              <div class="belege__text">
+                <ul class="fakten-liste">
+                  <li>Satzungsdaten Ihrer Gemeinde einmal hinterlegen, für jeden Entwurf wiederverwenden.</li>
+                </ul>
+                <p class="beleg-zeile">Entwurf nach Art. 5 KAG Bayern, orientiert am amtlichen Muster.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="runde-r runde-r--protokoll" data-sc-cue="0.39 0.50 0.15 0.15">
+            <span class="marke marke--teal">Aufmaßmodul · Aufmaßprotokoll</span>
+            <h2 class="anzeige">PDF rein, Aufmaßprotokoll raus.</h2>
+            <div class="protokoll-buehne">
+              <!-- Seite „Plan-Ausschnitte“ nach dem echten Export (tool/js/export.js: Kopf, Quelle, Plan mit Polygon, Tabelle, Zwischensumme, Fußzeile). Fiktive Daten. -->
+              <svg class="planblatt" viewBox="0 0 210 228" role="img" aria-label="Seite Plan-Ausschnitte des Aufmaßprotokolls: Grundriss Erdgeschoss mit rot eingefärbtem Polygon Hauptgebäude, 220,43 m², Kantenmaße und Flächentabelle. Fiktive Beispieldaten." font-family="Helvetica, Arial, sans-serif">
+                <rect width="210" height="297" fill="#FFFFFF"/>
+                <text x="15" y="13" font-size="3.9" font-weight="700" fill="#0F2D5A">Gemeinde Musterhausen</text>
+                <text x="195" y="13" font-size="3.1" fill="#666666" text-anchor="end">Projekt-Nr. 60-118/2026 · Neubau Musterweg 4</text>
+                <path d="M15 16.5H195" stroke="#0F2D5A" stroke-width="0.3"/>
+                <text x="15" y="28" font-size="5.6" font-weight="700" fill="#0F2D5A">Erdgeschoss</text>
+                <text x="15" y="34.5" font-size="3.1" fill="#666666">Quelle: Bauantrag_Musterweg_4.pdf, Seite 3 · Maßstab 1:100</text>
+                <rect x="15" y="39" width="180" height="140" fill="#FFFFFF" stroke="#DCE0E8" stroke-width="0.4"/>
+                <!-- der Bauplan selbst, wie er im PDF steht -->
+                <g transform="translate(37 52) scale(1.1)">
+                  <!-- Runde 12: Kontur und Kantenmaße des Demo-Musterplans (Doppelhaus mit Treppenhaus-Vorbau), wie Grundriss R1. -->
+                  <path d="M0 0H124V83.3H73V96.7H51V83.3H0Z M3.6 3.6V79.7H54.6V93.1H69.4V79.7H120.4V3.6Z" fill="#3A3F47" fill-rule="evenodd"/>
+                  <path d="M62 3.6V52 M3.6 34H51 M36 3.6V34 M73 34H120.4 M88 3.6V34 M51 52H73 M51 52V79.7 M73 52V79.7" fill="none" stroke="#3A3F47" stroke-width="1.2"/>
+                  <path d="M44 34A8 8 0 0 0 36 42 M80 34A8 8 0 0 1 88 42" fill="none" stroke="#3A3F47" stroke-width="0.35"/>
+                  <path d="M14 0V3.6 M28 0V3.6 M96 0V3.6 M110 0V3.6 M0 48V62 M124 48V62 M16 79.7V83.3 M34 79.7V83.3 M90 79.7V83.3 M108 79.7V83.3" fill="none" stroke="#FFFFFF" stroke-width="0.9"/>
+                  <g font-size="3.3" fill="#7A818C" text-anchor="middle"><text x="19.8" y="22">Schlafen</text><text x="49" y="22">Bad</text><text x="75" y="22">Bad</text><text x="104.2" y="22">Schlafen</text><text x="27" y="60">Wohnen</text><text x="97" y="60">Wohnen</text><text x="62" y="74">Treppe</text></g>
+                  <path d="M0 0H124V83.3H73V96.7H51V83.3H0Z" fill="#E74C3C" fill-opacity="0.5" stroke="#E74C3C" stroke-width="1.1" stroke-linejoin="round"/>
+                </g>
+                <g font-size="2.9" fill="#2C3440" text-anchor="middle">
+                  <rect x="97.7" y="49.7" width="15" height="4.6" fill="#FFFFFF" fill-opacity="0.92"/><text x="105.2" y="53">17,86 m</text>
+                  <rect x="165.9" y="95.5" width="15" height="4.6" fill="#FFFFFF" fill-opacity="0.92"/><text x="173.4" y="98.8">12,00 m</text>
+                  <rect x="137.85" y="141.3" width="15" height="4.6" fill="#FFFFFF" fill-opacity="0.92"/><text x="145.35" y="144.6">7,34 m</text>
+                  <rect x="109.8" y="148.7" width="15" height="4.6" fill="#FFFFFF" fill-opacity="0.92"/><text x="117.3" y="152">1,93 m</text>
+                  <rect x="97.7" y="156.1" width="15" height="4.6" fill="#FFFFFF" fill-opacity="0.92"/><text x="105.2" y="159.4">3,17 m</text>
+                  <rect x="85.6" y="148.7" width="15" height="4.6" fill="#FFFFFF" fill-opacity="0.92"/><text x="93.1" y="152">1,93 m</text>
+                  <rect x="57.55" y="141.3" width="15" height="4.6" fill="#FFFFFF" fill-opacity="0.92"/><text x="65.05" y="144.6">7,34 m</text>
+                  <rect x="29.5" y="95.5" width="15" height="4.6" fill="#FFFFFF" fill-opacity="0.92"/><text x="37" y="98.8">12,00 m</text>
+                </g>
+                <rect x="77.3" y="115" width="55.8" height="7" fill="#FFFFFF" fill-opacity="0.92"/>
+                <text x="105.2" y="120" font-size="3.6" font-weight="700" fill="#E74C3C" text-anchor="middle">Hauptgebäude · 220,43 m²</text>
+                <!-- Flächentabelle der Region -->
+                <rect x="15" y="186" width="180" height="7" fill="#F0F2F6"/>
+                <g font-size="3.1" fill="#0F2D5A" font-weight="700"><text x="18" y="190.8">Bezeichnung</text><text x="192" y="190.8" text-anchor="end">Fläche</text></g>
+                <rect x="18" y="195.6" width="3.4" height="3.4" fill="#E74C3C"/>
+                <g font-size="3.1" fill="#2C3440"><text x="24" y="198.6">Hauptgebäude</text><text x="192" y="198.6" text-anchor="end">220,43 m²</text></g>
+                <path d="M15 202.5H195" stroke="#DCE0E8" stroke-width="0.4"/>
+                <g font-size="3.1" fill="#0F2D5A" font-weight="700"><text x="21" y="207.5">Zwischensumme</text><text x="192" y="207.5" text-anchor="end">220,43 m²</text></g>
+                <text x="15" y="217" font-size="2.8" font-style="italic" fill="#666666">Berechnung nach Shoelace-Formel (Gauß).</text>
+                <path d="M15 280.5H195" stroke="#DCE0E8" stroke-width="0.3"/>
+                <g font-size="2.6" fill="#666666"><text x="15" y="285">15.07.2026 10:24</text><text x="105" y="285" text-anchor="middle">FlächenKlar</text><text x="195" y="285" text-anchor="end">Seite 3 / 5</text></g>
+              </svg>
+              <div class="protokoll-seite">
+                <p class="beleg-zeile">PDF mit Deckblatt, Geschossaufstellung, Plan-Ausschnitten und Berechnungsanhang.</p>
+                <p class="klein protokoll-text">So sieht auch der Bauherr, wie seine Fläche zustande kommt: Plan, Polygon, Maße, Rechnung. Fiktive Beispieldaten.</p>
+              </div>
+            </div>
+            <ul class="fakten-liste">
+              <li>Ein Klick, ein druckreifes PDF für die Akte.</li>
+              <li>Dazu Export als CSV, JSON und für das RIWA-Beitragsmodul: dieselben Werte, ohne Abtippen.</li>
+              <li>Die Projektdatei enthält den kompletten Stand samt Original-PDF. Archivierbar, weitergebbar.</li>
+            </ul>
+          </div>
+
+          <div class="runde-r" data-sc-cue="0.50 0.60 0.15 0.15">
+            <span class="marke marke--teal">Sicherheit</span>
+            <h2 class="anzeige">Bauherrendaten verlassen nie den Rechner.</h2>
+            <p class="offline"><span>Kein Cloud-Service.</span><span>Kein Account.</span><span>Kein Tracking.</span></p>
+            <!-- Runde 6: Schema Datensicherheit. Grenze um den Rechner, zwei Abrufe kommen herein, die Cloud bleibt gestrichen,
+                 der Ring steht für die Sicherung im Browser. Alle Beschriftungen aus den Zeilen darunter; JS zeichnet nach p.
+                 Runde 7: Zeitpunkt je Abruf aus der Quelle (updates.js: nur über das Menü Hilfe, Abbruch nach 8 s;
+                 lizenz.js pruefeSperre: beim Start, höchstens einmal in 24 h), dazu der Hinweis „keine Dauerverbindung“. -->
+            <svg class="sicher" viewBox="-30 0 230 90" aria-label="Schema: Ihr Rechner mit den Bauherrendaten und der Sicherung alle 30 Sekunden im Browser. Nur zwei kurze Abrufe kommen herein: die Update-Prüfung nur auf Klick im Menü Hilfe, der Lizenz-Hash beim Start höchstens einmal am Tag. Je ein kurzer Abruf, keine Projektdaten, keine Dauerverbindung. Keine Verbindung zu einer Cloud.">
+              <path id="s-grenze" d="M66 8H134Q142 8 142 16V74Q142 82 134 82H66Q58 82 58 74V16Q58 8 66 8Z" fill="#1EA596" fill-opacity="0.06" stroke="#1EA596" stroke-width="1.2" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+              <text class="sicher__titel" x="100" y="18" text-anchor="middle">Ihr Rechner</text>
+              <path d="M78 25H122V54H78Z M94 54L92 61H108L106 54" fill="none" stroke="#FFFFFF" stroke-opacity="0.55" stroke-width="1" stroke-linejoin="round"/>
+              <path d="M84 30H97V49H84Z" fill="#FFFFFF" fill-opacity="0.12"/>
+              <path d="M86.5 34H94.5 M86.5 37.5H94.5 M86.5 41H92" stroke="#FFFFFF" stroke-opacity="0.35" stroke-width="0.8"/>
+              <path d="M101 31H117V42H109V48H101Z" fill="#1EA596" fill-opacity="0.35" stroke="#1EA596" stroke-width="0.9" stroke-linejoin="round"/>
+              <text x="100" y="71" text-anchor="middle">Bauherrendaten</text>
+              <circle cx="128" cy="66" r="6" fill="none" stroke="#FFFFFF" stroke-opacity="0.2" stroke-width="1.4"/>
+              <circle id="s-ring" cx="128" cy="66" r="6" fill="none" stroke="#5CCFC2" stroke-width="1.4" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-90 128 66)"/>
+              <text class="sicher__ring" x="128" y="67.4" text-anchor="middle">30 s</text>
+              <text class="sicher__klein" x="128" y="78" text-anchor="middle">Sicherung</text>
+              <text x="-26" y="19">Update-Prüfung</text>
+              <path class="s-abruf" d="M-26 23H54L50 20L54 23L50 26" fill="none" stroke="#5CCFC2" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+              <text class="sicher__neben" x="-26" y="30">nur auf Klick im Menü Hilfe</text>
+              <text x="-26" y="42">Lizenz-Hash</text>
+              <path class="s-abruf" d="M-26 46H54L50 43L54 46L50 49" fill="none" stroke="#5CCFC2" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+              <text class="sicher__neben" x="-26" y="53">beim Start, höchstens 1× am Tag</text>
+              <text class="sicher__hinweis" x="-26" y="66">Je ein kurzer Abruf,</text>
+              <text class="sicher__hinweis" x="-26" y="72">keine Projektdaten,</text>
+              <text class="sicher__hinweis" x="-26" y="78">keine Dauerverbindung.</text>
+              <path d="M157 43H186Q193 43 193 36.5Q193 30.5 187 30Q186 22 178 22Q172 22 169.5 27Q160 26.5 158.5 34Q151 35 151 39Q151 43 157 43Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.4" stroke-width="1" stroke-linejoin="round"/>
+              <text x="172" y="54" text-anchor="middle">Cloud</text>
+              <path id="s-strich" d="M150 47L195 19" stroke="#5CCFC2" stroke-width="1.4" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
+            </svg>
+            <div class="belege">
+              <div class="belege__text">
+                <ul class="fakten-liste">
+                  <li>Keine Installation, keine Admin-Rechte. Start per Doppelklick, lokal oder vom Netzlaufwerk.</li>
+                  <li>Nur zwei passive Abrufe öffentlicher Dateien: Update-Prüfung und Lizenz-Hash.</li>
+                </ul>
+                <p class="beleg-zeile">Sicherung alle 30 Sekunden im Browser. Nach einem Absturz ist der letzte Stand wieder da.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="datei" data-sc-tilt="2" id="datei">
+          <p class="datei__name"><svg viewBox="0 0 18 22" aria-hidden="true"><path d="M1 1h11l5 5v15H1z" fill="none" stroke="#1EA596" stroke-width="1.5"/><path d="M12 1v5h5" fill="none" stroke="#1EA596" stroke-width="1.5"/></svg>Neubau Musterweg 4.gfproj</p>
+          <ul>
+            <li data-ab="0.10">Plan-PDF und Polygone EG, OG</li>
+            <li data-ab="0.20">Vollgeschoss-Nachweis</li>
+            <li data-ab="0.30">Bescheid-Entwurf</li>
+            <li data-ab="0.41">Aufmaßprotokoll, neu druckbar</li>
+            <li data-ab="0.52">Gespeichert, wo Sie entscheiden</li>
+          </ul>
+        </div>
+
+        <!-- Höhepunkt (Spec §6): das echte Werkzeug. Der Clip scrubbt mit dem Fortschritt 0,71 bis 0,88; die Quelle steht
+             nur als data-src im Markup, das Skript setzt sie ab p >= 0,30 und nie unter ist-ruhig (dann das Standbild).
+             Poster ist das erste Bild des Clips (leerer Plan), damit der Peak die Fläche nicht vorwegnimmt, solange der Clip lädt;
+             es steht als data-poster im Markup und wird nur ohne ist-ruhig gesetzt.
+             data-aufnahme: Lage des Elements in der 1920er-Aufnahme (x, y, Breite), für lab/peak.cjs. -->
+        <figure class="werkzeug">
+          <div class="werkzeug__bild" role="img" aria-label="Das Programm zeichnet die Außenkontur des Erdgeschosses und berechnet die Fläche">
+            <video class="werkzeug__film" muted playsinline preload="none" data-poster="assets/werkzeug-start.webp" width="1594" height="808" data-aufnahme="240 222 1594"><source data-src="assets/werkzeug.mp4" type="video/mp4"></video>
+            <img class="werkzeug__stand" src="assets/werkzeug-ende.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" data-aufnahme="0 0 1920">
+          </div>
+          <div class="werkzeug__text">
+            <ol class="werkzeug__zeilen">
+              <li data-ab="0.72">Ecke für Ecke, der Magnet rastet ein.</li>
+              <li data-ab="0.85">Maßkette getroffen: 17,86 m, 12,00 m.</li>
+              <li data-ab="0.86">220,43 m², bereit fürs Aufmaßprotokoll.</li>
+            </ol>
+            <p class="werkzeug__quelle">Aufgenommen im echten Programm, Version 1.5.7. Fiktiver Beispielplan.</p>
+          </div>
+        </figure>
+
+        <!-- Schluss: die rechte Spalte hat gewonnen -->
+        <div class="finale" data-sc-cue="0.91 1 0.4 0" data-sc-rise="0">
+          <div class="finale__satz">
+            <div>
+              <h2 class="anzeige">Was es Ihre Gemeinde kostet und wie Sie <span>anfangen</span>.</h2>
+              <p class="person"><img src="assets/alexander-portrait-kopf.webp" alt="Porträt Alexander Geitner" width="140" height="175">„Bisher brauchte man sein Lineal und seinen Bleistift, und jetzt braucht man sein ‚E&#8209;Lineal‘.“ Alexander Geitner, Sachbearbeiter im Bauamt des Marktes Postbauer-Heng.</p>
+            </div>
+            <div class="preiswahl">
+              <fieldset>
+                <legend>Einwohner Ihrer Kommune</legend>
+                <div class="klassen" id="klassen"></div>
+              </fieldset>
+              <p class="preise preise__anfrage" id="p-anfrage" aria-live="polite" hidden><strong>Preis auf Anfrage</strong><span>Für Kommunen über 30.000 Einwohner erstelle ich ein Einzelangebot.</span></p>
+              <dl class="preise" id="p-liste" aria-live="polite">
+                <div><dt>Aufmaßmodul, einmalig</dt><dd id="p-auf"></dd></div>
+                <div><dt>Bescheidmodul dazu</dt><dd id="p-bes"></dd></div>
+                <div><dt>Wartung je Jahr, nur Aufmaßmodul</dt><dd id="p-war-auf"></dd></div>
+                <div><dt>Wartung je Jahr, mit Bescheidmodul</dt><dd id="p-war"></dd></div>
+              </dl>
+              <!-- Runde 10 (05.11.): „So starten Sie“ steht hier beim Preis und beim Knopf, nicht mehr neben dem Blatt am Seitenende. -->
+              <p class="wege__titel" id="wege-titel">So starten Sie</p>
+              <ol class="wege" aria-labelledby="wege-titel">
+                <li><strong>Demo anfragen</strong><span>Kurzes Formular, Antwort in der Regel innerhalb eines Werktags.</span></li>
+                <li><strong>Link per Mail</strong><span>Den Link zur Demo erhalten Sie per E-Mail.</span></li>
+                <li><strong>Doppelklick</strong><span>Lokal oder vom Netzlaufwerk, ohne Installation.</span></li>
+              </ol>
+              <a class="knopf" id="demo-knopf" href="demo.html">Kostenlose Demo anfragen</a>
+              <p class="finale__klein">Einmalkauf nach Einwohnerklasse, Wartung bis 31.12. des Folgejahres inklusive. Die Demo läuft 14 Tage mit vollem Funktionsumfang.</p>
+              <p class="finale__weiter">Weiter unten: Funktionen, IT-Prüfbogen und Ihre Sitzungsvorlage.</p>
+            </div>
+          </div>
+          <!-- Rückblick (Runde 3, Runde 4 ohne Vollgeschoss): Messen und Protokoll aus dem Aufmaßmodul, dann der Entwurf aus dem
+               Bescheidmodul, in der Reihenfolge der Preisliste darüber. Das Skript füllt Fläche und Beitrag aus denselben Werten wie
+               #r1-wert und #r3-summe und zählt sie beim Erscheinen einmal hoch; das Protokoll steht fest. -->
+          <div class="rueckblick">
+            <div class="rueckblick__lineal" aria-hidden="true"></div>
+            <p class="rueckblick__hinweis">Fiktive Beispieldaten</p>
+            <ol class="rueckblick__schritte">
+              <li><span class="rueckblick__name"><b>1</b>Flächen messen</span><p class="rueckblick__wert"><span id="rb-flaeche">0,00</span><small>m²</small></p><p class="rueckblick__zeile"><span class="rueckblick__modul">Aufmaßmodul</span>Außenkontur EG, acht Eckpunkte</p></li>
+              <li><span class="rueckblick__name"><b>2</b>Aufmaßprotokoll</span><p class="rueckblick__wert">PDF<small>+ CSV + JSON</small></p><p class="rueckblick__zeile"><span class="rueckblick__modul">Aufmaßmodul</span>Deckblatt, Geschossaufstellung, Plan-Ausschnitte, Berechnungsanhang</p></li>
+              <li><span class="rueckblick__name"><b>3</b>Bescheid-Entwurf</span><p class="rueckblick__wert"><span id="rb-summe">0,00</span><small>€</small></p><p class="rueckblick__zeile"><span class="rueckblick__modul">Bescheidmodul dazu</span>Geschossfläche übernommen, Beitrag berechnet</p></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trennlinie -->
+      <div class="teiler" aria-hidden="true">
+        <span class="teiler__strich"></span>
+        <span class="teiler__schild teiler__schild--heute">Heute</span>
+        <span class="teiler__schild teiler__schild--morgen">Mit FlächenKlar</span>
+        <span class="teiler__skala"><i data-ab="0.08"></i><i data-ab="0.184"></i><i data-ab="0.288"></i><i data-ab="0.392"></i><i data-ab="0.496"></i><i data-ab="0.60"></i></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DIE FAKTEN: nach dem Kippen eine Seite ===================== -->
+  <section class="fakten" data-sc-act="flow" id="fakten">
+    <div class="fakten__innen">
+
+      <div class="block block--streifen" id="funktionen">
+        <div class="block__kopf">
+          <span class="marke">Funktionen</span>
+          <h2 class="anzeige">Sechs Aufnahmen aus dem echten Programm.</h2>
+          <p>Kein Nachbau: Jedes Bild ist ein Bildschirmfoto aus FlächenKlar.</p>
+        </div>
+        <div class="streifen__pfeile" role="group" aria-label="Funktionen blättern">
+          <button type="button" class="streifen__pfeil" data-richtung="-1" aria-label="Vorherige Funktionen" disabled><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M14.5 5.5 8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button type="button" class="streifen__pfeil" data-richtung="1" aria-label="Weitere Funktionen"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M9.5 5.5 16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+        <ul class="streifen" role="list" tabindex="0" aria-label="Sechs Funktionen im Bild" data-sc-in data-sc-stagger="50">
+          <li>
+            <img src="assets/produkt/f1.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Werkzeug Fläche im Programm: Die Außenkontur entsteht Punkt für Punkt, die Fangmarke zeigt „Endpunkt“, die Vorschau nennt 176,33 m² bei sieben Punkten">
+            <h3>Polygone mit Magnet und Bemaßung</h3>
+            <p>Außenkontur abklicken, mit Magnet-Einrasten an den Vektorlinien. Fläche per Shoelace-Formel automatisch.</p>
+          </li>
+          <li>
+            <img src="assets/produkt/f2.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Werkzeugleiste des Programms mit aktivem Werkzeug Rechteck, daneben das Hauptgebäude als rotes Rechteck mit 214,32 m²">
+            <h3>Rechteck mit zwei Klicks</h3>
+            <p>Kanten nachträglich bemaßen, Eckpunkte verschieben.</p>
+          </li>
+          <li>
+            <img src="assets/produkt/f3.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Werkzeug Maßstab im Programm: zwei orange Punkte an den Enden der Bemaßung 17,86 im Plan, darüber das Eingabefeld für das Sollmaß 17,86 m">
+            <h3>Maßstab pro Plan-Region</h3>
+            <p>Zwei Klicks auf eine eingezeichnete Bemaßung, Sollwert eintippen: Region kalibriert. Mehrere Maßstäbe pro Seite kein Problem.</p>
+          </li>
+          <li>
+            <img src="assets/produkt/f4.webp" width="1600" height="1148" loading="lazy" decoding="async" alt="Querschnitt des Daches mit Kniestock 0,80 m, Dachneigung 42 Grad und Maßen. Ergebnis: Ist Vollgeschoss, 66,7 Prozent bei 2,30 m">
+            <h3>Vollgeschoss-Berechnung (Dach)</h3>
+            <p>Art. 83 Abs. 7 BayBO, im Aufmaßmodul enthalten: Kniestock, Dachneigung, Gauben, Anteil ≥ 2,30 m. Mit Diagramm zur Plausibilität.</p>
+          </li>
+          <li>
+            <img src="assets/produkt/f5.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Dialog Beitragsbescheid erstellen im Programm: Beitragssätze, Bescheidnummer und festgesetzter Beitrag 2.583,23 Euro">
+            <h3>Bescheidmodul (Add-on)</h3>
+            <p>Entwürfe für Herstellungsbeitragsbescheide nach Art. 5 KAG Bayern, orientiert am amtlichen Muster. Die fachliche Prüfung und der Erlass verbleiben bei der Gemeinde.</p>
+          </li>
+          <li>
+            <img src="assets/produkt/f6.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Dialog Aufmaßprotokoll erstellen im Programm: Auswahl von Aufmaßblatt, Berechnungsdarstellung und Datenexport">
+            <h3>Druckreifes Aufmaßprotokoll</h3>
+            <p>Ein Klick: PDF mit Deckblatt, Geschossaufstellung, Plan-Ausschnitten und Berechnungsanhang. So kommt es in die Akte.</p>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Runde 8 (04.11.): Praxis als ein großes Zitat und eine Randspalte, Wortlaut der Zitate unverändert. -->
+      <div class="block block--praxis" id="praxis">
+        <div class="block__kopf">
+          <h2 class="anzeige">Gebaut am eigenen Schreibtisch im Bauamt.</h2>
+          <p>„Irgendwann hatte ich genug davon, Geschossflächen aus digitalen Plänen mühsam zusammenzurechnen und das Ergebnis halbwegs vernünftig zu dokumentieren. Also habe ich angefangen, das selbst zu lösen.“</p>
+          <p class="praxis__name">Alexander Geitner, Bauamt Postbauer-Heng</p>
+        </div>
+        <div class="praxis">
+          <figure class="praxis__kern" data-sc-in><blockquote>„Ein Sachbearbeiter, der in zehn oder fünfzehn Jahren die Akte aufschlägt, sieht anhand der Dokumentation sofort, was schon abgerechnet ist und was nicht.“</blockquote><figcaption>Die Akte in 15 Jahren</figcaption></figure>
+          <dl class="praxis__notizen" data-sc-in data-sc-stagger="50">
+            <div><dt>Nachvollziehbar</dt><dd>„Wer nachvollziehen kann, wie seine Fläche zustande kommt, ruft seltener an. Nach meiner Erfahrung im Bauamt gehen dadurch auch die Widersprüche zurück, und das ist am Ende weniger Arbeit und weniger Kosten für die Verwaltung.“</dd></div>
+            <div><dt>Verwinkelte Häuser</dt><dd>„Gerade wenn die Häuser mal nicht nur A × B sind, ist die Berechnung deutlich schneller.“</dd></div>
+            <div><dt>Genauigkeit</dt><dd>„Bringt FlächenKlar 11,99 statt 12,00 m², baut der Bürger in der Praxis ohnehin eher 12,20 m².“<span class="praxis__zusatz">Die Kontrollprüfung meldet Abweichungen über 3 % als Warnung. Bei Vektor-PDFs liegt sie unter 1 %. Tipp: als Referenzmaß die längste Maßkette nehmen.</span></dd></div>
+            <div><dt>Kleine Bauämter</dt><dd>„Gerade in so kleinen Einheiten, wo wenige Sachbearbeiter ein sehr breit gefächertes Aufgabengebiet haben, möchte ich eine echte Arbeitserleichterung schaffen.“</dd></div>
+            <div><dt>Ein Programm</dt><dd>„Vom digitalen Aufmaßblatt bis zum Bescheid-Entwurf erledigen Sie alles in einem Programm.“</dd></div>
+          </dl>
+        </div>
+      </div>
+
+      <!-- Runde 8: Prüfbogen ersetzt den Datenblock und die FAQ zu Installation, DSGVO und Browser. Jeder Fakt steht einmal.
+           Quellen: sicherheit.ts, faq.ts, tool/js/updates.js (Update nur über Menü Hilfe), lizenz.js (höchstens 1× in 24 h),
+           recovery.js (30 s). Die Zeile „Quelltext im Browser einsehbar“ entfällt: das Release-ZIP ist obfuskiert. -->
+      <div class="block block--pruefbogen" id="pruefbogen">
+        <div class="block__kopf">
+          <h2 class="anzeige">Prüfbogen für Ihre IT.</h2>
+          <p>Die Fragen, die IT-Betreuung und Datenschutzbeauftragte vor dem ersten Start stellen. Die kurze Antwort steht vorn.</p>
+        </div>
+        <table class="pruefbogen" aria-label="Prüfbogen: Frage, kurze Antwort, Erläuterung" data-sc-in>
+          <tbody>
+            <tr><th scope="row">Muss etwas installiert werden?</th><td class="pruefbogen__kurz">Nein</td><td>Start per Doppelklick, lokal oder vom Netzlaufwerk. Ohne Admin-Rechte, ohne Server-Komponente.</td></tr>
+            <tr><th scope="row">Läuft es auf unseren Rechnern?</th><td class="pruefbogen__kurz">Ja</td><td>Aktuelle Versionen von Microsoft Edge, Google Chrome und Mozilla Firefox, unter Windows, macOS und Linux. Internet Explorer wird nicht unterstützt.</td></tr>
+            <tr><th scope="row">Gehen Bauantragsdaten ins Netz?</th><td class="pruefbogen__kurz">Nein</td><td>Keine Cloud-Aufrufe, keine Cookies, kein Tracking. Bauantragsdaten verlassen den Rechner nicht.</td></tr>
+            <tr><th scope="row">Welche Verbindungen baut es auf?</th><td class="pruefbogen__kurz">Zwei Abrufe</td><td>Je ein kurzer Abruf öffentlicher statischer Dateien, ohne Projektdaten, keine Dauerverbindung: die Update-Prüfung nur auf Klick im Menü Hilfe, der Lizenz-Hash beim Start, höchstens 1× am Tag.</td></tr>
+            <tr><th scope="row">Was steht in der Freischaltliste?</th><td class="pruefbogen__kurz">Nur Hashes</td><td>SHA256-Hashes. Aus einem Hash lässt sich die Kunden-ID nicht rekonstruieren.</td></tr>
+            <tr><th scope="row">Wo liegen die Projekte?</th><td class="pruefbogen__kurz">Bei Ihnen</td><td>Als .gfproj-Datei, dort, wo Sie entscheiden: Aktenlaufwerk, Netzlaufwerk, lokaler Ordner.</td></tr>
+            <tr><th scope="row">Was passiert bei einem Absturz?</th><td class="pruefbogen__kurz">Gesichert</td><td>Alle 30 Sekunden ein Zwischenstand im Browser auf diesem Rechner. Beim nächsten Start bietet FlächenKlar den letzten Stand an.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="block" id="fragen">
+        <div class="block__kopf">
+          <h2 class="anzeige">Was Bauämter fachlich zuerst fragen.</h2>
+          <p>Technik und Datenschutz stehen im Prüfbogen darüber. Jeden Arbeitsschritt zeigt das <a href="tutorial.html">Tutorial in 13 Kapiteln</a>.</p>
+        </div>
+        <div class="faq">
+          <details><summary>Der Plan liegt nur als Scan oder auf Papier vor. Wie komme ich zum Maßstab?</summary><p>Über eine Referenzmessung: zwei Klicks auf eine eingezeichnete Bemaßung, Sollwert eintippen. Das gilt je Plan-Region, mehrere Maßstäbe auf einer Seite sind kein Problem. Gibt es nur den Papierplan, genügt ein Handyfoto: Sie klicken die vier Ecken eines Rechtecks mit bekannten Maßen an, FlächenKlar rechnet die Perspektive heraus. Bis Sie eine geschriebene Bemaßung nachgemessen haben, bleibt die Region als „Kontrollmaß offen“ markiert.</p></details>
+          <details><summary>Wie funktioniert die Vollgeschoss-Berechnung nach Art. 83 Abs. 7 BayBO?</summary><p>Ein Dachgeschoss zählt als Vollgeschoss, wenn die Fläche mit lichter Höhe ab 2,30 m mehr als zwei Drittel der darunterliegenden Geschossfläche ausmacht. FlächenKlar berechnet das aus Gebäudemaßen, Kniestockhöhen, Dachneigungen und Gauben, inklusive Diagrammen zur Plausibilitätsprüfung gegen das gezeichnete Polygon.</p></details>
+          <details><summary>Kann FlächenKlar auch den Beitragsbescheid erstellen?</summary><p>Ja, mit dem Bescheidmodul (Add-on, seit Version 1.3 verfügbar): Es erstellt aus den Berechnungsergebnissen und den Angaben der gemeindlichen Satzung Entwürfe für Herstellungsbeitragsbescheide nach Art. 5 KAG Bayern, orientiert am amtlichen Muster. Die fachliche Prüfung und der Erlass des Bescheids verbleiben bei der Gemeinde. FlächenKlar leistet keine Rechtsberatung.</p></details>
+          <details><summary>Wie lege ich das Ergebnis ab, in der Papierakte oder elektronisch?</summary><p>Beides geht. Das Aufmaßprotokoll ist ein PDF mit Deckblatt, Geschossaufstellung, Plan-Ausschnitten und vollständigem Berechnungsanhang. Für die Papierakte drucken Sie es aus, in eine elektronische Akte legen Sie es ab wie jedes andere PDF.</p></details>
+        </div>
+      </div>
+
+      <!-- Runde 9 (05.11.): das Blatt ist eine Sitzungsvorlage, die der Sachbearbeiter übernehmen kann. Wortlaut von Alexander
+           freigegeben 05.11.2026 nach Rechtsquellen-Prüfung (Art. 37, 38, 66 GO; Art. 20 Abs. 1 Nr. 1 BayWiVG).
+           Beträge aus PREISE (preise.ts, netto); die Klassenwahl ist mit dem Preiswähler im Pin gekoppelt.
+           Teal hinterlegte Felder sind direkt editierbar und gehen so in Kopie und Word-Datei. -->
+      <div class="block block--unterschrift" id="unterschrift">
+        <article class="beschluss" data-sc-in aria-labelledby="beschluss-titel">
+          <div class="vorlage-leiste">
+            <p class="vorlage-leiste__titel">Ihre Sitzungsvorlage, mit Ihren Zahlen.</p>
+            <div class="vorlage-leiste__wahl" role="group" aria-label="Einwohnerklasse" id="v-klassen"></div>
+            <label class="vorlage-leiste__modul"><input type="checkbox" id="v-modul" checked> Bescheidmodul mitbeschließen</label>
+          </div>
+          <div class="vorlage" id="vorlage">
+            <header class="beschluss__kopf"><span>Sitzungsvorlage, Entwurf</span><span>Gremium: <span class="feld" contenteditable="true" spellcheck="false" role="textbox" aria-label="Gremium" data-gremium>[Gemeinderat / Ausschuss]</span></span></header>
+            <p class="vorlage__betreff">Betreff</p>
+            <h2 class="beschluss__titel" id="beschluss-titel">Beschaffung einer Software zur Ermittlung der Geschossflächen für Herstellungsbeiträge (FlächenKlar)</h2>
+            <ol class="beschluss__punkte">
+              <li><h3>Sachverhalt</h3><!-- Runde 11 (06.11.): Sachverhalt nach Alexanders Stichpunkten neu gefasst. -->
+                <p>Für die Erhebung von Herstellungsbeiträgen nach Art. 5 KAG ermittelt die Verwaltung die Geschossflächen aus den Bauplänen. Auf dieser Grundlage ergeht der Beitragsbescheid. Die Herstellungsbeiträge werden neben den laufenden Verbrauchsgebühren einmalig erhoben; beide finanzieren die Einrichtungen der Wasserversorgung und der Abwasserbeseitigung.</p>
+                <p>Spätestens seit dem 01.01.2025 werden Bauanträge beim zuständigen Landratsamt eingereicht; die Gemeinde wird digital beteiligt. Die Pläne gehen bei der Verwaltung nur noch als PDF-Datei ein, nicht mehr in Papierform. Das bisherige Ausmessen der Grundrisse mit dem Lineal ist am Bildschirm nicht möglich.</p>
+                <p>FlächenKlar ist für genau diese Aufgabe gebaut: Die Sachbearbeitung öffnet den Plan (PDF, Scan oder Foto) am Bildschirm und greift die Eckpunkte der Fläche ab, das Programm berechnet die Fläche daraus automatisch. Ob die Wände rechtwinklig stehen oder schräg zulaufen, spielt dabei keine Rolle. Das Programm läuft lokal per Doppelklick, ohne Cloud, ohne Benutzerkonto und ohne Installation auf einem Server.</p>
+                <p>Die Beitragspflichtigen erhalten mit dem Bescheid neben dem gewohnten Aufmaßblatt eine Zeichnung ihres Grundrisses, auf der die berechnete Fläche farbig hinterlegt ist. Das macht die Berechnung nachvollziehbar und kann Rückfragen und Widersprüchen vorbeugen. Für die Akte gilt dasselbe: Wer den Fall später bearbeitet, sieht auf einen Blick, welche Flächen bereits abgerechnet sind.</p>
+                <p>Die Verwaltung hat die 14-tägige Demo mit vollem Funktionsumfang am <span class="feld" contenteditable="true" spellcheck="false" role="textbox" aria-label="Datum des Demo-Tests">[Datum]</span> getestet. Nach dem Test erwartet sie eine kürzere Bearbeitungszeit je Fall und eine Entlastung der Sachbearbeitung.</p></li>
+              <li><h3>Vergabe</h3><p>Der geschätzte Auftragswert einschließlich Wartung liegt unter der Wertgrenze für den Direktauftrag von 100.000 € netto (Art. 20 Abs. 1 Satz 1 Nr. 1 BayWiVG). Die Verwaltung hat <span class="feld" contenteditable="true" spellcheck="false" role="textbox" aria-label="Markterkundung">[Vergleichsangebote eingeholt / den Markt im Internet erkundet]</span>. Das Ergebnis ist dokumentiert.</p></li>
+              <li><h3>Finanzielle Auswirkungen</h3>
+                <p data-v="einzeln" hidden>Der Preis richtet sich nach dem Einzelangebot vom <span class="feld" contenteditable="true" spellcheck="false" role="textbox" aria-label="Datum des Einzelangebots">[Datum]</span>.</p>
+                <!-- Runde 11: Haken an = Bescheidmodul wird mitbeschlossen (kein „optional“), Wartung nur mit dem Betrag, der gilt. -->
+                <p data-v="liste">Die Lizenz kostet einmalig <span data-v="auf"></span> netto (Einwohnerklasse <span data-v="klasse"></span>)<span data-v="mod">, zuzüglich Bescheidmodul <span data-v="bes"></span> netto</span>. Die Wartung ist bis zum 31.12. des Jahres nach der Auslieferung enthalten. Danach kostet sie <span data-v="ohne-mod"><span data-v="war-auf"></span></span><span data-v="mod"><span data-v="war"></span></span> netto je Kalenderjahr; sie ist jährlich kündbar.</p>
+                <p>Die Mittel stehen unter <span class="feld" contenteditable="true" spellcheck="false" role="textbox" aria-label="Haushaltsstelle oder Produkt">[Haushaltsstelle / Produkt]</span> im Haushalt <span class="feld" contenteditable="true" spellcheck="false" role="textbox" aria-label="Haushaltsjahr">[Jahr]</span> zur Verfügung. Die Wartung ist ab dem zweiten Kalenderjahr nach der Auslieferung als Folgekosten zu veranschlagen.</p></li>
+              <li><h3>Beschlussvorschlag</h3><p>Der <span class="feld" contenteditable="true" spellcheck="false" role="textbox" aria-label="Gremium im Beschlussvorschlag" data-gremium>[Gemeinderat / Ausschuss]</span> beschließt die Beschaffung der Software FlächenKlar <span data-v="preis-liste">zum Preis von <span data-v="auf"></span> netto<span data-v="mod"> zuzüglich Bescheidmodul <span data-v="bes"></span> netto</span></span><span data-v="preis-einzeln" hidden>zum Preis laut Einzelangebot</span>. Der Erste Bürgermeister wird ermächtigt, den Lizenzvertrag abzuschließen.</p></li>
+            </ol>
+          </div>
+          <div class="vorlage-fuss">
+            <div class="vorlage-fuss__knoepfe">
+              <button type="button" class="knopf-vorlage" id="v-kopieren">Text kopieren</button>
+              <button type="button" class="knopf-vorlage knopf-vorlage--zweit" id="v-word">Als Word-Datei laden</button>
+              <span class="vorlage-fuss__status" id="v-status" role="status" aria-live="polite"></span>
+            </div>
+            <p class="vorlage-fuss__hinweis">Die farbig hinterlegten Felder können Sie direkt überschreiben. Ob ein Beschluss nötig ist oder der Erste Bürgermeister selbst entscheidet, regelt Ihre Geschäftsordnung (Art. 37 GO).</p>
+          </div>
+          <p class="beschluss__fussnote">Als Kleinunternehmer nach § 19 UStG weise ich für Leistungen bis 31.12.2026 keine Umsatzsteuer aus. Ab 01.01.2027 bin ich umsatzsteuerpflichtig: Die Wartung für Lizenzen aus 2026 beginnt am 01.01.2028 und wird nach der ab 2027 gültigen Preisliste netto zzgl. 19 % USt berechnet.</p>
+        </article>
+      </div>
+
+      <footer class="fuss">
+        <span>FlächenKlar · Alexander Geitner · Postbauer-Heng</span>
+        <nav><a href="tutorial.html">Tutorial</a><a href="versionen.html">Versionen</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></nav>
+        <p class="fuss__stand">Version 1.5.7 vom 23.10.2026. Änderungen öffentlich unter <span class="fuss__ziel"><a href="versionen.html">flaechenklar.de/versionen</a>.</span></p>
+      </footer>
+    </div>
+  </section>
+</main>
+
+<script src="scrollcraft.js"></script>
+<script>
+ScrollCraft.mount(document.body);
+
+(function () {
+  var REDUZIERT = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var akt = document.getElementById('vergleich');
+  var buehne = document.getElementById('buehne');
+
+  // Ruhige Fassung (Spec §10): Reduced Motion oder schmal. Dann Poster statt Clip, keine Ebenenbewegung, kein Abruf des Clips
+  // und kein Abruf des Lineals (Ebene D ist dort ausgeblendet; beide stehen nur als data-src im Markup).
+  var wurzel = document.documentElement;
+  var clip = document.querySelector('.ebene--a');
+  var lineal = document.querySelector('.ebene--d');
+  var ruhigMQ = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var ruhig = false;
+  function pruefeRuhe() {
+    ruhig = ruhigMQ.matches || window.innerWidth < 861;
+    wurzel.classList.toggle('ist-ruhig', ruhig);
+    if (!ruhig && clip && !clip.getAttribute('src')) {
+      clip.muted = true;
+      clip.src = clip.getAttribute('data-src');
+      clip.load();
+    }
+    if (!ruhig && lineal && !lineal.getAttribute('src')) lineal.src = lineal.getAttribute('data-src');
+    // Peak-Poster (erstes Bild des Clips) ebenso nur ohne ist-ruhig; dort steht das Standbild werkzeug-ende.webp.
+    var filmP = document.querySelector('.werkzeug__film');
+    if (!ruhig && filmP && !filmP.getAttribute('poster')) filmP.setAttribute('poster', filmP.getAttribute('data-poster'));
+  }
+  pruefeRuhe();
+  // Clip läuft einmal und hält das letzte Bild (Schub ~25 %, nicht loop-tauglich); nur im Hero, nie nach dem Ende neu.
+  // Lehnt der Browser Autoplay ab, bleibt das Poster stehen; kein neuer Versuch je Bild, erst wieder nach einem Resize.
+  var clipAbgelehnt = false;
+  function steuereClip(p) {
+    if (!clip || !clip.getAttribute('src')) return;
+    var soll = !ruhig && p < 0.12 && !clip.ended && !clipAbgelehnt;
+    if (soll && clip.paused) {
+      var start = clip.play();
+      if (start && start.catch) start.catch(function (e) { if (e && e.name === 'NotAllowedError') clipAbgelehnt = true; });
+    } else if (!soll && !clip.paused) clip.pause();
+  }
+
+  /* Preise aus src/content/preise.ts der Website, unverändert. Über 30.000 seit 04.11.2026 ohne Listenpreis (Preis auf Anfrage).
+     Auf flaechenklar.de schreibt scripts/baue-seite.mjs die Liste zwischen den Marken bei jedem Bauen neu aus preise.ts. */
+  /* PREISE:START */
+  var PREISE = [
+    { klasse: 'bis 3.000', auf: '1.600 €', bes: '250 €', warAuf: '160 €', war: '185 €' },
+    { klasse: '3.000 bis 8.000', auf: '3.100 €', bes: '500 €', warAuf: '310 €', war: '360 €' },
+    { klasse: '8.000 bis 15.000', auf: '5.800 €', bes: '900 €', warAuf: '580 €', war: '670 €' },
+    { klasse: '15.000 bis 30.000', auf: '10.500 €', bes: '1.600 €', warAuf: '1.050 €', war: '1.210 €' },
+    { klasse: 'über 30.000', aufAnfrage: true }
+  ];
+  /* PREISE:ENDE */
+  var klassen = document.getElementById('klassen');
+  var vKlassen = document.getElementById('v-klassen');
+  var vorlage = document.getElementById('vorlage');
+  var vModul = document.getElementById('v-modul');
+  function alle(sel) { return Array.prototype.slice.call(vorlage.querySelectorAll(sel)); }
+  // Pin-Wähler und Vorlage zeigen dieselbe Klasse: eine Wahl an einer Stelle gilt an beiden.
+  function waehle(i) {
+    [klassen, vKlassen].forEach(function (g) {
+      Array.prototype.forEach.call(g.children, function (b, k) { b.setAttribute('aria-pressed', k === i ? 'true' : 'false'); });
+    });
+    var p = PREISE[i];
+    document.getElementById('p-liste').hidden = !!p.aufAnfrage;
+    document.getElementById('p-anfrage').hidden = !p.aufAnfrage;
+    alle('[data-v="liste"], [data-v="preis-liste"]').forEach(function (e) { e.hidden = !!p.aufAnfrage; });
+    alle('[data-v="einzeln"], [data-v="preis-einzeln"]').forEach(function (e) { e.hidden = !p.aufAnfrage; });
+    if (p.aufAnfrage) return;
+    document.getElementById('p-auf').textContent = p.auf;
+    document.getElementById('p-bes').textContent = p.bes;
+    document.getElementById('p-war-auf').textContent = p.warAuf + ' p. a.';
+    document.getElementById('p-war').textContent = p.war + ' p. a.';
+    var werte = { klasse: p.klasse + ' Einwohner', auf: p.auf, bes: p.bes, 'war-auf': p.warAuf, war: p.war };
+    Object.keys(werte).forEach(function (k) { alle('[data-v="' + k + '"]').forEach(function (e) { e.textContent = werte[k]; }); });
+  }
+  function modul() {
+    alle('[data-v="mod"]').forEach(function (e) { e.hidden = !vModul.checked; });
+    alle('[data-v="ohne-mod"]').forEach(function (e) { e.hidden = vModul.checked; });
+  }
+  // Das Gremium steht im Kopf und im Beschlussvorschlag: eine Eingabe gilt für beide.
+  var gremien = alle('[data-gremium]');
+  gremien.forEach(function (f) {
+    f.addEventListener('input', function () { gremien.forEach(function (g) { if (g !== f) g.textContent = f.textContent; }); });
+  });
+  vModul.addEventListener('change', modul);
+  PREISE.forEach(function (p, i) {
+    [klassen, vKlassen].forEach(function (g) {
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = p.klasse;
+      // Schritt 6: erst eine echte Wahl gibt die Klasse an den Demo-Knopf weiter (demo.html wählt sie vor), die Voreinstellung nicht.
+      b.addEventListener('click', function () { waehle(i); document.getElementById('demo-knopf').href = 'demo.html?klasse=' + encodeURIComponent(p.klasse); }); g.appendChild(b);
+    });
+  });
+  waehle(1); modul();
+
+  // Kopie und Word-Datei aus dem sichtbaren Blatt: Betreff, dann je Abschnitt Überschrift und Absätze.
+  // innerText lässt ausgeblendete Teile (Klasse über 30.000, Bescheidmodul abgewählt) von selbst weg.
+  function vorlageTeile() {
+    var t = function (e) { return e.innerText.replace(/\s+/g, ' ').trim(); };
+    // textContent: der Kopf steht in Versalien (CSS), innerText würde sie mitnehmen.
+    var gremium = vorlage.querySelector('.beschluss__kopf .feld').textContent.replace(/\s+/g, ' ').trim();
+    var teile = [{ art: 'kopf', text: 'Sitzungsvorlage, Gremium: ' + gremium },
+                 { art: 'titel', text: 'Betreff: ' + t(document.getElementById('beschluss-titel')) }];
+    alle('.beschluss__punkte > li').forEach(function (li) {
+      teile.push({ art: 'h', text: t(li.querySelector('h3')) });
+      Array.prototype.forEach.call(li.querySelectorAll('p'), function (p) { if (!p.hidden) teile.push({ art: 'p', text: t(p) }); });
+    });
+    return teile;
+  }
+  function vorlageText() { return vorlageTeile().map(function (x) { return x.text; }).join('\n\n') + '\n'; }
+  // RTF öffnet Word ohne Bibliothek und offline. Umlaute als \uN?, Steuerzeichen maskiert.
+  function vorlageRtf() {
+    var esc = function (s) {
+      return s.replace(/[\\{}]/g, function (c) { return '\\' + c; })
+              .replace(/[^\x00-\x7f]/g, function (c) { return '\\u' + c.charCodeAt(0) + '?'; });
+    };
+    var fmt = { kopf: '\\fs18 ', titel: '\\b\\fs28 ', h: '\\b\\fs24 ', p: '\\fs22 ' };
+    var koerper = vorlageTeile().map(function (x) {
+      return '{\\pard\\sa200\\sl276\\slmult1' + (x.art === 'h' ? '\\sb240' : '') + ' ' + fmt[x.art] + esc(x.text) + '\\par}';
+    }).join('\n');
+    return '{\\rtf1\\ansi\\ansicpg1252\\deff0{\\fonttbl{\\f0 Arial;}}\\f0\n' + koerper + '\n}';
+  }
+  var vStatus = document.getElementById('v-status');
+  function melde(s) { vStatus.textContent = s; }
+  document.getElementById('v-kopieren').addEventListener('click', function () {
+    var text = vorlageText();
+    var notweg = function () {
+      var ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      melde(ok ? 'Text kopiert.' : 'Kopieren nicht möglich. Bitte den Text im Blatt markieren.');
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { melde('Text kopiert.'); }, notweg);
+    } else notweg();
+  });
+  document.getElementById('v-word').addEventListener('click', function () {
+    var url = URL.createObjectURL(new Blob([vorlageRtf()], { type: 'application/rtf' }));
+    var a = document.createElement('a'); a.href = url; a.download = 'Sitzungsvorlage-FlaechenKlar.rtf';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    melde('Word-Datei geladen.');
+  });
+
+  /* Beispielgrundriss = Außenkontur EG des Demo-Musterplans (Runde 12, nach der Entzerrung des Plans): Ecken in PDF-pt wie
+     die Demo-Fläche „Hauptgebäude“, umgerechnet mit dem Maßstab der Demo (Referenz 17,86 m). Die Gaußsche Trapezformel ergibt
+     220,43 m² wie die Programm-Aufnahme (Hauptgebäude EG = Geschossfläche gesamt), die Kanten 17,86 / 12,00 / 7,34 / 1,93 /
+     3,17 / 1,93 / 7,34 / 12,00 m wie die Maßketten. */
+  var PT_PRO_M = 28.118701007838744;
+  var ECKEN = [[355.32, 867.72], [857.52, 867.72], [857.52, 1205.148], [651, 1205.148], [651, 1259.352], [561.84, 1259.352],
+    [561.84, 1205.148], [355.32, 1205.148]].map(function (e) { return [(e[0] - 355.32) / PT_PRO_M, (e[1] - 867.72) / PT_PRO_M]; });
+  // Gezeichnete Kontur in SVG-Einheiten (Grundriss R1, 124 Einheiten = 17,86 m). Proportionen weichen unter 0,1 % von ECKEN ab.
+  var ZUG = [[0, 0], [124, 0], [124, 83.3], [73, 83.3], [73, 96.7], [51, 96.7], [51, 83.3], [0, 83.3]];
+  var flaecheEG = (function () {
+    var s = 0;
+    for (var i = 0; i < ECKEN.length; i++) { var a = ECKEN[i], b = ECKEN[(i + 1) % ECKEN.length]; s += a[0] * b[1] - b[0] * a[1]; }
+    return Math.abs(s) / 2;
+  })();
+  var zahl = new Intl.NumberFormat('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  // Wie im Tool: Betrag aus der gedruckten (gerundeten) Fläche. Sätze fiktiv:
+  // Grundstück 620 m² × 1,50 €/m², Geschossfläche × 7,50 €/m².
+  var gf = Math.round(flaecheEG * 100) / 100;
+  var grundBetrag = Math.round(620 * 1.5 * 100) / 100;
+  var gfBetrag = Math.round(gf * 7.5 * 100) / 100;
+  var summeZahl = Math.round((grundBetrag + gfBetrag) * 100) / 100;
+  var summe = zahl.format(summeZahl) + ' €';
+  document.getElementById('r3-gf').textContent = zahl.format(gf) + ' m²';
+  document.getElementById('r3-grund').textContent = zahl.format(grundBetrag) + ' €';
+  document.getElementById('r3-betrag').textContent = zahl.format(gfBetrag) + ' €';
+  ['r3-beitrag', 'r3-summe', 'r3-faellig'].forEach(function (id) { document.getElementById(id).textContent = summe; });
+
+  // Rückblick im Schluss (Runde 3): Ergebniszahlen aus denselben Werten wie die Runden, damit sie nie auseinanderlaufen.
+  // Fläche aus flaecheEG (wie #r1-wert), Beitrag aus summeZahl (wie #r3-summe); Schritt 2 (Protokoll) steht fest im Markup,
+  // der Beitrag behält den Versatz des dritten Schritts. Zählt je Erscheinen einmal hoch (Zeit, nicht Scroll, sonst sieht
+  // man es bei zügigem Scrollen nie):
+  // Start, sobald der Schluss gut halb eingeblendet ist (p 0,93), wieder bereit erst, wenn er ganz weg ist (p < 0,90).
+  // Unter ist-ruhig (Reduced Motion oder schmal) sofort der Endwert, das Lineal steht ganz.
+  var rbF = document.getElementById('rb-flaeche'), rbS = document.getElementById('rb-summe');
+  var rbLeiste = document.querySelector('.rueckblick');
+  var rbStart = -1, rbZuletzt = '';
+  var RB_MS = 1400, RB_VERSATZ = 160;
+  function rueckblick(p) {
+    var jetzt = performance.now();
+    if (p < 0.90) rbStart = -1;
+    else if (rbStart < 0 && p >= 0.93) rbStart = jetzt;
+    function stand(i) {
+      if (ruhig) return 1;
+      if (rbStart < 0) return 0;
+      var t = Math.min(1, Math.max(0, (jetzt - rbStart - i * RB_VERSATZ) / RB_MS));
+      return 1 - Math.pow(1 - t, 3);
+    }
+    var f = zahl.format(flaecheEG * stand(0)), s = zahl.format(summeZahl * stand(2));
+    var neu = f + '|' + s;
+    if (neu === rbZuletzt) return;
+    rbZuletzt = neu;
+    rbF.textContent = f; rbS.textContent = s;
+    rbLeiste.style.setProperty('--rb', stand(0).toFixed(3));
+  }
+
+  var r1 = document.getElementById('r1-flaeche'), r1Wert = document.getElementById('r1-wert');
+  var zeiger = document.getElementById('r1-zeiger');
+  var ecken = document.querySelectorAll('.ecke'), masse = document.querySelectorAll('.mass');
+  // Kantenlängen für die Lage der Zeichenspitze entlang der Kontur
+  var kanten = ZUG.map(function (a, i) { var b = ZUG[(i + 1) % ZUG.length]; return Math.hypot(b[0] - a[0], b[1] - a[1]); });
+  var umfang = kanten.reduce(function (s, k) { return s + k; }, 0);
+  function spitze(t) {
+    var rest = t * umfang;
+    for (var i = 0; i < kanten.length; i++) {
+      if (rest <= kanten[i] || i === kanten.length - 1) {
+        var a = ZUG[i], b = ZUG[(i + 1) % ZUG.length], f = Math.min(1, rest / kanten[i]);
+        return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f];
+      }
+      rest -= kanten[i];
+    }
+  }
+  var sGrenze = document.getElementById('s-grenze'), sRing = document.getElementById('s-ring'), sStrich = document.getElementById('s-strich');
+  var sAbrufe = document.querySelectorAll('.s-abruf');
+  var blaetter = Array.prototype.slice.call(document.querySelectorAll('.blatt'));
+  var dateiZeilen = document.querySelectorAll('#datei li');
+  var striche = document.querySelectorAll('.teiler__skala i');
+  var datei = document.getElementById('datei');
+  var schildHeute = document.querySelector('.teiler__schild--heute');
+
+  function band(p, a, b) { return Math.min(1, Math.max(0, (p - a) / (b - a))); }
+  function glatt(t) { return t * t * (3 - 2 * t); }
+
+  // Rechte Inhalte wachsen mit der blauen Fläche, aber nur so weit, wie zwischen Kopfzeile und Datei Platz ist.
+  var inhalt = document.querySelector('.morgen__inhalt');
+  var rundenR = Array.prototype.slice.call(document.querySelectorAll('.runde-r'));
+  var kopf = document.querySelector('.morgen__kopf');
+  var schmal = window.matchMedia('(max-width: 860px)');
+  var dateiHoch = 0;
+  var inhaltS = 1;   // zuletzt angewandtes --s, für data-sc-verify-state
+  function passeInhaltAn(l) {
+    if (schmal.matches) return;
+    var oben = kopf.offsetTop + kopf.offsetHeight + 20;
+    // Die Datei wird mit der Linie breiter und damit niedriger; ihre größte Höhe hält den Platz ruhig.
+    dateiHoch = Math.max(dateiHoch, datei.offsetHeight);
+    var unten = datei.offsetTop + datei.offsetHeight - dateiHoch - 24;
+    var breit = Math.min((100 - l) / 50, 1.2), mitteC = inhalt.offsetHeight / 2;
+    // Je Runde eigener Faktor und Versatz; beim Überblenden nach Deckkraft gemischt, damit nichts springt.
+    var summe = 0, s = 0, dy = 0;
+    rundenR.forEach(function (r) {
+      var o = parseFloat(getComputedStyle(r).opacity);
+      if (o < 0.01) return;
+      var sr = Math.max(0.75, Math.min(breit, (unten - oben) / r.offsetHeight));
+      // Skaliert wird um die Mitte des Containers; die Runde soll danach mittig zwischen Kopfzeile und Datei stehen.
+      var mitteR = r.offsetTop + r.offsetHeight / 2;
+      summe += o; s += o * sr; dy += o * ((oben + unten) / 2 - inhalt.offsetTop - mitteC - sr * (mitteR - mitteC));
+    });
+    // Zwischen zwei Runden ist kurz keine sichtbar: dann bleibt der letzte Stand stehen.
+    if (!summe) return;
+    s /= summe; dy /= summe;
+    inhaltS = s;
+    inhalt.style.setProperty('--s', s.toFixed(3));
+    inhalt.style.setProperty('--dy', dy.toFixed(1) + 'px');
+    // Planblatt: Oberkante 5 vh unter den Schritt-Knöpfen der Hero-Runde, solange sie zu sehen ist; zu wenig Platz darunter: aus.
+    if (parseFloat(getComputedStyle(rundenR[0]).opacity) > 0.01) {
+      var bu = schritteHero.getBoundingClientRect().bottom - buehneEl.getBoundingClientRect().top, hoch = buehneEl.offsetHeight;
+      planblatt.style.setProperty('--plan-oben', Math.round(bu + 0.05 * hoch) + 'px');
+      planblatt.classList.toggle('ist-eng', hoch - bu < 0.18 * hoch);
+    }
+  }
+  var planblatt = document.querySelector('.grundriss-deko'), buehneEl = document.getElementById('buehne');
+  var schritteHero = rundenR[0].querySelector('.schritte');
+
+  var letztes = -1;
+  window.addEventListener('resize', function () { letztes = -1; dateiHoch = 0; clipAbgelehnt = false; pruefeRuhe(); });
+  if (ruhigMQ.addEventListener) ruhigMQ.addEventListener('change', function () { letztes = -1; pruefeRuhe(); });
+  // Pillen: einmal beim Laden nacheinander (Stagger über transition-delay), ein Bild nach dem ersten bild(),
+  // damit der Ausgangszustand gemalt ist und der Übergang läuft. Unter ist-ruhig sofort sichtbar (CSS).
+  var pillen = document.querySelectorAll('.schritte span'), pillenDa = false;
+
+  // Höhepunkt (Spec §6): Fenster blendet 0,68 bis 0,71 ein, der Clip scrubbt 0,71 bis 0,88, hält bis 0,90 und weicht dem Schluss.
+  // Quelle erst ab p >= 0,30 (Preload weit vor dem Peak, Clip ~2,9 MB), unter ist-ruhig nie: dann Standbild per CSS.
+  // Seek erst ab readyState >= 1 (Review Focus 2). Der erste Seek ist Pflicht, sonst zeigt Chrome weiter das Poster
+  // (erstes Bild) statt der Stelle, die zum Fortschritt gehört.
+  var werkzeug = document.querySelector('.werkzeug');
+  var film = document.querySelector('.werkzeug__film');
+  var filmQuelle = film.querySelector('source');
+  var werkzeugZeilen = document.querySelectorAll('.werkzeug__zeilen li');
+  var filmGeladen = false, filmGesucht = false;
+  // Kommen die Metadaten, während niemand scrollt, muss bild() trotzdem einmal laufen.
+  film.addEventListener('loadedmetadata', function () { letztes = -1; });
+  // Während eines Seeks wird kein neuer gesetzt (sonst staut sich beim schnellen Scrollen eine Kette); ist er fertig,
+  // rechnet bild() einmal neu und sucht die dann aktuelle Stelle.
+  film.addEventListener('seeked', function () { letztes = -1; });
+  function peak(p) {
+    // Ausblenden kurz (0,90 bis 0,91): das Fenster ist ganz weg, bevor der Schluss ab 0,91 einblendet (voll ab 0,946),
+    // so scheint kein Schlusstext durch das verblassende Fenster.
+    var w = glatt(band(p, 0.68, 0.71)) * (1 - glatt(band(p, 0.90, 0.91)));
+    werkzeug.style.setProperty('--w', w.toFixed(3));
+    werkzeug.style.visibility = w > 0.001 ? 'visible' : 'hidden';
+    // Die Einblendung selbst ist Bewegung: eigener Zustand für shoot.mjs, #buehne bleibt beim Format l|s|h|t.
+    werkzeug.setAttribute('data-sc-verify-state', w.toFixed(2));
+    for (var z = 0; z < werkzeugZeilen.length; z++) werkzeugZeilen[z].classList.toggle('ist-da', p >= parseFloat(werkzeugZeilen[z].getAttribute('data-ab')));
+    if (ruhig) return;
+    // Kamera fährt langsam auf das Polygon, ab 0,73: die ersten Klicks stehen in der ganzen Zeichenfläche (Ursprung im CSS).
+    werkzeug.style.setProperty('--z', (1 + 0.6 * glatt(band(p, 0.73, 0.88))).toFixed(4));
+    if (!filmGeladen && p >= 0.30) {
+      filmGeladen = true;
+      filmQuelle.src = filmQuelle.getAttribute('data-src');
+      film.preload = 'auto';
+      film.load();
+    }
+    // Ohne endliche Dauer (Infinity, NaN) kein Seek: currentTime = NaN würfe und hielte die ganze Seite an.
+    if (film.readyState >= 1 && isFinite(film.duration) && film.duration > 0 && !film.seeking) {
+      var t = Math.min(band(p, 0.71, 0.88) * film.duration, film.duration - 0.02);
+      if (!filmGesucht || Math.abs(film.currentTime - t) > 0.02) { film.currentTime = t; filmGesucht = true; }
+    }
+  }
+
+  var h = 0;   // Hero-Fortschritt, für data-sc-verify-state
+  function bild(p) {
+    if (Math.abs(p - letztes) < 0.0004) return;
+    letztes = p;
+    // Hero (Spec §5): Ebenen trennen sich über --h, rechts steigt die Datei, die Pillen kommen nacheinander.
+    h = band(p, 0, 0.08);
+    buehne.style.setProperty('--h', h.toFixed(3));
+    datei.style.setProperty('--auf', glatt(band(p, 0.02, 0.08)).toFixed(3));
+    if (!pillenDa) {
+      pillenDa = true;
+      requestAnimationFrame(function () { for (var k = 0; k < pillen.length; k++) pillen[k].classList.add('ist-da'); });
+    }
+    steuereClip(p);
+    // Die Waage neigt sich Runde für Runde, dann kippt sie.
+    var kippen = glatt(band(p, 0.60, 0.66));
+    var l = (50 - 12 * band(p, 0.08, 0.60)) * (1 - kippen);
+    buehne.style.setProperty('--l', l.toFixed(3));
+    passeInhaltAn(l);
+    schildHeute.style.opacity = (1 - kippen).toFixed(3);
+
+    // Runde 1: Ecke für Ecke abgeklickt, Maß je Seite, nach dem Schließen die Fläche.
+    var zug = band(p, 0.09, 0.15);
+    r1.style.strokeDashoffset = String(1 - zug);
+    r1.style.fillOpacity = (0.25 * band(p, 0.15, 0.1625)).toFixed(3);
+    r1Wert.textContent = zahl.format(flaecheEG * glatt(band(p, 0.15, 0.165)));
+    for (var e = 0; e < ecken.length; e++) ecken[e].classList.toggle('ist-da', zug >= parseFloat(ecken[e].getAttribute('data-ab')));
+    for (var m = 0; m < masse.length; m++) masse[m].classList.toggle('ist-da', zug >= parseFloat(masse[m].getAttribute('data-ab')));
+    var tip = spitze(zug);
+    zeiger.setAttribute('transform', 'translate(' + tip[0].toFixed(2) + ' ' + tip[1].toFixed(2) + ')');
+    zeiger.setAttribute('opacity', zug > 0 && zug < 1 ? '1' : '0');
+
+    // Runde 6 (Sicherheit, sichtbar 0,515 bis 0,585): erst die Grenze um den Rechner, dann die zwei Abrufe herein,
+    // dann der Strich durch die Cloud, zuletzt der Sicherungsring. Ab 0,565 steht das Bild bis zum Kippen.
+    sGrenze.style.strokeDashoffset = String(1 - glatt(band(p, 0.50, 0.525)));
+    for (var a = 0; a < sAbrufe.length; a++) sAbrufe[a].style.strokeDashoffset = String(1 - glatt(band(p, 0.52 + a * 0.008, 0.535 + a * 0.008)));
+    sStrich.style.strokeDashoffset = String(1 - glatt(band(p, 0.538, 0.55)));
+    sRing.style.strokeDashoffset = String(1 - band(p, 0.545, 0.565));
+
+    // Signatur: Blätter fallen auf den Stapel, beim Kippen fegt die Linie sie weg.
+    var breite = buehne.clientWidth;
+    blaetter.forEach(function (b, i) {
+      var ab = parseFloat(b.getAttribute('data-blatt')), dreh = parseFloat(b.getAttribute('data-dreh'));
+      var da = band(p, ab - 0.03, ab + 0.01);
+      var weg = glatt(band(p, 0.60 + i * 0.006, 0.63 + i * 0.006));
+      b.style.opacity = (da * (1 - weg)).toFixed(3);
+      if (REDUZIERT) { b.style.transform = 'rotate(' + dreh + 'deg) translateY(' + (-i * 7) + 'px)'; return; }
+      var fall = (1 - da) * -40;
+      var x = -weg * breite * 0.7, r = dreh + weg * (dreh < 0 ? -28 : 28);
+      b.style.transform = 'translate(' + x.toFixed(1) + 'px,' + (fall - i * 7).toFixed(1) + 'px) rotate(' + r.toFixed(2) + 'deg)';
+    });
+    for (var d = 0; d < dateiZeilen.length; d++) dateiZeilen[d].classList.toggle('ist-da', p >= parseFloat(dateiZeilen[d].getAttribute('data-ab')));
+    for (var s = 0; s < striche.length; s++) striche[s].classList.toggle('ist-da', p >= parseFloat(striche[s].getAttribute('data-ab')));
+    // Die Datei gewinnt (Schlussreview MEDIUM): 0,60 bis 0,65 fährt sie in die Mitte der wachsenden Navy-Fläche (waagrecht
+    // jeweils die Mitte rechts der Linie, ab 0,62 ganz, senkrecht bis 0,63) und wird etwas größer, 0,65 bis 0,66 blendet sie
+    // aus; die Stille 0,66 bis 0,68 bleibt reines Navy. Nur translate/scale/opacity: ihr Kasten bleibt auf der Breite von vor
+    // dem Kippen (--ld), sonst liefe sie mit der Linie zur vollen Breite. Unter ist-ruhig wie bisher: kein Weg, Ausblenden
+    // 0,62 bis 0,66 (mobil ist sie ohnehin ausgeblendet).
+    if (ruhig) {
+      datei.style.setProperty('--ld', l.toFixed(3));
+      datei.style.setProperty('--dx', '0px'); datei.style.setProperty('--dy', '0px'); datei.style.setProperty('--ds', '1');
+      datei.style.opacity = (1 - band(p, 0.62, 0.66)).toFixed(3);
+    } else {
+      datei.style.setProperty('--ld', (50 - 12 * band(p, 0.08, 0.60)).toFixed(3));
+      var dx = 0, dy = 0, ds = 1;
+      if (p > 0.60) {
+        var bw = buehne.clientWidth, bh = buehne.clientHeight;
+        var cx = datei.offsetLeft + datei.offsetWidth / 2, cy = datei.offsetTop + datei.offsetHeight / 2;
+        dx = glatt(band(p, 0.60, 0.62)) * ((l / 100 * bw + bw) / 2 - cx);
+        dy = glatt(band(p, 0.60, 0.63)) * (bh / 2 - cy);
+        ds = 1 + 0.12 * glatt(band(p, 0.60, 0.65));
+      }
+      datei.style.setProperty('--dx', dx.toFixed(1) + 'px');
+      datei.style.setProperty('--dy', dy.toFixed(1) + 'px');
+      datei.style.setProperty('--ds', ds.toFixed(4));
+      datei.style.opacity = (1 - band(p, 0.65, 0.66)).toFixed(3);
+    }
+    datei.style.visibility = p > 0.66 ? 'hidden' : 'visible';
+
+    peak(p);
+    // Sichtbarer Zustand für shoot.mjs: Linie, Skalierung rechts, Hero, Clip-Zeit. Gehalten wird nur das Clip-Ende
+    // (0,88 bis 0,90), unter ist-ruhig das Standbild, das bis zum Schluss bewusst steht, und der aufgelöste Schluss ab 0,946.
+    // l mit einer Nachkommastelle: die Linie wandert zwischen den Runden langsam, ganze Prozent verschluckten das.
+    buehne.setAttribute('data-sc-verify-state', l.toFixed(1) + '|' + inhaltS.toFixed(2) + '|' + h.toFixed(2) + '|' + (film.currentTime || 0).toFixed(1));
+    if ((p >= 0.88 && p < 0.90) || (ruhig && p >= 0.70 && p < 0.90) || p >= 0.946) buehne.setAttribute('data-sc-verify-hold', 'true');
+    else buehne.removeAttribute('data-sc-verify-hold');
+  }
+
+  function lauf() {
+    var pJetzt = parseFloat(akt.style.getPropertyValue('--sc-p')) || 0;
+    bild(pJetzt);
+    // Außerhalb von bild(): das kehrt bei stehendem Fortschritt früh zurück, das Hochzählen läuft aber nach der Zeit weiter.
+    rueckblick(pJetzt);
+    requestAnimationFrame(lauf);
+  }
+  requestAnimationFrame(lauf);
+
+  // Tastaturfokus (Schlussreview HIGH, BITV): Kopf-Link, Preiswähler und Demo-Knopf liegen in der gepinnten Bühne und sind
+  // nur in ihrem Abschnitt sichtbar. Der Ausweg der Engine (scrollIntoView auf das Element) greift in der sticky Bühne nicht,
+  // das Element steht dort ja schon im Bild, nur mit Deckkraft 0. Deshalb hier über den Fortschritt: Fokus im Schluss vor
+  // 0,91 (oder solange er noch einblendet) springt auf 0,95 (Schluss voll ab 0,946), Fokus im Kopf nach 0,6 (oder sobald er
+  // ausblendet, Cue 0 bis 0,62 mit Ausblende-Rampe ab 0,43) an den Akt-Anfang. Gilt auch unter ist-ruhig: der Pin und die
+  // Cues bleiben dort, nur die Bewegung fällt weg. behavior 'instant', weil scrollcraft.css scroll-behavior: smooth setzt.
+  // Auf window und nach ScrollCraft.mount registriert, läuft also nach dem Engine-Handler.
+  // Liegt das Element außerhalb des Fensters (Shift+Tab aus dem Faktenteil, Bühne schon nach oben geschoben), springt der
+  // Fortschritt ebenfalls an seine Stelle; sonst scrollt der Browser selbst nur knapp heran und landet mitten im Einblenden.
+  var finale = document.querySelector('.finale');
+  function deckt(el) { return parseFloat(getComputedStyle(el).opacity) >= 0.85; }
+  function imFenster(el) { var r = el.getBoundingClientRect(); return r.top >= 0 && r.bottom <= window.innerHeight; }
+  function springeZu(q) {
+    var oben = akt.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top: Math.round(oben + q * (akt.offsetHeight - window.innerHeight)), behavior: 'instant' });
+  }
+  window.addEventListener('focusin', function (e) {
+    var el = e.target;
+    if (!el || !el.closest) return;
+    var p = parseFloat(akt.style.getPropertyValue('--sc-p')) || 0;
+    if (el.closest('.finale') && (p < 0.91 || !deckt(finale) || !imFenster(el))) springeZu(0.95);
+    else if (el.closest('.morgen__kopf') && (p > 0.6 || !deckt(kopf) || !imFenster(el))) springeZu(0);
+  });
+})();
+</script>
+<script>
+// Funktionen-Streifen: Pfeile blättern um eine Karte, am Rand gesperrt; weiches Scrollen nur ohne Reduced Motion.
+// Keine Scroll-Kopplung an den Pin, nur Klick, Scroll und Größenänderung der Liste selbst.
+(function () {
+  var liste = document.querySelector('ul.streifen');
+  if (!liste) return;
+  var zurueck = document.querySelector('.streifen__pfeil[data-richtung="-1"]');
+  var vor = document.querySelector('.streifen__pfeil[data-richtung="1"]');
+  var ruhig = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var wartet = false;
+
+  function schritt() {
+    var k = liste.children;
+    return k.length > 1 ? k[1].getBoundingClientRect().left - k[0].getBoundingClientRect().left : liste.clientWidth / 3;
+  }
+  // Rückfall für den Fokus, wenn weder Pfeil noch Liste ihn halten können (mobil: Pfeile aus, Liste ohne Tab-Stopp):
+  // die Überschrift des Blocks, per Skript fokussierbar, ohne eigenen Tab-Stopp.
+  var titel = liste.closest('.block') && liste.closest('.block').querySelector('h2');
+  var letzterPfeil = null;
+  document.addEventListener('focusin', function (e) { letzterPfeil = (e.target === zurueck || e.target === vor) ? e.target : null; });
+  // Ein Klick ins Leere nimmt den Fokus ohne focusin weg: dann gibt es nichts aufzufangen.
+  document.addEventListener('pointerdown', function (e) { if (!(e.target.closest && e.target.closest('.streifen__pfeil'))) letzterPfeil = null; });
+  function fokusAuffangen() {
+    if (liste.hasAttribute('tabindex')) { liste.focus(); return; }
+    if (titel) { titel.setAttribute('tabindex', '-1'); titel.focus(); }
+  }
+  // Erst freigeben, dann sperren: so hat ein Knopf mit Fokus immer einen aktiven Nachbarn, zu dem der Fokus wandern kann.
+  function setze(knopf, aus, nachbar) {
+    if (!knopf || knopf.disabled === aus) return;
+    if (aus && document.activeElement === knopf) { if (nachbar && !nachbar.disabled && nachbar.offsetParent) nachbar.focus(); else fokusAuffangen(); }
+    knopf.disabled = aus;
+  }
+  function aktualisiere() {
+    wartet = false;
+    var max = liste.scrollWidth - liste.clientWidth;
+    // Mobil liegen die Karten untereinander: keine Scrollfläche, also auch kein Tab-Stopp auf der Liste.
+    if (max > 2) liste.setAttribute('tabindex', '0'); else liste.removeAttribute('tabindex');
+    // Sind die Pfeile ausgeblendet (schmal), darf ein Pfeil mit Fokus ihn nicht an body verlieren. Chrome setzt den Fokus
+    // eines ausgeblendeten Elements selbst auf body zurück; deshalb zählt der zuletzt fokussierte Pfeil.
+    var a = document.activeElement;
+    if (letzterPfeil && !letzterPfeil.offsetParent && (a === letzterPfeil || !a || a === document.body)) { letzterPfeil = null; fokusAuffangen(); }
+    var amAnfang = liste.scrollLeft <= 2, amEnde = liste.scrollLeft >= max - 2;
+    if (!amAnfang) setze(zurueck, false, vor);
+    if (!amEnde) setze(vor, false, zurueck);
+    if (amAnfang) setze(zurueck, true, vor);
+    if (amEnde) setze(vor, true, zurueck);
+  }
+  function anfrage() { if (!wartet) { wartet = true; requestAnimationFrame(aktualisiere); } }
+
+  [zurueck, vor].forEach(function (k) {
+    if (!k) return;
+    k.addEventListener('click', function () {
+      liste.scrollBy({ left: Number(k.getAttribute('data-richtung')) * schritt(), behavior: ruhig.matches ? 'auto' : 'smooth' });
+    });
+  });
+  // Die Bilder 4 bis 6 liegen waagrecht außerhalb des Fensters und würden das native Lazy-Laden nie anstoßen: beim ersten Sichtkontakt alle laden.
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (e) {
+      if (!e[0].isIntersecting) return;
+      io.disconnect();
+      Array.prototype.forEach.call(liste.querySelectorAll('img[loading="lazy"]'), function (i) { i.loading = 'eager'; });
+    }, { rootMargin: '600px 0px' });
+    io.observe(liste);
+  }
+  liste.addEventListener('scroll', anfrage, { passive: true });
+  window.addEventListener('resize', anfrage);
+  aktualisiere();
+})();
+</script>
+</body>
+</html>
