@@ -14,10 +14,10 @@ führt zur Demo-Anfrage.
 
 ## Architektur-Eckpunkte
 
-- **Routing:** eigener Mini-Router (`src/router.tsx`), kein React Router; SPA-Fallback in `wrangler.toml`.
-- **Tailwind-Klassen nur als Literale** (Design-Tokens in `src/components/ui/tokens.ts`). Keine dynamische Concat wie `bg-${color}-500`, sonst entfernt der Purge die Klasse.
+- **Seit 09.11.2026 statisch:** Seiten in `seite/`, gebaut von `scripts/baue-seite.mjs` nach `dist/` (Details: `README.md`). Die React-/Vite-/Tailwind-Seite liegt im Tag `react-letzter-stand`. Entwurf, Abnahme und Playwright-Proben: `scrollcraft/builds/flaechenklar-split/` (`PLAN-uebernahme.md`, `lab/`, Aufruf mit `BASIS=http://localhost:8787/`).
+- **Datenquellen:** `src/content/versionen.ts` (schreibt das Release-Werkzeug des Programms, Pfad nicht ändern) und `src/content/preise.ts`. Feste Versions- oder Preisangaben in `seite/` nicht von Hand pflegen, das Bau-Skript überschreibt sie.
+- **Routing:** saubere Adressen über den Asset-Resolver (`/demo` -> `dist/demo.html`), `not_found_handling = "404-page"`; Weiterleitungen im Worker.
 - **Animationen** respektieren `prefers-reduced-motion`; Schatten bewusst zurückhaltend (Bauamts-Tonalität).
-- Komponenten, Tokens und Animationen im Einzelnen: im Code, Stand der Anlage in `../anleitungen/website-historie.md`.
 
 ## R2-Asset-Hosting
 
@@ -58,10 +58,10 @@ nötig). Details in `docs/video-assets.md`.
 ## Verify-Gate (statt Tests)
 
 Das Projekt hat **kein Test-Framework** (Vitest o.ä.) — bewusst, weil
-statische Marketing-Site mit 2 Routen. Gate stattdessen:
-- `npm run typecheck` (TS strict)
-- `npm run build` (Vite-Build muss durchlaufen)
-- Manuelle Browser-Smoke gegen `npm run preview` (Wrangler)
+statische Marketing-Site. Gate stattdessen:
+- `npm run typecheck` (TS strict, `src/content` und `worker`)
+- `npm run build` (Bau-Skript bricht bei fehlender Marke oder übrigem `.html`-Link ab)
+- Playwright-Proben aus `scrollcraft/builds/flaechenklar-split/lab/` gegen `npm run dev` (Wrangler, Port 8787), darunter `uebernahme.cjs`
 - Auf Live: PowerShell `Invoke-WebRequest`-basierter Bundle-Check ob
   Asset-URLs im JS auftauchen
 

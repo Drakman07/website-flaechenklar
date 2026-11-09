@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FlächenKlar · Demo anfragen</title>
+<meta name="description" content="Kostenlose Demo von FlächenKlar anfragen: 14 Tage mit vollem Funktionsumfang, Antwort in der Regel innerhalb eines Werktags.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230F2D5A'/><path d='M8 8h16v10h-7v6H8z' fill='none' stroke='%231EA596' stroke-width='2.4'/></svg>">
+<link rel="stylesheet" href="seiten.css">
+<style>
+  /* Formular auf Navy. Farben nur Navy, Teal, Weiß: Fehler zeigen sich über weiße Kante, Zeichen und Text, nicht über Rot. */
+  .formular { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-5) var(--s-5); max-width: 52rem; }
+  .formular[hidden] { display: none; }
+  .formular .breit { grid-column: 1 / -1; }
+  .feld-titel { display: block; font-size: var(--t-sm); color: var(--tinte-weich); margin-bottom: var(--s-2); }
+  .eingabe { width: 100%; min-height: 48px; padding: 0.7rem 0.85rem; font: 400 var(--t-base)/1.4 var(--font-text); color: #FFFFFF;
+    background: var(--navy-tief); border: 1px solid color-mix(in oklab, #FFFFFF 34%, transparent); border-radius: 6px;
+    transition: border-color var(--d-fast) var(--ease-out); }
+  textarea.eingabe { min-height: 8.5rem; resize: vertical; }
+  .eingabe:hover { border-color: color-mix(in oklab, #FFFFFF 55%, transparent); }
+  .eingabe:focus-visible { outline: 2px solid var(--teal-hell); outline-offset: 2px; border-color: var(--teal-hell); }
+  .eingabe[aria-invalid="true"] { border: 2px solid #FFFFFF; }
+  .eingabe:disabled { opacity: 0.6; }
+
+  /* Wahl als Knöpfe wie der Preiswähler der Startseite, technisch Radio-Felder (Pfeiltasten, Pflichtfeld). */
+  .wahl { border: 0; padding: 0; margin: 0; min-width: 0; }
+  .wahl legend { padding: 0; }
+  .wahl__knoepfe { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+  .wahl input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .wahl label { display: inline-flex; align-items: center; min-height: 44px; padding: 0.5rem 0.85rem; border-radius: 6px; cursor: pointer;
+    border: 1px solid color-mix(in oklab, #FFFFFF 28%, transparent); font-size: var(--t-sm); color: #FFFFFF;
+    transition: background-color var(--d-fast) var(--ease-out), border-color var(--d-fast) var(--ease-out); }
+  .wahl label:hover { border-color: var(--teal); }
+  /* Navy-tief statt Navy: Navy auf Teal hat nur 4,46:1, für kleine Schrift zu wenig (Navy-tief 5,1:1). */
+  .wahl input:checked + label { background: var(--teal); border-color: var(--teal); color: var(--navy-tief); font-weight: 600; }
+  .wahl input:focus-visible + label { outline: 2px solid var(--teal-hell); outline-offset: 2px; }
+  .wahl[aria-invalid="true"] label { border-color: #FFFFFF; }
+  .haken { display: inline-flex; align-items: center; gap: 0.6rem; min-height: 44px; font-size: var(--t-sm); color: #FFFFFF; cursor: pointer; }
+  .haken input { width: 1.15rem; height: 1.15rem; accent-color: var(--teal); }
+
+  .fehlertext { display: flex; align-items: center; gap: 0.45rem; margin-top: var(--s-2); font-size: var(--t-xs); font-weight: 600; color: #FFFFFF; }
+  .fehlertext::before { content: "!"; display: inline-grid; place-items: center; flex: none; width: 1.1rem; height: 1.1rem; border-radius: 50%;
+    background: #FFFFFF; color: var(--navy); font: 800 0.72rem/1 var(--font-anzeige); }
+  .fehlertext[hidden] { display: none; }
+  .hinweis { font-size: var(--t-xs); line-height: 1.55; color: var(--tinte-weich); max-width: 60ch; }
+  .meldung { border-radius: 6px; padding: var(--s-5); }
+  .meldung--fehler { border: 2px solid #FFFFFF; background: var(--navy-hell); font-size: var(--t-sm); }
+  .meldung--erfolg { border: 1px solid var(--teal); background: color-mix(in oklab, var(--teal) 14%, var(--navy)); max-width: 52rem; }
+  .meldung--erfolg h2 { font: 800 var(--t-lg)/1.2 var(--font-anzeige); letter-spacing: -0.015em; }
+  .meldung--erfolg p { margin-top: var(--s-3); color: #DCE4EF; }
+  .meldung[hidden] { display: none; }
+  .knopf-text { margin-top: var(--s-4); background: none; border: 0; padding: 0.4rem 0; font: 600 var(--t-sm)/1.2 var(--font-text); color: var(--teal-hell);
+    text-decoration: underline; text-underline-offset: 0.25em; cursor: pointer; }
+  .falle { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .formular .knopf { justify-self: start; margin-top: var(--s-2); }
+
+  @media (max-width: 860px) {
+    .formular { grid-template-columns: minmax(0, 1fr); }
+    /* Schmal zuerst das Formular, „So starten Sie“ danach. Die Kopfspalte hat nichts Fokussierbares, die Tabfolge bleibt gleich. */
+    .block--formular > .block__kopf { order: 2; }
+  }
+</style>
+</head>
+<body>
+<a class="springmarke" href="#inhalt">Zum Inhalt springen</a>
+<header class="seitenkopf">
+  <div class="kopf">
+    <a class="wortmarke" href="index.html">Flächen<span>Klar</span></a>
+    <nav aria-label="Hauptnavigation"><a href="tutorial.html">Tutorial</a><a href="versionen.html">Versionen</a><a class="kopf-link" href="demo.html" aria-current="page">Demo anfragen</a></nav>
+  </div>
+  <div class="seitenkopf__satz">
+    <span class="marke">Demo anfragen</span>
+    <h1 class="anzeige">In zwei Minuten zur <span>Demo-Anfrage</span>.</h1>
+    <p class="lede">Formular ausfüllen und abschicken. Die Antwort kommt in der Regel innerhalb eines Werktags an die angegebene E-Mail-Adresse.</p>
+  </div>
+  <div class="lineal" aria-hidden="true"></div>
+</header>
+
+<main id="inhalt" class="inhalt">
+  <div class="inhalt__innen">
+    <section class="block block--formular" aria-labelledby="formular-titel">
+      <div class="block__kopf">
+        <p class="wege__titel" id="wege-titel">So starten Sie</p>
+        <ol class="wege" aria-labelledby="wege-titel">
+          <li><strong>Demo anfragen</strong><span>Kurzes Formular, Antwort in der Regel innerhalb eines Werktags.</span></li>
+          <li><strong>Link per Mail</strong><span>Den Link zur Demo erhalten Sie per E-Mail.</span></li>
+          <li><strong>Doppelklick</strong><span>Lokal oder vom Netzlaufwerk, ohne Installation.</span></li>
+        </ol>
+        <p class="person"><img src="assets/alexander-portrait-kopf.webp" alt="Porträt Alexander Geitner" width="140" height="175">„Bisher brauchte man sein Lineal und seinen Bleistift, und jetzt braucht man sein ‚E&#8209;Lineal‘.“ Alexander Geitner, Sachbearbeiter im Bauamt des Marktes Postbauer-Heng.</p>
+        <p class="klein">Einmalkauf nach Einwohnerklasse, Wartung bis 31.12. des Folgejahres inklusive. Die Demo läuft 14 Tage mit vollem Funktionsumfang.</p>
+      </div>
+
+      <div>
+        <h2 class="sr-only" id="formular-titel">Anfrageformular</h2>
+        <form class="formular" id="formular" novalidate>
+          <div class="breit">
+            <label class="feld-titel" for="f-behoerde">Behörde *</label>
+            <input class="eingabe" id="f-behoerde" name="behoerde" required autocomplete="organization" aria-describedby="fehler-behoerde">
+            <p class="fehlertext" id="fehler-behoerde" hidden></p>
+          </div>
+
+          <fieldset class="wahl breit" id="f-einwohner" aria-describedby="fehler-einwohner">
+            <legend class="feld-titel">Einwohnerzahl *</legend>
+            <!-- value wie bisher im Formular der Website (Formspree-Mail bleibt gleich), Beschriftung wie der Preiswähler der Startseite. -->
+            <div class="wahl__knoepfe">
+              <input type="radio" name="einwohner" id="ew1" value="bis 3.000" required><label for="ew1">bis 3.000</label>
+              <input type="radio" name="einwohner" id="ew2" value="3.000 – 8.000"><label for="ew2">3.000 bis 8.000</label>
+              <input type="radio" name="einwohner" id="ew3" value="8.000 – 15.000"><label for="ew3">8.000 bis 15.000</label>
+              <input type="radio" name="einwohner" id="ew4" value="15.000 – 30.000"><label for="ew4">15.000 bis 30.000</label>
+              <input type="radio" name="einwohner" id="ew5" value="über 30.000"><label for="ew5">über 30.000</label>
+            </div>
+            <p class="fehlertext" id="fehler-einwohner" hidden></p>
+          </fieldset>
+
+          <fieldset class="wahl breit">
+            <legend class="feld-titel">Anliegen *</legend>
+            <div class="wahl__knoepfe">
+              <input type="radio" name="anliegen" id="an1" value="Demo" checked><label for="an1">Demo</label>
+              <input type="radio" name="anliegen" id="an2" value="Angebot"><label for="an2">Angebot</label>
+              <input type="radio" name="anliegen" id="an3" value="Frage"><label for="an3">Frage</label>
+            </div>
+          </fieldset>
+
+          <label class="haken breit"><input type="checkbox" name="bescheid" id="f-bescheid"> Interesse am Bescheidmodul</label>
+
+          <div>
+            <label class="feld-titel" for="f-ansprechpartner">Ansprechpartner *</label>
+            <input class="eingabe" id="f-ansprechpartner" name="ansprechpartner" required autocomplete="name" aria-describedby="fehler-ansprechpartner">
+            <p class="fehlertext" id="fehler-ansprechpartner" hidden></p>
+          </div>
+          <div>
+            <label class="feld-titel" for="f-email">E-Mail *</label>
+            <input class="eingabe" id="f-email" name="email" type="email" required autocomplete="email" aria-describedby="fehler-email">
+            <p class="fehlertext" id="fehler-email" hidden></p>
+          </div>
+
+          <div class="breit">
+            <label class="feld-titel" for="f-telefon">Telefon (optional)</label>
+            <input class="eingabe" id="f-telefon" name="telefon" type="tel" autocomplete="tel">
+          </div>
+          <div class="breit">
+            <label class="feld-titel" for="f-nachricht">Nachricht (optional)</label>
+            <textarea class="eingabe" id="f-nachricht" name="nachricht" rows="5"></textarea>
+          </div>
+
+          <!-- Falle für Bots: für Menschen unsichtbar, Formspree erkennt _gotcha und verwirft die Anfrage. -->
+          <div class="falle" aria-hidden="true"><label for="_gotcha">Bitte leer lassen</label><input type="text" id="_gotcha" name="_gotcha" tabindex="-1" autocomplete="off"></div>
+
+          <div class="meldung meldung--fehler breit" id="sendefehler" role="alert" hidden></div>
+
+          <p class="hinweis breit">Mit dem Absenden willigen Sie der Verarbeitung Ihrer Angaben gemäß der <a href="datenschutz.html">Datenschutzerklärung</a> ein. Die Übermittlung erfolgt über den Dienst Formspree (USA).</p>
+          <button class="knopf breit" type="submit" id="senden">Nachricht senden</button>
+        </form>
+
+        <div class="meldung meldung--erfolg" id="erfolg" role="status" aria-live="polite" tabindex="-1" hidden>
+          <h2>Nachricht gesendet.</h2>
+          <p>Vielen Dank für Ihre Anfrage. Die Antwort kommt in der Regel innerhalb eines Werktags an <span id="erfolg-mail">Ihre E-Mail-Adresse</span>.</p>
+          <button class="knopf-text" type="button" id="weitere">Weitere Anfrage senden</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div class="fuss-rahmen">
+  <footer class="fuss">
+    <span>FlächenKlar · Alexander Geitner · Postbauer-Heng</span>
+    <nav aria-label="Rechtliches"><a href="versionen.html">Versionen</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></nav>
+    <p class="fuss__stand">Version 1.5.7 vom 23.10.2026. Änderungen öffentlich unter <span class="fuss__ziel"><a href="versionen.html">flaechenklar.de/versionen</a>.</span></p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  // Formspree-Formular wie bisher auf der Website (src/sections/Kontakt.tsx): gleiche Form-ID, gleiche Felder im Versand.
+  var ENDPUNKT = 'https://formspree.io/f/mjglqzyz';
+  var MAIL_MUSTER = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  var form = document.getElementById('formular');
+  var erfolg = document.getElementById('erfolg');
+  var sendefehler = document.getElementById('sendefehler');
+  var knopf = document.getElementById('senden');
+  var versucht = false;
+
+  // Vorbelegung per Link, z. B. demo.html?anliegen=Angebot&bescheid=1&klasse=8.000%20bis%2015.000 (Beschriftung wie im Preiswähler).
+  var q = new URLSearchParams(location.search);
+  var vor = q.get('anliegen');
+  if (vor) { var a = form.querySelector('input[name="anliegen"][value="' + CSS.escape(vor) + '"]'); if (a) a.checked = true; }
+  if (q.get('bescheid') === '1') document.getElementById('f-bescheid').checked = true;
+  var kl = q.get('klasse');
+  if (kl) form.querySelectorAll('input[name="einwohner"]').forEach(function (r) { if (r.nextElementSibling.textContent === kl) r.checked = true; });
+
+  function wert(name) { var el = form.elements[name]; return el ? (el.value || '').trim() : ''; }
+
+  function pruefe() {
+    var f = {};
+    if (!wert('behoerde')) f.behoerde = 'Bitte Behörde angeben.';
+    if (!wert('einwohner')) f.einwohner = 'Bitte Einwohnerzahl wählen.';
+    if (!wert('ansprechpartner')) f.ansprechpartner = 'Bitte Ansprechpartner angeben.';
+    if (!wert('email')) f.email = 'Bitte E-Mail-Adresse angeben.';
+    else if (!MAIL_MUSTER.test(wert('email'))) f.email = 'E-Mail-Adresse ungültig, Beispiel: name@gemeinde.de';
+    return f;
+  }
+
+  function zeige(f) {
+    ['behoerde', 'einwohner', 'ansprechpartner', 'email'].forEach(function (k) {
+      var t = document.getElementById('fehler-' + k);
+      var ziel = k === 'einwohner' ? document.getElementById('f-einwohner') : form.elements[k];
+      t.textContent = f[k] || '';
+      t.hidden = !f[k];
+      if (f[k]) ziel.setAttribute('aria-invalid', 'true'); else ziel.removeAttribute('aria-invalid');
+    });
+  }
+
+  form.addEventListener('input', function () { if (versucht) zeige(pruefe()); });
+  form.addEventListener('change', function () { if (versucht) zeige(pruefe()); });
+
+  function sperre(an) {
+    Array.prototype.forEach.call(form.elements, function (el) { el.disabled = an; });
+    knopf.textContent = an ? 'Wird gesendet …' : 'Nachricht senden';
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (knopf.disabled) return;
+    sendefehler.hidden = true;
+    // Bot-Falle ausgefüllt: so tun, als wäre alles gesendet, nichts übertragen.
+    if (form.elements._gotcha.value) { fertig(''); return; }
+    var f = pruefe();
+    versucht = true;
+    zeige(f);
+    var erstes = ['behoerde', 'einwohner', 'ansprechpartner', 'email'].filter(function (k) { return f[k]; })[0];
+    if (erstes) {
+      (erstes === 'einwohner' ? form.querySelector('input[name="einwohner"]') : form.elements[erstes]).focus();
+      return;
+    }
+    var mail = wert('email');
+    var anliegen = wert('anliegen');
+    var daten = {
+      'Behörde': wert('behoerde'),
+      'Einwohnerzahl': wert('einwohner'),
+      'Anliegen': anliegen,
+      'Interesse Bescheidmodul': document.getElementById('f-bescheid').checked ? 'Ja' : 'Nein',
+      'Ansprechpartner': wert('ansprechpartner'),
+      'email': mail,
+      'Telefon': wert('telefon') || '—',
+      'Nachricht': wert('nachricht') || '—',
+      '_subject': 'FlächenKlar — ' + (anliegen || 'Anfrage') + ' (' + wert('behoerde') + ')'
+    };
+    sperre(true);
+    fetch(ENDPUNKT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(daten) })
+      .then(function (res) {
+        if (res.ok) { fertig(mail); return; }
+        return res.json().catch(function () { return {}; }).then(function (d) {
+          fehlschlag(d && d.errors && d.errors[0] && d.errors[0].message ? d.errors[0].message : 'Senden fehlgeschlagen. Bitte später erneut versuchen.');
+        });
+      })
+      .catch(function () { fehlschlag('Netzwerk-Fehler. Bitte E-Mail direkt an info@flaechenklar.de senden.'); });
+  });
+
+  function fehlschlag(text) { sperre(false); sendefehler.textContent = text; sendefehler.hidden = false; }
+
+  function fertig(mail) {
+    sperre(false);
+    form.reset();
+    versucht = false;
+    zeige({});
+    document.getElementById('erfolg-mail').textContent = mail || 'Ihre E-Mail-Adresse';
+    form.hidden = true;
+    erfolg.hidden = false;
+    erfolg.focus();
+  }
+
+  document.getElementById('weitere').addEventListener('click', function () {
+    erfolg.hidden = true;
+    form.hidden = false;
+    form.elements.behoerde.focus();
+  });
+})();
+</script>
+</body>
+</html>

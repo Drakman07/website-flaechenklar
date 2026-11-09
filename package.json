@@ -4,33 +4,19 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "preview": "wrangler dev",
+    "dev": "npm run build && wrangler dev",
+    "build": "node scripts/baue-seite.mjs",
+    "preview": "npm run build && wrangler dev",
     "deploy": "npm run build && wrangler deploy",
-    "typecheck": "tsc -b --noEmit",
+    "typecheck": "tsc --noEmit",
     "build-og-image": "node scripts/build-og-image.mjs",
-    "build-favicons": "node scripts/build-favicons.mjs",
-    "build-portrait": "node scripts/build-portrait.mjs"
-  },
-  "dependencies": {
-    "@fontsource/geist-sans": "^5.1.0",
-    "lucide-react": "^0.451.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "build-favicons": "node scripts/build-favicons.mjs"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20241127.0",
     "@types/node": "^25.8.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "@vitejs/plugin-react": "^4.3.3",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.49",
     "sharp": "^0.33.5",
-    "tailwindcss": "^3.4.15",
     "typescript": "^5.6.3",
-    "vite": "^5.4.11",
     "wrangler": "^3.90.0"
   }
 }

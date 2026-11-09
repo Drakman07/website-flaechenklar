@@ -1,0 +1,165 @@
+/* =============================================================================
+   seiten.css · Hülle der Unterseiten (Plan-Unterseiten, Schritt 0, 08.11.2026)
+   Werte aus index.html (abgenommen 08.11.2026) und den Tokens aus scrollcraft.css.
+   Keine Engine, kein Pin: Unterseiten sind Nachschlage- und Arbeitsseiten.
+   Schriften lokal (Archivo OFL 1.1 aus @fontsource/archivo 5.3.0, Geist), kein Abruf bei Dritten.
+   ============================================================================= */
+
+@font-face { font-family: "Archivo"; src: url("fonts/archivo-latin-500-normal.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Archivo"; src: url("fonts/archivo-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Archivo"; src: url("fonts/archivo-latin-800-normal.woff2") format("woff2"); font-weight: 800; font-display: swap; }
+@font-face { font-family: "Geist"; src: url("fonts/geist-sans-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Geist"; src: url("fonts/geist-sans-latin-600-normal.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Geist"; src: url("fonts/geist-sans-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+
+:root {
+  --navy: #0F2D5A;
+  --navy-tief: #0A2246;
+  --navy-hell: #14386C;
+  --teal: #1EA596;
+  --teal-hell: #5CCFC2;
+  --papier: #E7ECF2;
+  --tinte-weich: #B9C6DA;      /* auf Navy 7,9:1 */
+  --tinte-blatt: #46597A;      /* auf Weiß 7,2:1 */
+  --linie: color-mix(in oklab, #FFFFFF 12%, transparent);
+
+  --font-anzeige: "Archivo", "Geist", system-ui, sans-serif;
+  --font-text: "Geist", "Helvetica Neue", system-ui, sans-serif;
+
+  /* Typo- und Abstandsstufen wie scrollcraft.css */
+  --t-xs:   clamp(0.75rem, 0.72rem + 0.15vw, 0.82rem);
+  --t-sm:   clamp(0.875rem, 0.84rem + 0.18vw, 0.95rem);
+  --t-base: clamp(1rem, 0.96rem + 0.22vw, 1.125rem);
+  --t-lg:   clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem);
+  --t-xl:   clamp(1.6rem, 1.35rem + 1.2vw, 2.25rem);
+  --t-2xl:  clamp(2.1rem, 1.6rem + 2.4vw, 3.4rem);
+  --s-2: 0.5rem; --s-3: 0.75rem; --s-4: 1rem; --s-5: 1.5rem; --s-6: 2rem; --s-7: 3rem; --s-8: 4rem;
+  --rand: clamp(1.25rem, 5vw, 5.5rem);
+  /* Linke Kante für Kopf, Seitenkopf und Lineal: wie der Inhalt (112rem breit, mittig), nie schmaler als --rand. */
+  --kante: max(var(--rand), calc((100% - 112rem) / 2));
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --d-fast: 160ms;
+  --schatten: 215 60% 10%;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: var(--s-6); }
+body { margin: 0; background: var(--navy); color: #FFFFFF; font: 400 var(--t-base)/1.55 var(--font-text);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+h1, h2, h3, p, figure, dl, dd, ul, ol { margin: 0; }
+img, video { max-width: 100%; display: block; }
+a { color: var(--teal-hell); text-underline-offset: 0.25em; }
+:focus-visible { outline: 2px solid var(--teal-hell); outline-offset: 3px; border-radius: 2px; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.springmarke { position: absolute; left: var(--rand); top: -4rem; z-index: 20; background: var(--teal); color: var(--navy); padding: 0.6rem 1rem;
+  border-radius: 6px; font-weight: 600; text-decoration: none; }
+.springmarke:focus { top: var(--s-4); }
+
+/* Bausteine aus der Startseite, gleiche Werte */
+.anzeige { font-family: var(--font-anzeige); font-weight: 800; letter-spacing: -0.035em; line-height: 0.98; text-wrap: balance; }
+.marke { display: block; font-size: var(--t-xs); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal-hell); }
+.wortmarke { font: 800 1.15rem/1 var(--font-anzeige); letter-spacing: -0.02em; color: #FFFFFF; text-decoration: none; }
+.wortmarke span { color: var(--teal); }
+.knopf { display: inline-flex; align-items: center; gap: 0.5em; background: var(--teal); color: var(--navy); font: 700 1.2rem/1 var(--font-anzeige);
+  padding: 1rem 1.6rem; border-radius: 6px; border: 0; text-decoration: none; cursor: pointer;
+  box-shadow: 0 10px 24px -14px hsl(var(--schatten) / 0.9);
+  transition: background-color var(--d-fast) var(--ease-out), transform 120ms var(--ease-out); }
+.knopf:hover { background: var(--teal-hell); }
+.knopf:active { transform: translateY(1px); }
+.knopf:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ------------------------------------------------------------ Kopfzeile --- */
+.kopf { position: relative; z-index: 2; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--s-4) var(--s-6);
+  padding: clamp(1rem, 2.6vh, 1.75rem) var(--kante) 0; }
+.kopf nav { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-2) var(--s-6); }
+.kopf nav a { color: var(--tinte-weich); font-size: var(--t-sm); text-decoration: none; padding: 0.35rem 0; }
+.kopf nav a:hover { color: #FFFFFF; text-decoration: underline; }
+.kopf nav a[aria-current="page"] { color: #FFFFFF; text-decoration: underline; text-decoration-color: var(--teal); text-decoration-thickness: 2px; }
+.kopf nav a.kopf-link { color: var(--teal-hell); font-weight: 600; }
+
+/* -------------------------------------------------- Seitenkopf (Planblatt) --- */
+/* Millimeterraster und Teal-Schein wie .seite--morgen; der Schein sitzt links, wo die Trennlinie nach dem Umkippen steht. */
+.seitenkopf { --raster: 12px; position: relative;
+  background:
+    radial-gradient(ellipse 50% 90% at 0% 30%, color-mix(in oklab, var(--teal) 20%, transparent), transparent 70%),
+    repeating-linear-gradient(to right, color-mix(in oklab, #FFFFFF 8%, transparent) 0 1px, transparent 1px calc(var(--raster) * 5)),
+    repeating-linear-gradient(to bottom, color-mix(in oklab, #FFFFFF 8%, transparent) 0 1px, transparent 1px calc(var(--raster) * 5)),
+    repeating-linear-gradient(to right, color-mix(in oklab, #FFFFFF 4%, transparent) 0 1px, transparent 1px var(--raster)),
+    repeating-linear-gradient(to bottom, color-mix(in oklab, #FFFFFF 4%, transparent) 0 1px, transparent 1px var(--raster)),
+    var(--navy); }
+.seitenkopf__satz { padding: clamp(3.5rem, 11vh, 7.5rem) var(--kante) clamp(2.5rem, 7vh, 4.5rem); }
+.seitenkopf .marke { margin-bottom: var(--s-3); }
+.seitenkopf h1 { font-size: var(--t-2xl); max-width: 22ch; }
+.seitenkopf h1 span { color: var(--teal); }
+.lede { margin-top: var(--s-5); font-size: var(--t-lg); line-height: 1.45; color: var(--tinte-weich); max-width: 46ch; }
+/* Lineal als Grenze zum Inhalt, wie die Rückblick-Leiste der Startseite: Grundstrich Teal, kurze Striche alle 24 px. */
+.lineal { height: 14px; margin: 0 var(--kante);
+  background:
+    linear-gradient(var(--teal), var(--teal)) left bottom / 100% 2px no-repeat,
+    repeating-linear-gradient(90deg, color-mix(in oklab, var(--teal-hell) 45%, transparent) 0 1px, transparent 1px 24px) left bottom / 100% 7px no-repeat; }
+
+/* --------------------------------------------------------------- Inhalt --- */
+.inhalt { padding: var(--s-8) var(--rand) var(--s-8); }
+.inhalt__innen { max-width: 112rem; margin: 0 auto; }
+.block { display: grid; grid-template-columns: minmax(0, clamp(18rem, 22vw, 26rem)) minmax(0, 1fr); gap: var(--s-8); padding: var(--s-8) 0; border-top: 1px solid var(--linie); }
+.block:first-child { border-top: 0; padding-top: 0; }
+.block__kopf .marke { margin-bottom: var(--s-3); }
+.block__kopf h2 { font-size: var(--t-xl); line-height: 1.05; hyphens: auto; }
+.block__kopf p { margin-top: var(--s-4); color: var(--tinte-weich); font-size: var(--t-sm); line-height: 1.55; }
+.text { max-width: 66ch; color: #DCE4EF; }
+.text p + p { margin-top: var(--s-4); }
+
+/* „So starten Sie“ wie im Finale der Startseite, hier untereinander */
+.wege__titel { font-size: var(--t-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--tinte-weich); }
+.wege { list-style: none; padding: 0; margin: var(--s-3) 0 0; counter-reset: w; display: grid; gap: var(--s-4); }
+.wege li { counter-increment: w; display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 0.6rem; align-items: baseline; }
+.wege li::before { content: counter(w); grid-row: 1 / span 2; font: 800 var(--t-lg)/1 var(--font-anzeige); color: var(--teal-hell); font-variant-numeric: tabular-nums; }
+.wege strong { font: 700 var(--t-sm)/1.3 var(--font-anzeige); }
+.wege span { grid-column: 2; font-size: var(--t-xs); line-height: 1.45; color: var(--tinte-weich); }
+.klein { margin-top: var(--s-5); font-size: var(--t-xs); line-height: 1.5; color: var(--tinte-weich); max-width: 46ch; }
+
+/* Porträt wie Runde 14: Kreis mit Teal-Ring */
+.person { display: flex; gap: var(--s-5); align-items: center; margin-top: var(--s-6); color: var(--tinte-weich); max-width: 48ch; font-size: var(--t-sm); }
+.person img { width: 132px; height: 132px; border-radius: 50%; object-fit: cover; object-position: 50% 18%; flex: none;
+  outline: 2px solid var(--teal); outline-offset: 4px; }
+
+/* Weißes Blatt auf Navy, wie die Sitzungsvorlage (.beschluss) */
+.blatt { background: #FFFFFF; color: var(--navy); border-top: 4px solid var(--teal); border-radius: 3px; padding: clamp(1.75rem, 3.2vw, 3.5rem);
+  box-shadow: 0 34px 70px -34px hsl(var(--schatten) / 0.75); width: min(100%, 70rem); margin: 0 auto; }
+.blatt a { color: #1B6E64; }
+.blatt :focus-visible { outline-color: var(--navy); }
+
+/* ------------------------------------------------------------------ Fuß --- */
+.fuss { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-4); padding: var(--s-7) 0 var(--s-6); margin-top: var(--s-8);
+  border-top: 1px solid var(--linie); font-size: var(--t-xs); color: var(--tinte-weich); }
+.fuss nav { display: flex; gap: var(--s-5); }
+.fuss a { color: inherit; }
+.fuss__stand { flex: 1 0 100%; margin: 0; line-height: 1.5; }
+.fuss__ziel { white-space: nowrap; }
+.inhalt + .fuss-rahmen, .fuss-rahmen { padding: 0 var(--rand); }
+/* Das Inhaltspolster unten reicht als Abstand, der Fuß bringt keinen eigenen mit. */
+.fuss-rahmen .fuss { max-width: 112rem; margin: 0 auto; }
+
+/* ------------------------------------------------------------ schmal ---------- */
+@media (max-width: 860px) {
+  .kopf { padding-top: var(--s-4); }
+  .kopf nav { gap: var(--s-2) var(--s-5); }
+  .kopf nav a { padding: 0.75rem 0; margin: -0.4rem 0; }
+  .seitenkopf { --raster: 10px; }
+  .block { grid-template-columns: minmax(0, 1fr); gap: var(--s-5); padding: var(--s-7) 0; }
+  .person img { width: 80px; height: 80px; outline-offset: 3px; }
+  .inhalt { padding-top: var(--s-7); }
+  /* Tap-Ziele mindestens 44 px wie auf der Startseite; der negative Rand hält die Zeilen zusammen. */
+  .fuss nav { flex-wrap: wrap; row-gap: 0; }
+  .fuss nav a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; }
+  .fuss__stand a { display: inline-block; padding: 0.9rem 0; margin: -0.9rem 0; }
+  .kopf nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0; margin: 0; }
+  .wortmarke { display: inline-flex; align-items: center; min-height: 44px; }
+  /* Links im Inhalt: Trefferfläche 44 px hoch, der negative Rand (Zeilenhöhe minus 44 px, halbiert) hält den Zeilenabstand. */
+  main a:not(.knopf) { display: inline-flex; align-items: center; min-height: 44px; margin-block: -0.75rem; margin-block: calc((1lh - 44px) / 2); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
