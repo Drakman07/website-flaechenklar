@@ -298,6 +298,9 @@
   .werkzeug__film, .werkzeug__stand { position: absolute; height: auto; max-width: none; display: block; }
   /* Clip = Ausschnitt selbst. */
   .werkzeug__film { left: 0; top: 0; width: 100%; transform-origin: 57.152% 49.381%; transform: scale(var(--z, 1)); }
+  /* Ersatz-Bildfolge, wenn der Clip nicht lädt (Skript, Abschnitt Peak): gleiche Lage und Kamera wie der Clip, liegt darüber. */
+  .werkzeug__folge { position: absolute; left: 0; top: 0; width: 100%; height: auto; display: block; transform-origin: 57.152% 49.381%; transform: scale(var(--z, 1)); }
+  .werkzeug__folge[hidden] { display: none; }
   /* Standbild: volle Aufnahme, Endzustand in der Endeinstellung der Kamera, ohne Bewegung. */
   .werkzeug__stand { display: none; left: -15.056%; top: -27.475%; width: 120.452%; transform-origin: 59.948% 57.5%; transform: scale(1.6); }
   .werkzeug__zeilen { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: clamp(1.5rem, 2.5vw, 3rem); counter-reset: z; }
@@ -311,7 +314,7 @@
   .werkzeug__quelle { margin-top: var(--sc-4); font-size: var(--sc-t-xs); line-height: 1.5; color: var(--teal-hell); }
   @media (min-width: 861px) and (max-width: 1279px) { .werkzeug { width: min(86vw, calc((100svh - 15rem) * 1.97)); } .werkzeug__zeilen li { font-size: var(--sc-t-lg); } }
   /* Ruhige Fassung (Spec §10): Standbild des Endzustands, die Zeilen stehen gleich da. */
-  html.ist-ruhig .werkzeug__film { display: none; }
+  html.ist-ruhig .werkzeug__film, html.ist-ruhig .werkzeug__folge { display: none; }
   html.ist-ruhig .werkzeug__stand { display: block; }
   html.ist-ruhig .werkzeug__zeilen li { opacity: 1; translate: none; transition: none; }
 
@@ -967,6 +970,7 @@
         <figure class="werkzeug">
           <div class="werkzeug__bild" role="img" aria-label="Das Programm zeichnet die Außenkontur des Erdgeschosses und berechnet die Fläche">
             <video class="werkzeug__film" muted playsinline preload="none" data-poster="assets/werkzeug-start.webp" width="1594" height="808" data-aufnahme="240 222 1594"><source data-src="assets/werkzeug.mp4" type="video/mp4"></video>
+            <canvas class="werkzeug__folge" width="1594" height="808" data-folge="assets/werkzeug-folge/" data-bilder="57" hidden></canvas>
             <img class="werkzeug__stand" src="assets/werkzeug-ende.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" data-aufnahme="0 0 1920">
           </div>
           <div class="werkzeug__text">
@@ -1475,7 +1479,28 @@ ScrollCraft.mount(document.body);
   film.addEventListener('loadedmetadata', function () { letztes = -1; });
   // Während eines Seeks wird kein neuer gesetzt (sonst staut sich beim schnellen Scrollen eine Kette); ist er fertig,
   // rechnet bild() einmal neu und sucht die dann aktuelle Stelle.
-  film.addEventListener('seeked', function () { letztes = -1; });
+  film.addEventListener('seeked', function () { filmOk = true; clearTimeout(filmFrist); folge.hidden = true; letztes = -1; });
+  // Ersatz (09.11.2026): Am Arbeits-PC im Markt Postbauer-Heng zeigten Chrome und Edge nur das Poster, der Zoom lief.
+  // Manche Behördennetze lassen MP4 nicht durch, Bilder schon. Meldet der Clip einen Fehler oder ist 8 s nach dem
+  // Laden-Start noch kein Seek fertig, spult die Seite stattdessen 57 Einzelbilder aus demselben Clip (alle 0,2 s, das
+  // letzte ist das Schlussbild). Kommt der Clip doch noch (sehr langsames Netz), übernimmt er nach seinem ersten Seek wieder.
+  var folge = document.querySelector('.werkzeug__folge');
+  var folgeMaler = folge.getContext('2d');
+  var folgeBilder = null, folgeZuletzt = -1, filmOk = false, filmFrist = 0;
+  function filmGescheitert() {
+    if (filmOk || folgeBilder) return;
+    clearTimeout(filmFrist);
+    var n = parseInt(folge.getAttribute('data-bilder'), 10), basis = folge.getAttribute('data-folge');
+    folgeBilder = [];
+    for (var i = 0; i < n; i++) {
+      var bildI = new Image();
+      bildI.onload = function () { letztes = -1; };
+      bildI.src = basis + (i < 10 ? '0' : '') + i + '.webp';
+      folgeBilder.push(bildI);
+    }
+  }
+  film.addEventListener('error', filmGescheitert);
+  filmQuelle.addEventListener('error', filmGescheitert);
   function peak(p) {
     // Ausblenden kurz (0,90 bis 0,91): das Fenster ist ganz weg, bevor der Schluss ab 0,91 einblendet (voll ab 0,946),
     // so scheint kein Schlusstext durch das verblassende Fenster.
@@ -1493,8 +1518,21 @@ ScrollCraft.mount(document.body);
       filmQuelle.src = filmQuelle.getAttribute('data-src');
       film.preload = 'auto';
       film.load();
+      filmFrist = setTimeout(filmGescheitert, 8000);
+    }
+    if (folgeBilder && !filmOk) {
+      // Bild zum Fortschritt, sonst das nächste schon geladene davor; bis eins da ist, bleibt das Poster des Clips stehen.
+      var k = Math.round(band(p, 0.71, 0.88) * (folgeBilder.length - 1));
+      while (k >= 0 && !(folgeBilder[k].complete && folgeBilder[k].naturalWidth)) k--;
+      if (k >= 0 && k !== folgeZuletzt) {
+        folgeMaler.drawImage(folgeBilder[k], 0, 0, folge.width, folge.height);
+        folgeZuletzt = k;
+        folge.hidden = false;
+        folge.setAttribute('data-bild', k);
+      }
     }
     // Ohne endliche Dauer (Infinity, NaN) kein Seek: currentTime = NaN würfe und hielte die ganze Seite an.
+    // Läuft auch neben der Bildfolge weiter, damit ein verspäteter Clip übernehmen kann.
     if (film.readyState >= 1 && isFinite(film.duration) && film.duration > 0 && !film.seeking) {
       var t = Math.min(band(p, 0.71, 0.88) * film.duration, film.duration - 0.02);
       if (!filmGesucht || Math.abs(film.currentTime - t) > 0.02) { film.currentTime = t; filmGesucht = true; }
