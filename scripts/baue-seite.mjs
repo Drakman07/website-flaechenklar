@@ -181,11 +181,12 @@ function kopf(name, html) {
     '<meta property="og:url" content="' + url + '">\n' +
     '<meta property="og:title" content="' + titel + '">\n' +
     '<meta property="og:description" content="' + beschreibung + '">\n' +
-    '<meta property="og:image" content="' + HOST + '/og-image.png">\n' +
+    // ?v= hochzaehlen, wenn sich og-image.png aendert: LinkedIn haelt Bilder je Adresse im Speicher
+    '<meta property="og:image" content="' + HOST + '/og-image.png?v=2">\n' +
     '<meta property="og:image:width" content="1200">\n' +
     '<meta property="og:image:height" content="630">\n' +
     '<meta name="twitter:card" content="summary_large_image">\n' +
-    '<meta name="twitter:image" content="' + HOST + '/og-image.png">';
+    '<meta name="twitter:image" content="' + HOST + '/og-image.png?v=2">';
   html = html.replace(/(<meta name="description" content="[^"]*">)/, "$1\n" + meta);
   if (name === "index") html = html.replace("</head>", jsonLd(html, textOhneTags(beschreibung)) + "\n</head>");
   return html;
