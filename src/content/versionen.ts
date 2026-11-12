@@ -45,6 +45,29 @@ export const versionen: readonly Version[] = [
   // Im Internet erscheinen aber nur Einträge mit oeffentlich !== false.
   // Eilpatches bekommen `oeffentlich: false` (siehe 1.2.1).
   {
+    version: "1.6.0",
+    datum: "12.11.2026",
+    iso: "2026-11-12",
+    punkte: [
+      {
+        titel: "Fläche eines anderen Geschosses übernehmen",
+        text: "Haben zwei Geschosse dieselbe Außenkontur, etwa Erdgeschoss und Obergeschosse im Geschosswohnungsbau, messen Sie die Kontur nur noch einmal. In der Geschoss-Liste setzen Sie über „+ Fläche wie …“ einzelne Flächen eines anderen Geschosses für das aktuelle Geschoss an; ein eigener Plan-Ausschnitt ist dafür nicht nötig. Die übernommene Fläche bleibt mit ihrer Quelle verknüpft: Ändern Sie die Quelle, ändert sich die Übernahme mit, und das Programm nennt die betroffenen Geschosse. Löschen Sie die Quelle, fragt das Programm nach und entfernt die Übernahmen mit. Das Aufmaßprotokoll weist jede Übernahme auf einer eigenen Seite aus: mit dem Plan der Quelle, der farbigen Fläche und dem Vermerk, dass die Fläche nach Angabe des Bearbeiters deckungsgleich ist und übernommen, nicht neu gemessen wurde. Ob die Geschosse tatsächlich deckungsgleich sind, prüft das Programm nicht; das beurteilen Sie anhand der Pläne. Weicht ein Geschoss in Teilen ab, tragen Sie dort einen Abzug ein oder messen die Fläche selbst.",
+      },
+      {
+        titel: "Bezeichnung einer Fläche nachträglich ändern",
+        text: "Die Bezeichnung einer gemessenen Fläche lässt sich jetzt ändern, ohne die Fläche neu zu zeichnen: Klicken Sie auf den Stift an der Fläche und tragen Sie im Feld „Bezeichnung“ den neuen Namen ein. Fläche, Eckpunkte und eine manuelle Korrektur bleiben erhalten; eine Begründung ist für die reine Umbenennung nicht nötig.",
+      },
+      {
+        titel: "Update-Hinweis in eigenem Fenster",
+        text: "Liegt beim Start über FlaechenKlar.bat ein Update vor, zeigt das Programm die Änderungen künftig in einem eigenen Fenster: nach Versionen gegliedert, mit Datum und bei Bedarf scrollbar, höchstens die fünf neuesten Versionen. Mit „Jetzt aktualisieren“ läuft das Update, mit „Später“ startet das Programm mit dem bisherigen Stand und fragt beim nächsten Start erneut. Das neue Fenster erscheint ab dem nächsten Update nach dieser Version; das Update auf 1.6.0 selbst zeigt noch die bisherige Meldung.",
+      },
+      {
+        titel: "Mit 1.6.0 gespeicherte Akten öffnen nur ab Version 1.6.0",
+        text: "Mit dieser Version gespeicherte Akten lassen sich mit älteren Programmversionen nicht mehr öffnen. Ältere Akten öffnet Version 1.6.0 wie gewohnt. Arbeiten mehrere Arbeitsplätze an denselben Akten, aktualisieren Sie bitte alle Arbeitsplätze.",
+      },
+    ],
+  },
+  {
     version: "1.5.7",
     datum: "23.10.2026",
     iso: "2026-10-23",
