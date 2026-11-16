@@ -913,8 +913,10 @@
             <!-- Runde 6: Schema Datensicherheit. Grenze um den Rechner, zwei Abrufe kommen herein, die Cloud bleibt gestrichen,
                  der Ring steht für die Sicherung im Browser. Alle Beschriftungen aus den Zeilen darunter; JS zeichnet nach p.
                  Runde 7: Zeitpunkt je Abruf aus der Quelle (updates.js: nur über das Menü Hilfe, Abbruch nach 8 s;
-                 lizenz.js pruefeSperre: beim Start, höchstens einmal in 24 h), dazu der Hinweis „keine Dauerverbindung“. -->
-            <svg class="sicher" viewBox="-30 0 230 90" aria-label="Schema: Ihr Rechner mit den Bauherrendaten und der Sicherung alle 30 Sekunden im Browser. Nur zwei kurze Abrufe kommen herein: die Update-Prüfung nur auf Klick im Menü Hilfe, der Lizenz-Hash beim Start höchstens einmal am Tag. Je ein kurzer Abruf, keine Projektdaten, keine Dauerverbindung. Keine Verbindung zu einer Cloud.">
+                 lizenz.js pruefeSperre: beim Start, höchstens einmal in 24 h), dazu der Hinweis „keine Dauerverbindung“.
+                 16.11.2026: Der Start über FlaechenKlar.bat ruft bei jedem Start launcher.ps1 -> update.ps1 -NurPruefen
+                 (version.txt und allowlist.json, ohne Karenz). Deshalb „beim Start und auf Klick“ und Lizenz-Hash „beim Start“. -->
+            <svg class="sicher" viewBox="-30 0 230 90" aria-label="Schema: Ihr Rechner mit den Bauherrendaten und der Sicherung alle 30 Sekunden im Browser. Nur zwei kurze Abrufe kommen herein: die Update-Prüfung beim Start und auf Klick im Menü Hilfe, der Lizenz-Hash beim Start. Je ein kurzer Abruf, keine Projektdaten, keine Dauerverbindung. Keine Verbindung zu einer Cloud.">
               <path id="s-grenze" d="M66 8H134Q142 8 142 16V74Q142 82 134 82H66Q58 82 58 74V16Q58 8 66 8Z" fill="#1EA596" fill-opacity="0.06" stroke="#1EA596" stroke-width="1.2" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
               <text class="sicher__titel" x="100" y="18" text-anchor="middle">Ihr Rechner</text>
               <path d="M78 25H122V54H78Z M94 54L92 61H108L106 54" fill="none" stroke="#FFFFFF" stroke-opacity="0.55" stroke-width="1" stroke-linejoin="round"/>
@@ -928,10 +930,10 @@
               <text class="sicher__klein" x="128" y="78" text-anchor="middle">Sicherung</text>
               <text x="-26" y="19">Update-Prüfung</text>
               <path class="s-abruf" d="M-26 23H54L50 20L54 23L50 26" fill="none" stroke="#5CCFC2" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
-              <text class="sicher__neben" x="-26" y="30">nur auf Klick im Menü Hilfe</text>
+              <text class="sicher__neben" x="-26" y="30">beim Start und auf Klick</text>
               <text x="-26" y="42">Lizenz-Hash</text>
               <path class="s-abruf" d="M-26 46H54L50 43L54 46L50 49" fill="none" stroke="#5CCFC2" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>
-              <text class="sicher__neben" x="-26" y="53">beim Start, höchstens 1× am Tag</text>
+              <text class="sicher__neben" x="-26" y="53">beim Start</text>
               <text class="sicher__hinweis" x="-26" y="66">Je ein kurzer Abruf,</text>
               <text class="sicher__hinweis" x="-26" y="72">keine Projektdaten,</text>
               <text class="sicher__hinweis" x="-26" y="78">keine Dauerverbindung.</text>
@@ -1107,7 +1109,7 @@
       </div>
 
       <!-- Runde 8: Prüfbogen ersetzt den Datenblock und die FAQ zu Installation, DSGVO und Browser. Jeder Fakt steht einmal.
-           Quellen: sicherheit.ts, faq.ts, tool/js/updates.js (Update nur über Menü Hilfe), lizenz.js (höchstens 1× in 24 h),
+           Quellen: sicherheit.ts, faq.ts, tool/js/updates.js (Update über Menü Hilfe), tool/launcher.ps1 (Update- und Lizenzprüfung bei jedem Start über FlaechenKlar.bat), lizenz.js (höchstens 1× in 24 h),
            recovery.js (30 s). Die Zeile „Quelltext im Browser einsehbar“ entfällt: das Release-ZIP ist obfuskiert. -->
       <div class="block block--pruefbogen" id="pruefbogen">
         <div class="block__kopf">
@@ -1119,7 +1121,7 @@
             <tr><th scope="row">Muss etwas installiert werden?</th><td class="pruefbogen__kurz">Nein</td><td>Start per Doppelklick, lokal oder vom Netzlaufwerk. Ohne Admin-Rechte, ohne Server-Komponente.</td></tr>
             <tr><th scope="row">Läuft es auf unseren Rechnern?</th><td class="pruefbogen__kurz">Ja</td><td>Aktuelle Versionen von Microsoft Edge, Google Chrome und Mozilla Firefox, unter Windows, macOS und Linux. Internet Explorer wird nicht unterstützt.</td></tr>
             <tr><th scope="row">Gehen Bauantragsdaten ins Netz?</th><td class="pruefbogen__kurz">Nein</td><td>Keine Cloud-Aufrufe, keine Cookies, kein Tracking. Bauantragsdaten verlassen den Rechner nicht.</td></tr>
-            <tr><th scope="row">Welche Verbindungen baut es auf?</th><td class="pruefbogen__kurz">Zwei Abrufe</td><td>Je ein kurzer Abruf öffentlicher statischer Dateien, ohne Projektdaten, keine Dauerverbindung: die Update-Prüfung nur auf Klick im Menü Hilfe, der Lizenz-Hash beim Start, höchstens 1× am Tag.</td></tr>
+            <tr><th scope="row">Welche Verbindungen baut es auf?</th><td class="pruefbogen__kurz">Zwei Abrufe</td><td>Je ein kurzer Abruf öffentlicher statischer Dateien, ohne Projektdaten, keine Dauerverbindung: die Update-Prüfung bei jedem Start über die Startdatei und auf Klick im Menü Hilfe, der Lizenz-Hash beim Start.</td></tr>
             <tr><th scope="row">Was steht in der Freischaltliste?</th><td class="pruefbogen__kurz">Nur Hashes</td><td>SHA256-Hashes. Aus einem Hash lässt sich die Kunden-ID nicht rekonstruieren.</td></tr>
             <tr><th scope="row">Wo liegen die Projekte?</th><td class="pruefbogen__kurz">Bei Ihnen</td><td>Als .gfproj-Datei, dort, wo Sie entscheiden: Aktenlaufwerk, Netzlaufwerk, lokaler Ordner.</td></tr>
             <tr><th scope="row">Was passiert bei einem Absturz?</th><td class="pruefbogen__kurz">Gesichert</td><td>Alle 30 Sekunden ein Zwischenstand im Browser auf diesem Rechner. Beim nächsten Start bietet FlächenKlar den letzten Stand an.</td></tr>
