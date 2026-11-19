@@ -791,7 +791,7 @@
         q.el.style.transform = reduce ? 'none'
           : 'translate3d(0,' + ((0.5 - wp) * 4).toFixed(2) + 'vh,0)';
         var on = vis > 0.5;
-        if (on !== (q.state === 1)) { q.state = on ? 1 : 0; q.el.style.pointerEvents = on ? 'auto' : 'none'; }
+        if ((on ? 1 : 0) !== q.state) { q.state = on ? 1 : 0; q.el.style.pointerEvents = on ? 'auto' : 'none'; }
       }
 
       // Publish the route, draw none of it. A gauge, a map, a leg counter and a
@@ -930,7 +930,9 @@
               : 'translate3d(0,' + ((1 - vis) * 2.4 * q.rise).toFixed(2) + 'vh,0)';
           }
           var on = vis > 0.5;
-          if (on !== (q.state === 1)) { q.state = on ? 1 : 0; q.el.style.pointerEvents = on ? 'auto' : 'none'; }
+          // Vergleich gegen 0/1 statt (state === 1): sonst bleibt der Startzustand -1 bei unsichtbaren Cues stehen,
+          // pointer-events bleibt auto und ein ausgeblendeter Cue (z. B. .finale, z-index 6) fängt Klicks ab.
+          if ((on ? 1 : 0) !== q.state) { q.state = on ? 1 : 0; q.el.style.pointerEvents = on ? 'auto' : 'none'; }
         }
 
         // parallax

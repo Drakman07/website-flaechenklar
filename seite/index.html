@@ -151,7 +151,9 @@
     background: repeating-linear-gradient(to bottom, #DCE3EC 0 1px, transparent 1px 9px); }
 
   /* -------------------------------------------- Seite „Mit FlächenKlar“ --- */
-  .morgen__kopf { position: absolute; top: clamp(1rem, 2.6vh, 1.75rem); right: var(--sc-gutter); display: flex; gap: var(--sc-6); align-items: baseline; }
+  /* z-index: .morgen__inhalt steht im DOM danach und ragt nach translate/scale bis unter die Kopfzeile;
+     ohne eigene Ebene fängt er die Klicks auf „Demo anfragen“ ab. */
+  .morgen__kopf { position: absolute; z-index: 1; top: clamp(1rem, 2.6vh, 1.75rem); right: var(--sc-gutter); display: flex; gap: var(--sc-6); align-items: baseline; }
   .wortmarke { font: 800 1.15rem/1 var(--sc-font-display); letter-spacing: -0.02em; }
   .wortmarke span { color: var(--teal); }
   .kopf-link { color: var(--teal-hell); font-weight: 600; font-size: var(--sc-t-sm); text-underline-offset: 0.3em; }
@@ -186,8 +188,9 @@
   .beleg-zeile { margin-top: var(--sc-3); padding-left: 0.7rem; border-left: 2px solid var(--teal); max-width: 52ch;
     font-size: var(--sc-t-sm); line-height: 1.45; color: #FFFFFF; text-wrap: pretty; }
 
-  .schritte { display: flex; flex-wrap: wrap; gap: var(--sc-2); margin-top: var(--sc-5); }
-  .schritte span { border: 1px solid color-mix(in oklab, #FFFFFF 22%, transparent); border-radius: 999px; padding: 0.35rem 0.8rem; font-size: var(--sc-t-sm); }
+  /* Ohne Rahmen (19.11.2026): die Pillen sahen aus wie Knöpfe, sind aber reine Aufzählung. */
+  .schritte { display: flex; flex-wrap: wrap; gap: var(--sc-2) var(--sc-5); margin-top: var(--sc-5); }
+  .schritte span { font-size: var(--sc-t-sm); }
   .schritte b { color: var(--teal-hell); margin-right: 0.35rem; }
   /* Die drei Pillen kommen beim Laden nacheinander (Spec §5, Stagger 60 ms); ist-da setzt das Skript. */
   .schritte span { opacity: 0; transition: opacity var(--sc-d-base) var(--sc-ease-out); }
@@ -378,6 +381,7 @@
   @media (max-height: 960px) { .wege span { display: none; } }
   .finale__klein { margin-top: var(--sc-4); font-size: var(--sc-t-xs); line-height: 1.5; color: var(--sc-ink-soft); max-width: 46ch; }
   .finale__weiter { margin-top: var(--sc-2); font-size: var(--sc-t-xs); color: var(--teal-hell); }
+  .finale__weiter a { color: inherit; text-decoration: underline; text-underline-offset: 0.25em; }
   /* Rückblick-Leiste (Runde 3): löst die drei Schritte der Überschrift mit den Ergebniszahlen der Runden ein. Oben ein Lineal
      wie an der Trennlinie (Grundstrich mit kurzen Strichen), je Schritt ein langer Strich, der durch das Lineal bis zur Zahl
      läuft, rechts der Hinweis auf die Beispieldaten. Das Lineal zieht sich beim Hochzählen von links auf (--rb, schreibt das
@@ -571,7 +575,7 @@
     .fakten-liste { margin-top: var(--sc-3); padding-top: var(--sc-3); font-size: var(--sc-t-xs); gap: 0.3rem; }
     .fakten-liste li:nth-child(n+3) { display: none; }
     .schritte { margin-top: var(--sc-3); }
-    .schritte span { font-size: var(--sc-t-xs); padding: 0.25rem 0.6rem; }
+    .schritte span { font-size: var(--sc-t-xs); }
     .runde-r .marke--teal { margin-bottom: var(--sc-2); }
     .runde-r svg.grundriss { max-height: 14svh; }
     .runde-r svg.sicher { max-height: 21svh; }
@@ -1013,7 +1017,7 @@
               </ol>
               <a class="knopf" id="demo-knopf" href="demo.html">Kostenlose Demo anfragen</a>
               <p class="finale__klein">Einmalkauf nach Einwohnerklasse, Wartung bis 31.12. des Folgejahres inklusive. Die Demo läuft 14 Tage mit vollem Funktionsumfang.</p>
-              <p class="finale__weiter">Weiter unten: Funktionen, IT-Prüfbogen und Ihre Sitzungsvorlage.</p>
+              <p class="finale__weiter">Weiter unten: <a href="#funktionen">Funktionen</a>, <a href="#pruefbogen">IT-Prüfbogen</a> und Ihre <a href="#vorlage">Sitzungsvorlage</a>.</p>
             </div>
           </div>
           <!-- Rückblick (Runde 3, Runde 4 ohne Vollgeschoss): Messen und Protokoll aus dem Aufmaßmodul, dann der Entwurf aus dem
