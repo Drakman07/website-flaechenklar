@@ -7,3 +7,4 @@ dist
 .DS_Store
 *.tsbuildinfo
 .claude/
+src/content/kundenkarte.vorschlag.json

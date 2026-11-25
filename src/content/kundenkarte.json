@@ -1,0 +1,210 @@
+{
+  "hinweis": "Quelle der Kundenkarte auf der Startseite. Vorschlag aus dem CRM: scripts/kundenkarte-vorschlag.mjs. name_zeigen (gesamt und je Verwaltung) schaltet Gemeindenamen frei; beide müssen true sein. sperrliste: AGS oder Schlüssel einer Verwaltung, der Eintrag fehlt dann auf Karte, in Liste und Zahlen.",
+  "stand": "2026-11",
+  "name_zeigen": false,
+  "sperrliste": [],
+  "verwaltungen": [
+    {
+      "schluessel": "ags:09189155",
+      "art": "Stadt",
+      "landkreis": "Traunstein",
+      "regierungsbezirk": "Oberbayern",
+      "reihenfolge": 1,
+      "name_zeigen": false,
+      "gemeinden": [
+        {
+          "ags": "09189155",
+          "lon": 12.6476,
+          "lat": 47.8688
+        }
+      ]
+    },
+    {
+      "schluessel": "vg:09274132",
+      "art": "Verwaltungsgemeinschaft",
+      "landkreis": "Landshut",
+      "regierungsbezirk": "Niederbayern",
+      "beschriftung": "unten",
+      "reihenfolge": 2,
+      "name_zeigen": false,
+      "gemeinden": [
+        {
+          "ags": "09274132",
+          "lon": 12.0225,
+          "lat": 48.5894
+        },
+        {
+          "ags": "09274165",
+          "lon": 11.9441,
+          "lat": 48.6099
+        },
+        {
+          "ags": "09274187",
+          "lon": 12.0438,
+          "lat": 48.604
+        }
+      ]
+    },
+    {
+      "schluessel": "vg:09277112",
+      "art": "Verwaltungsgemeinschaft",
+      "landkreis": "Rottal-Inn",
+      "regierungsbezirk": "Niederbayern",
+      "reihenfolge": 3,
+      "name_zeigen": false,
+      "gemeinden": [
+        {
+          "ags": "09277112",
+          "lon": 13.144,
+          "lat": 48.4101
+        },
+        {
+          "ags": "09277113",
+          "lon": 13.09,
+          "lat": 48.4441
+        }
+      ]
+    },
+    {
+      "schluessel": "vg:09774127",
+      "art": "Verwaltungsgemeinschaft",
+      "landkreis": "Günzburg",
+      "regierungsbezirk": "Schwaben",
+      "reihenfolge": 4,
+      "name_zeigen": false,
+      "gemeinden": [
+        {
+          "ags": "09774127",
+          "lon": 10.4331,
+          "lat": 48.4667
+        },
+        {
+          "ags": "09774140",
+          "lon": 10.4493,
+          "lat": 48.4375
+        },
+        {
+          "ags": "09774151",
+          "lon": 10.5234,
+          "lat": 48.4345
+        },
+        {
+          "ags": "09774178",
+          "lon": 10.4444,
+          "lat": 48.4244
+        },
+        {
+          "ags": "09774196",
+          "lon": 10.4883,
+          "lat": 48.4642
+        }
+      ]
+    },
+    {
+      "schluessel": "ags:09577114",
+      "art": "Gemeinde",
+      "landkreis": "Weißenburg-Gunzenhausen",
+      "regierungsbezirk": "Mittelfranken",
+      "reihenfolge": 5,
+      "name_zeigen": false,
+      "beschriftung": "links",
+      "gemeinden": [
+        {
+          "ags": "09577114",
+          "lon": 10.7111,
+          "lat": 49.1552
+        }
+      ]
+    },
+    {
+      "schluessel": "ags:09276126",
+      "art": "Gemeinde",
+      "landkreis": "Regen",
+      "regierungsbezirk": "Niederbayern",
+      "reihenfolge": 6,
+      "name_zeigen": false,
+      "gemeinden": [
+        {
+          "ags": "09276126",
+          "lon": 13.1851,
+          "lat": 48.8988
+        }
+      ]
+    },
+    {
+      "schluessel": "ags:09373160",
+      "art": "Gemeinde",
+      "landkreis": "Neumarkt i.d.OPf.",
+      "regierungsbezirk": "Oberpfalz",
+      "reihenfolge": 7,
+      "name_zeigen": false,
+      "gemeinden": [
+        {
+          "ags": "09373160",
+          "lon": 11.6252,
+          "lat": 49.1644
+        }
+      ]
+    },
+    {
+      "schluessel": "vg:09673135",
+      "art": "Verwaltungsgemeinschaft",
+      "landkreis": "Rhön-Grabfeld",
+      "regierungsbezirk": "Unterfranken",
+      "reihenfolge": 8,
+      "name_zeigen": false,
+      "gemeinden": [
+        {
+          "ags": "09673135",
+          "lon": 10.1718,
+          "lat": 50.3141
+        },
+        {
+          "ags": "09673146",
+          "lon": 10.1796,
+          "lat": 50.2962
+        },
+        {
+          "ags": "09673156",
+          "lon": 10.2775,
+          "lat": 50.3197
+        },
+        {
+          "ags": "09673161",
+          "lon": 10.2088,
+          "lat": 50.3095
+        },
+        {
+          "ags": "09673163",
+          "lon": 10.1048,
+          "lat": 50.3805
+        },
+        {
+          "ags": "09673171",
+          "lon": 10.2322,
+          "lat": 50.2831
+        },
+        {
+          "ags": "09673186",
+          "lon": 10.18,
+          "lat": 50.2766
+        }
+      ]
+    },
+    {
+      "schluessel": "ags:09471142",
+      "art": "Markt",
+      "landkreis": "Bamberg",
+      "regierungsbezirk": "Oberfranken",
+      "reihenfolge": 9,
+      "name_zeigen": false,
+      "gemeinden": [
+        {
+          "ags": "09471142",
+          "lon": 11.1707,
+          "lat": 49.865
+        }
+      ]
+    }
+  ]
+}
