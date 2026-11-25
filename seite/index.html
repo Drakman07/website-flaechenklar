@@ -615,7 +615,8 @@
     .teiler__strich { left: 0; right: 0; top: -1px; bottom: auto; width: auto; height: 2px; }
     .teiler__schild { top: auto; }
     .teiler__schild--heute { left: var(--sc-gutter); transform: translateY(calc(-100% - 0.6rem)); }
-    .teiler__schild--morgen { left: var(--sc-gutter); transform: translateY(0.75rem); }
+    /* Im Schluss (ab 0,91) blendet das Schild aus: mobil läge es sonst auf der Überschrift „Was es Ihre Gemeinde kostet“. */
+    .teiler__schild--morgen { left: var(--sc-gutter); transform: translateY(0.75rem); opacity: clamp(0, (0.905 - var(--sc-p, 0)) * 60, 1); }
     .teiler__skala { left: auto; right: var(--sc-gutter); top: 0; bottom: auto; flex-direction: row; gap: 10px; }
     .teiler__skala i { width: 2px; height: 22px; transform: translateY(-50%) scaleY(0.4545); }
     .teiler__skala i.ist-da { transform: translateY(-50%); }
@@ -676,7 +677,8 @@
     .werkzeug__zeilen li::before { margin-bottom: var(--sc-1); }
     .werkzeug__quelle { margin-top: var(--sc-1); }
 
-    .finale { padding: 1.25rem var(--sc-gutter); align-items: center; }
+    /* safe: ist der Schluss höher als das Fenster, beginnt er oben; mittig schnitte das Fenster die Überschrift an. */
+    .finale { padding: 1.25rem var(--sc-gutter); align-items: center; align-content: safe center; }
     .finale__satz { grid-template-columns: minmax(0, 1fr); gap: var(--sc-4); }
     .finale h2 { font-size: var(--sc-t-2xl); }
     .person { margin-top: var(--sc-3); font-size: var(--sc-t-xs); }
@@ -750,6 +752,15 @@
     /* Schritt 6: Tutorial-Link im Fragen-Block, 44 px Trefferfläche; der negative Rand (Zeilenhöhe minus 44 px, halbiert) hält den Zeilenabstand. */
     .block__kopf p a { display: inline-flex; align-items: center; min-height: 44px; margin-block: -0.75rem; margin-block: calc((1lh - 44px) / 2); }
   }
+  /* Schluss auf niedrigen Handys (25.11.): bei 360 px Breite braucht er 870 px Höhe, ein Handy mit Adressleiste hat
+     rund 660. Statt abzuschneiden fällt stufenweise weg, was weiter unten ohnehin noch einmal steht:
+     erst die Rückblick-Leiste, dann „So starten Sie“, dann wird die Überschrift kleiner, dann die Sprungmarken, zuletzt
+     das Zitat. Preise und der Knopf bleiben immer. Grenzen gemessen bei 360 bis 430 px Breite. */
+  @media (max-width: 860px) and (max-height: 870px) { .rueckblick { display: none; } }
+  @media (max-width: 860px) and (max-height: 766px) { .wege__titel, .wege { display: none; } }
+  @media (max-width: 860px) and (max-height: 690px) { .finale h2 { font-size: var(--sc-t-xl); } }
+  @media (max-width: 860px) and (max-height: 620px) { .finale__weiter { display: none; } }
+  @media (max-width: 860px) and (max-height: 570px) { .finale .person { display: none; } }
 </style>
 </head>
 <body>
