@@ -1,4 +1,6 @@
 // Liest die Kunden aus der CRM-Datenbank (nur lesend) und schreibt einen Vorschlag für src/content/kundenkarte.json.
+// Auf die Karte kommen die Status kunde und pilotbetrieb (Entscheidung 25.11.2026). Was in kundenkarte.json unter
+// ausgenommen steht (AGS), kommt nie in die Datei: dort steht der Arbeitgeber, der im CRM als Pilot geführt wird.
 //
 // Veröffentlicht wird nichts von selbst: der Vorschlag landet in kundenkarte.vorschlag.json (nicht im Repo),
 // das Skript zeigt, was sich gegenüber der gültigen Datei ändert. Erst --uebernehmen schreibt kundenkarte.json,
@@ -34,15 +36,17 @@ const alt = fs.existsSync(zielDatei) ? JSON.parse(fs.readFileSync(zielDatei, "ut
 const db = new DatabaseSync(dbPfad, { readOnly: true });
 const zeilen = db
   .prepare(
-    "SELECT id, ags, vg, gemeindename, art, landkreis, regierungsbezirk, vertragsdatum FROM gemeinden " +
-      "WHERE lower(status) = 'kunde' ORDER BY vertragsdatum, id",
+    "SELECT id, ags, vg, gemeindename, art, landkreis, regierungsbezirk, vertragsdatum, lower(status) AS status FROM gemeinden " +
+      "WHERE lower(status) IN ('kunde', 'pilotbetrieb') ORDER BY vertragsdatum, id",
   )
   .all();
 db.close();
 
+const ausgenommen = new Set(alt.ausgenommen || []);
 const ohneAgs = zeilen.filter((z) => !z.ags);
+const draussen = zeilen.filter((z) => z.ags && ausgenommen.has(z.ags));
 const gruppen = new Map();
-for (const z of zeilen.filter((x) => x.ags)) {
+for (const z of zeilen.filter((x) => x.ags && !ausgenommen.has(x.ags))) {
   if (!punkte[z.ags]) { console.error("Kein Gemeindepunkt für AGS " + z.ags + " (CRM-Zeile " + z.id + ")"); process.exit(1); }
   const istVg = z.vg && !/^(nein|ja)$/i.test(z.vg.trim());
   const schluessel = istVg ? "crm-vg:" + z.vg.trim() : "ags:" + z.ags;
@@ -80,6 +84,7 @@ const verwaltungen = [...gruppen.values()]
       reihenfolge: i + 1,
       name_zeigen: mitNamen,
       ...(vorher.beschriftung ? { beschriftung: vorher.beschriftung } : {}),
+      ...(vorher.versatz ? { versatz: vorher.versatz } : {}),
       gemeinden: gemeinden.map(({ name, ...rest }) => (mitNamen ? { name, ...rest } : rest)),
     };
   });
@@ -88,10 +93,12 @@ const neu = {
   hinweis:
     "Quelle der Kundenkarte auf der Startseite. Vorschlag aus dem CRM: scripts/kundenkarte-vorschlag.mjs. " +
     "name_zeigen (gesamt und je Verwaltung) schaltet Gemeindenamen frei; beide müssen true sein. " +
-    "sperrliste: AGS oder Schlüssel einer Verwaltung, der Eintrag fehlt dann auf Karte, in Liste und Zahlen.",
+    "sperrliste: AGS oder Schlüssel einer Verwaltung, der Eintrag fehlt dann auf Karte, in Liste und Zahlen. " +
+    "ausgenommen: AGS, die das Skript nie in die Datei schreibt.",
   stand,
   name_zeigen: alt.name_zeigen === true,
   sperrliste: alt.sperrliste || [],
+  ausgenommen: [...ausgenommen],
   verwaltungen,
 };
 
@@ -101,7 +108,9 @@ const dazu = [...n].filter((x) => !a.has(x));
 const weg = [...a].filter((x) => !n.has(x));
 const gemeinden = verwaltungen.reduce((s, v) => s + v.gemeinden.length, 0);
 console.log("kundenkarte: " + gemeinden + " Gemeinden in " + verwaltungen.length + " Verwaltungen, " +
-  new Set(verwaltungen.map((v) => v.regierungsbezirk)).size + " Regierungsbezirke (CRM-Zeilen mit Status kunde: " + zeilen.length + ").");
+  new Set(verwaltungen.map((v) => v.regierungsbezirk)).size + " Regierungsbezirke (CRM-Zeilen: " +
+  zeilen.filter((z) => z.status === "kunde").length + " kunde, " + zeilen.filter((z) => z.status === "pilotbetrieb").length + " pilotbetrieb).");
+if (draussen.length) console.log("  ausgenommen, nicht auf der Karte: " + draussen.map((z) => z.id + " " + z.gemeindename).join("; "));
 if (ohneAgs.length) console.log("  ohne AGS, nicht auf der Karte: " + ohneAgs.map((z) => z.id + " " + z.gemeindename + " (" + z.art + ")").join("; "));
 console.log("  neu gegenüber kundenkarte.json: " + (dazu.length ? dazu.join(", ") : "nichts"));
 console.log("  entfällt gegenüber kundenkarte.json: " + (weg.length ? weg.join(", ") : "nichts"));
