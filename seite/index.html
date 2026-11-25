@@ -460,6 +460,73 @@
   .praxis__notizen dd { margin: 0; font-size: var(--sc-t-base); line-height: 1.5; color: #FFFFFF; max-width: 52ch; }
   .praxis__zusatz { display: block; margin-top: var(--sc-2); font-size: var(--sc-t-sm); color: var(--sc-ink-soft); max-width: 50ch; }
 
+  /* Verbreitung (25.11.): Bayernkarte der Gemeinden mit Lizenz, drei Zahlen, Liste je Regierungsbezirk. Der Block kommt
+     beim Bau aus scripts/kundenkarte.mjs. Ohne Skript und bei Reduced Motion steht der Endzustand aus dem HTML.
+     Mit Skript: .ist-bereit blendet aus, .ist-laeuft zeichnet Umriss und Bezirke, .ist-da setzt eine Gruppe,
+     .ist-fertig lässt die Ringe ruhig weiterlaufen. Maße im SVG sind Einheiten des Kartenblatts (612 breit). */
+  .verbreitung__zahlen { display: flex; flex-wrap: wrap; gap: var(--sc-5) var(--sc-6); margin: var(--sc-6) 0 0; }
+  .verbreitung__zahlen div { display: flex; flex-direction: column-reverse; gap: var(--sc-2); }
+  .verbreitung__zahlen dd { margin: 0; font: 800 var(--sc-t-2xl)/1 var(--sc-font-display); letter-spacing: -0.03em; color: #FFFFFF; font-variant-numeric: tabular-nums; }
+  .verbreitung__zahlen dd small { font: 600 var(--sc-t-sm)/1 var(--sc-font-text); letter-spacing: 0; color: var(--sc-ink-soft); }
+  .verbreitung__zahlen dt { font-size: var(--sc-t-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal-hell); }
+  .block__kopf .verbreitung__stand { margin-top: var(--sc-5); font-size: var(--sc-t-xs); }
+  .verbreitung { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sc-7); align-items: start; }
+  @media (min-width: 1280px) { .verbreitung { grid-template-columns: minmax(0, 46rem) minmax(0, 17rem); justify-content: space-between; gap: var(--sc-7); align-items: center; } }
+  .karte { margin: 0; max-width: 46rem; }
+  .karte__blatt { display: block; width: 100%; height: auto; overflow: visible; }
+  .karte figcaption { margin-top: var(--sc-3); font-size: var(--sc-t-xs); color: var(--sc-ink-soft); }
+  .karte figcaption a { color: inherit; text-underline-offset: 0.25em; }
+  .karte__grund { fill: color-mix(in oklab, #FFFFFF 3%, transparent); }
+  .karte__bezirk { fill: transparent; stroke: color-mix(in oklab, #FFFFFF 24%, transparent); stroke-width: 1; transition: fill 700ms var(--sc-ease-out); }
+  .karte__bezirk.ist-kunde { fill: color-mix(in oklab, var(--teal) 17%, transparent); }
+  .karte__umriss { fill: none; stroke: var(--teal-hell); stroke-width: 1.6; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+  .karte__bezirksname { font: 600 10.5px/1 var(--sc-font-text); letter-spacing: 0.14em; text-transform: uppercase; text-anchor: middle; fill: color-mix(in oklab, #FFFFFF 36%, transparent); }
+  .karte__faden { stroke: var(--teal-hell); stroke-width: 0.8; stroke-dasharray: 3 4; opacity: 0; }
+  .karte__ring { fill: none; stroke: var(--teal-hell); stroke-width: 1.2; opacity: 0; pointer-events: all; transform-box: fill-box; transform-origin: center; }
+  .karte__hof { fill: var(--teal); stroke: var(--teal); stroke-width: 15; stroke-linejoin: round; stroke-linecap: round; opacity: 0.42; transform-box: fill-box; transform-origin: center; }
+  .karte__flaeche { fill: none; stroke: var(--teal-hell); stroke-width: 1.1; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+  .karte__punkt { fill: #FFFFFF; stroke: var(--navy); stroke-width: 1; transform-box: fill-box; transform-origin: center; }
+  .karte__schild { font: 700 14px/1 var(--sc-font-text); fill: #FFFFFF; paint-order: stroke; stroke: #11365F; stroke-width: 3.5; stroke-linejoin: round; }
+  .karte__schild-klein { font-weight: 500; font-size: 12px; fill: #C9D4E4; }
+  .karte__gruppe.ist-aktiv .karte__ring { opacity: 1; animation: none; }
+  .karte__gruppe.ist-aktiv .karte__hof { opacity: 0.8; }
+  .karte__gruppe.ist-aktiv .karte__punkt { fill: var(--teal-hell); }
+
+  .karte.ist-bereit .karte__umriss { stroke-dashoffset: 1; }
+  .karte.ist-bereit .karte__bezirk, .karte.ist-bereit .karte__bezirksname, .karte.ist-bereit .karte__schild { opacity: 0; }
+  .karte.ist-bereit .karte__punkt { transform: scale(0); }
+  .karte.ist-bereit .karte__flaeche { stroke-dashoffset: 1; }
+  .karte.ist-bereit .karte__hof { opacity: 0; transform: scale(0.4); }
+  .karte.ist-laeuft .karte__umriss { stroke-dashoffset: 0; transition: stroke-dashoffset 1700ms cubic-bezier(0.6, 0, 0.2, 1); }
+  .karte.ist-laeuft .karte__bezirk { opacity: 1; transition: opacity 700ms var(--sc-ease-out) 800ms, fill 700ms var(--sc-ease-out); }
+  .karte.ist-laeuft .karte__bezirksname { opacity: 1; transition: opacity 700ms var(--sc-ease-out) 1100ms; }
+  .karte.ist-laeuft.hat-faden .karte__faden { opacity: 0.5; transition: transform 360ms var(--sc-ease-out), opacity 300ms linear; }
+  .karte.ist-laeuft.ist-fertig .karte__faden { opacity: 0; }
+  .karte.ist-bereit .karte__gruppe.ist-da .karte__punkt { transform: scale(1); transition: transform 420ms cubic-bezier(0.3, 1.7, 0.5, 1) calc(var(--k) * 55ms); }
+  .karte.ist-bereit .karte__gruppe.ist-da .karte__flaeche { stroke-dashoffset: 0; transition: stroke-dashoffset 620ms var(--sc-ease-out) 160ms; }
+  .karte.ist-bereit .karte__gruppe.ist-da .karte__hof { opacity: 0.42; transform: none; transition: opacity 500ms linear 420ms, transform 600ms cubic-bezier(0.3, 1.4, 0.5, 1) 420ms; }
+  .karte.ist-bereit .karte__gruppe.ist-da.ist-aktiv .karte__hof { opacity: 0.8; }
+  .karte.ist-bereit .karte__gruppe.ist-da .karte__schild { opacity: 1; transition: opacity 400ms linear 200ms; }
+  .karte.ist-bereit .karte__gruppe.ist-da .karte__ring { animation: karte-setzen 900ms var(--sc-ease-out) 1; }
+  @media (prefers-reduced-motion: no-preference) {
+    .karte.ist-fertig .karte__gruppe:not(.ist-aktiv) .karte__ring { animation: karte-puls 7.2s var(--sc-ease-out) infinite; animation-delay: calc(var(--i) * 0.8s); }
+  }
+  @keyframes karte-setzen { 0% { opacity: 0.9; transform: scale(0.3); } 100% { opacity: 0; transform: scale(2.4); } }
+  @keyframes karte-puls { 0% { opacity: 0; transform: scale(0.5); } 4% { opacity: 0.75; } 22%, 100% { opacity: 0; transform: scale(2); } }
+
+  .verbreitung__liste { margin: 0; }
+  .verbreitung__liste > div { display: grid; grid-template-columns: minmax(0, 10rem) minmax(0, 1fr); gap: var(--sc-5); padding: var(--sc-3) 0; border-top: 1px solid var(--linie); }
+  /* Neben der Karte ist die Liste schmal: Bezirk über den Einträgen. */
+  @media (min-width: 1280px) { .verbreitung__liste > div { grid-template-columns: minmax(0, 1fr); gap: var(--sc-1); } }
+  .verbreitung__liste > div:last-child { border-bottom: 1px solid var(--linie); }
+  .verbreitung__liste dt { padding-top: 0.25em; font-size: var(--sc-t-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal-hell); }
+  .verbreitung__liste dd { margin: 0; }
+  .verbreitung__liste ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sc-1); }
+  .verbreitung__liste li { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0 var(--sc-3); line-height: 1.45; }
+  .verbreitung__liste strong { font-weight: 600; font-size: var(--sc-t-sm); color: #FFFFFF; transition: color var(--sc-d-fast) var(--sc-ease-out); }
+  .verbreitung__liste span { font-size: var(--sc-t-sm); color: var(--sc-ink-soft); }
+  .verbreitung__liste li.ist-aktiv strong { color: var(--teal-hell); }
+
   /* Runde 8: Prüfbogen für die IT. Frage | kurze Antwort | Erläuterung, Grundlinien bündig wie auf einem Formular. */
   .pruefbogen { width: 100%; border-collapse: collapse; }
   .pruefbogen th, .pruefbogen td { text-align: left; vertical-align: baseline; padding: var(--sc-4) var(--sc-5) var(--sc-4) 0; border-bottom: 1px solid var(--linie); }
@@ -647,6 +714,12 @@
        ohne Mindestbreite (Einwohnerklasse bricht um), damit sie nicht seitlich läuft. */
     .praxis__kern blockquote { font-size: var(--sc-t-lg); }
     .praxis__notizen div { grid-template-columns: minmax(0, 1fr); gap: var(--sc-2); }
+    /* Verbreitung mobil: Karte über die volle Breite, Schilder und Bezirksnamen aus (stehen in der Liste darunter),
+       Punkte größer; Liste mit dem Bezirk über den Einträgen. */
+    .karte__schild, .karte__bezirksname { display: none; }
+    .karte__punkt { r: 4.4px; }
+    .verbreitung__liste > div { grid-template-columns: minmax(0, 1fr); gap: var(--sc-1); }
+    .karte figcaption a { display: inline-block; padding: 0.9rem 0; margin: -0.9rem 0; }
     .pruefbogen, .pruefbogen tbody, .pruefbogen tr, .pruefbogen th, .pruefbogen td { display: block; width: auto; }
     .pruefbogen tr { padding: var(--sc-4) 0; border-bottom: 1px solid var(--linie); }
     .pruefbogen tr:first-child { border-top: 1px solid var(--linie); }
@@ -1111,6 +1184,11 @@
           </dl>
         </div>
       </div>
+
+      <!-- Verbreitung (25.11.): Bayernkarte der Gemeinden mit Lizenz. Der Block entsteht beim Bau aus
+           src/content/kundenkarte.json (scripts/kundenkarte.mjs); in seite/ bleibt die Stelle leer. -->
+      <!-- KUNDENKARTE:START -->
+      <!-- KUNDENKARTE:ENDE -->
 
       <!-- Runde 8: Prüfbogen ersetzt den Datenblock und die FAQ zu Installation, DSGVO und Browser. Jeder Fakt steht einmal.
            Quellen: sicherheit.ts, faq.ts, tool/js/updates.js (Update über Menü Hilfe), tool/launcher.ps1 (Update- und Lizenzprüfung bei jedem Start über FlaechenKlar.bat), lizenz.js (höchstens 1× in 24 h),
@@ -1733,6 +1811,77 @@ ScrollCraft.mount(document.body);
   liste.addEventListener('scroll', anfrage, { passive: true });
   window.addEventListener('resize', anfrage);
   aktualisiere();
+})();
+</script>
+<script>
+// Kundenkarte (Block Verbreitung): beim ersten Sichtkontakt zeichnet sich der Umriss, dann setzen sich die Gruppen in der
+// Reihenfolge der Abschlüsse; ein Fadenkreuz springt mit, die drei Zahlen laufen mit. Danach pulsen die Ringe ruhig.
+// Ohne Skript und bei Reduced Motion steht der Endzustand aus dem HTML. Karte und Liste zeigen aufeinander.
+(function () {
+  var karte = document.querySelector('[data-karte]');
+  if (!karte) return;
+  var block = karte.closest('.block');
+  var gruppen = Array.prototype.slice.call(karte.querySelectorAll('.karte__gruppe'));
+  var eintraege = Array.prototype.slice.call(block.querySelectorAll('.verbreitung__liste li[data-i]'));
+
+  function zeige(i, an) {
+    gruppen.forEach(function (g) { if (g.getAttribute('data-i') === i) g.classList.toggle('ist-aktiv', an); });
+    eintraege.forEach(function (li) { if (li.getAttribute('data-i') === i) li.classList.toggle('ist-aktiv', an); });
+  }
+  gruppen.concat(eintraege).forEach(function (el) {
+    var i = el.getAttribute('data-i');
+    el.addEventListener('pointerenter', function () { zeige(i, true); });
+    el.addEventListener('pointerleave', function () { zeige(i, false); });
+  });
+
+  if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var bezirke = Array.prototype.slice.call(karte.querySelectorAll('.karte__bezirk'));
+  var fadenH = karte.querySelector('.karte__faden--h'), fadenV = karte.querySelector('.karte__faden--v');
+  var zahl = {};
+  Array.prototype.forEach.call(block.querySelectorAll('[data-zahl]'), function (el) { zahl[el.getAttribute('data-zahl')] = el; });
+  var stand = { gemeinden: 0, verwaltungen: 0 };
+
+  function faden(g) {
+    fadenH.style.transform = 'translate(0px, ' + g.getAttribute('data-y') + 'px)';
+    fadenV.style.transform = 'translate(' + g.getAttribute('data-x') + 'px, 0px)';
+  }
+  function schreibe(name, wert) { if (zahl[name]) zahl[name].textContent = String(wert); }
+
+  karte.classList.add('ist-bereit');
+  bezirke.forEach(function (b) { b.classList.remove('ist-kunde'); });
+  ['gemeinden', 'verwaltungen', 'bezirke'].forEach(function (n) { schreibe(n, 0); });
+  if (gruppen[0]) faden(gruppen[0]);
+
+  function setze(g) {
+    var n = Number(g.getAttribute('data-n'));
+    g.classList.add('ist-da');
+    karte.classList.add('hat-faden');
+    faden(g);
+    bezirke.forEach(function (b) { if (b.getAttribute('data-bezirk') === g.getAttribute('data-bezirk')) b.classList.add('ist-kunde'); });
+    schreibe('verwaltungen', ++stand.verwaltungen);
+    schreibe('bezirke', karte.querySelectorAll('.karte__bezirk.ist-kunde').length);
+    for (var k = 0; k < n; k++) setTimeout(function () { schreibe('gemeinden', ++stand.gemeinden); }, k * 55);
+  }
+  function fertig() {
+    karte.classList.add('ist-fertig');
+    Object.keys(zahl).forEach(function (n) { schreibe(n, zahl[n].getAttribute('data-ziel')); });
+  }
+  function lauf() {
+    karte.classList.add('ist-laeuft');
+    var t = 1500;
+    gruppen.forEach(function (g) {
+      setTimeout(function () { setze(g); }, t);
+      t += 380 + Number(g.getAttribute('data-n')) * 55;
+    });
+    setTimeout(fertig, t + 700);
+  }
+  var io = new IntersectionObserver(function (e) {
+    if (!e[0].isIntersecting) return;
+    io.disconnect();
+    lauf();
+  }, { threshold: 0.35 });
+  io.observe(karte);
 })();
 </script>
 </body>

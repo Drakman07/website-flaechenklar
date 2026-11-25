@@ -32,8 +32,24 @@ Nach Änderungen in `seite/` oder `src/content/` neu bauen (`npm run build`), wr
 - schreibt Links auf saubere Adressen um (`demo.html` → `/demo`, `assets/` → `/assets/`)
 - ergänzt je Seite canonical, Open Graph, Twitter-Karte und Favicons, auf der Startseite JSON-LD
 
+- baut aus `src/content/kundenkarte.json` und `src/content/geo/bayern.json` den Block
+  „Verbreitung“ der Startseite (Bayernkarte, drei Zahlen, Liste; `scripts/kundenkarte.mjs`)
+
 `src/content/versionen.ts` bleibt an diesem Ort: das Release-Werkzeug des Programms
 (`tool/tools/bump-version.js`) schreibt dort bei jedem Release einen Eintrag hinein.
+
+### Kundenkarte pflegen
+
+- Neuer Kunde: `node scripts/kundenkarte-vorschlag.mjs` liest die CRM-Datenbank nur lesend und
+  zeigt, was sich ändert. `--uebernehmen` schreibt `src/content/kundenkarte.json`. Auf die Seite
+  kommt es erst mit Bau und Deploy.
+- Gemeindenamen stehen nur da, wenn `name_zeigen` in der Datei und an der Verwaltung `true` ist.
+  Sonst nennt die Karte den Landkreis, und die Datei enthält gar keine Namen: erst den Schalter
+  an der Verwaltung setzen, dann das Skript noch einmal laufen lassen.
+- Eine Gemeinde will nicht erscheinen: AGS oder Schlüssel der Verwaltung in `sperrliste`, neu bauen.
+- Ein Schild sitzt schlecht: `beschriftung` an der Verwaltung (`links`, `rechts`, `oben`, `unten`).
+- Geodaten: BKG (VG2500, VG250), Datenlizenz Deutschland Namensnennung 2.0. Der Quellenvermerk
+  steht unter der Karte. Neu aufbereiten mit `scripts/geodaten-aufbereiten.mjs` (Abruf im Kopf der Datei).
 
 ## Adressen
 

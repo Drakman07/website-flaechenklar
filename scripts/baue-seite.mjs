@@ -7,12 +7,15 @@
 // 3. Aus src/content/preise.ts: Preisliste des Preiswählers (Startseite) und das Angebot im JSON-LD.
 // 4. Saubere Adressen: demo.html -> /demo, index.html -> /, relative assets/ und fonts/ -> absolut.
 // 5. Kopf je Seite: canonical, Open Graph, Twitter-Karte, Favicons; JSON-LD auf der Startseite.
+// 6. Aus src/content/kundenkarte.json und src/content/geo/bayern.json: Block „Verbreitung“ mit der Bayernkarte
+//    (Startseite, scripts/kundenkarte.mjs).
 //
 // Bricht ab, wenn eine Marke fehlt oder ein interner .html-Link übrig bleibt.
 // Aufruf: npm run build
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { kundenkarteBlock } from "./kundenkarte.mjs";
 
 const WURZEL = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SEITE = path.join(WURZEL, "seite");
@@ -212,6 +215,7 @@ for (const name of SEITEN) {
   }
   if (name === "tutorial") html = marke(html, "tutorial.html", "NEU", neuBlock);
   if (name === "index") html = marke(html, "index.html", "PREISE", preisListe, true);
+  if (name === "index") html = marke(html, "index.html", "KUNDENKARTE", kundenkarteBlock(WURZEL, abbruch));
   html = kopf(name, html);
   html = adressen(html);
   const rest = html.match(/(["'])(?!https?:)[a-z0-9-]+\.html\b/g);
