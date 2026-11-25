@@ -46,8 +46,11 @@ Nach Änderungen in `seite/` oder `src/content/` neu bauen (`npm run build`), wr
 - Gemeindenamen stehen nur da, wenn `name_zeigen` in der Datei und an der Verwaltung `true` ist.
   Sonst nennt die Karte den Landkreis, und die Datei enthält gar keine Namen: erst den Schalter
   an der Verwaltung setzen, dann das Skript noch einmal laufen lassen.
+- Auf die Karte kommen die CRM-Status `kunde` und `pilotbetrieb`. AGS unter `ausgenommen` schreibt
+  das Skript nie in die Datei (dort steht der Arbeitgeber, der im CRM als Pilot geführt wird).
 - Eine Gemeinde will nicht erscheinen: AGS oder Schlüssel der Verwaltung in `sperrliste`, neu bauen.
-- Ein Schild sitzt schlecht: `beschriftung` an der Verwaltung (`links`, `rechts`, `oben`, `unten`).
+- Ein Schild sitzt schlecht: `beschriftung` an der Verwaltung (`links`, `rechts`, `oben`, `unten`),
+  zum Nachrücken `versatz` (`[x, y]` in Einheiten des Kartenblatts).
 - Geodaten: BKG (VG2500, VG250), Datenlizenz Deutschland Namensnennung 2.0. Der Quellenvermerk
   steht unter der Karte. Neu aufbereiten mit `scripts/geodaten-aufbereiten.mjs` (Abruf im Kopf der Datei).
 

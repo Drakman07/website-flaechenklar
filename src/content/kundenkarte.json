@@ -1,15 +1,49 @@
 {
-  "hinweis": "Quelle der Kundenkarte auf der Startseite. Vorschlag aus dem CRM: scripts/kundenkarte-vorschlag.mjs. name_zeigen (gesamt und je Verwaltung) schaltet Gemeindenamen frei; beide müssen true sein. sperrliste: AGS oder Schlüssel einer Verwaltung, der Eintrag fehlt dann auf Karte, in Liste und Zahlen.",
+  "hinweis": "Quelle der Kundenkarte auf der Startseite. Vorschlag aus dem CRM: scripts/kundenkarte-vorschlag.mjs. name_zeigen (gesamt und je Verwaltung) schaltet Gemeindenamen frei; beide müssen true sein. sperrliste: AGS oder Schlüssel einer Verwaltung, der Eintrag fehlt dann auf Karte, in Liste und Zahlen. ausgenommen: AGS, die das Skript nie in die Datei schreibt.",
   "stand": "2026-11",
   "name_zeigen": false,
   "sperrliste": [],
+  "ausgenommen": [
+    "09373155"
+  ],
   "verwaltungen": [
+    {
+      "schluessel": "ags:09371148",
+      "art": "Markt",
+      "landkreis": "Amberg-Sulzbach",
+      "regierungsbezirk": "Oberpfalz",
+      "reihenfolge": 1,
+      "name_zeigen": false,
+      "gemeinden": [
+        {
+          "ags": "09371148",
+          "lon": 11.9213,
+          "lat": 49.267
+        }
+      ]
+    },
+    {
+      "schluessel": "ags:09375118",
+      "art": "Markt",
+      "landkreis": "Regensburg",
+      "regierungsbezirk": "Oberpfalz",
+      "reihenfolge": 2,
+      "name_zeigen": false,
+      "versatz": [0, 12],
+      "gemeinden": [
+        {
+          "ags": "09375118",
+          "lon": 11.81,
+          "lat": 49.0953
+        }
+      ]
+    },
     {
       "schluessel": "ags:09189155",
       "art": "Stadt",
       "landkreis": "Traunstein",
       "regierungsbezirk": "Oberbayern",
-      "reihenfolge": 1,
+      "reihenfolge": 3,
       "name_zeigen": false,
       "gemeinden": [
         {
@@ -24,9 +58,9 @@
       "art": "Verwaltungsgemeinschaft",
       "landkreis": "Landshut",
       "regierungsbezirk": "Niederbayern",
-      "beschriftung": "unten",
-      "reihenfolge": 2,
+      "reihenfolge": 4,
       "name_zeigen": false,
+      "beschriftung": "unten",
       "gemeinden": [
         {
           "ags": "09274132",
@@ -50,7 +84,7 @@
       "art": "Verwaltungsgemeinschaft",
       "landkreis": "Rottal-Inn",
       "regierungsbezirk": "Niederbayern",
-      "reihenfolge": 3,
+      "reihenfolge": 5,
       "name_zeigen": false,
       "gemeinden": [
         {
@@ -70,7 +104,7 @@
       "art": "Verwaltungsgemeinschaft",
       "landkreis": "Günzburg",
       "regierungsbezirk": "Schwaben",
-      "reihenfolge": 4,
+      "reihenfolge": 6,
       "name_zeigen": false,
       "gemeinden": [
         {
@@ -105,7 +139,7 @@
       "art": "Gemeinde",
       "landkreis": "Weißenburg-Gunzenhausen",
       "regierungsbezirk": "Mittelfranken",
-      "reihenfolge": 5,
+      "reihenfolge": 7,
       "name_zeigen": false,
       "beschriftung": "links",
       "gemeinden": [
@@ -121,7 +155,7 @@
       "art": "Gemeinde",
       "landkreis": "Regen",
       "regierungsbezirk": "Niederbayern",
-      "reihenfolge": 6,
+      "reihenfolge": 8,
       "name_zeigen": false,
       "gemeinden": [
         {
@@ -136,8 +170,10 @@
       "art": "Gemeinde",
       "landkreis": "Neumarkt i.d.OPf.",
       "regierungsbezirk": "Oberpfalz",
-      "reihenfolge": 7,
+      "reihenfolge": 9,
       "name_zeigen": false,
+      "beschriftung": "unten",
+      "versatz": [-50, 14],
       "gemeinden": [
         {
           "ags": "09373160",
@@ -151,7 +187,7 @@
       "art": "Verwaltungsgemeinschaft",
       "landkreis": "Rhön-Grabfeld",
       "regierungsbezirk": "Unterfranken",
-      "reihenfolge": 8,
+      "reihenfolge": 10,
       "name_zeigen": false,
       "gemeinden": [
         {
@@ -196,7 +232,7 @@
       "art": "Markt",
       "landkreis": "Bamberg",
       "regierungsbezirk": "Oberfranken",
-      "reihenfolge": 9,
+      "reihenfolge": 11,
       "name_zeigen": false,
       "gemeinden": [
         {

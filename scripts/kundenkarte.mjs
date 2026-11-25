@@ -99,8 +99,11 @@ export function kundenkarteBlock(wurzel, abbruch) {
       // Schild: rechts, links, oben oder unten von der Gruppe (kundenkarte.json: beschriftung), sonst rechts.
       const seite = v.beschriftung || "rechts";
       const ab = radius + (pkt.length > 1 ? 15 : 10);
-      const [sx, sy, anker] =
+      const [gx, gy, anker] =
         seite === "links" ? [cx - ab, cy - 2, "end"] : seite === "oben" ? [cx, cy - ab - 14, "middle"] : seite === "unten" ? [cx, cy + ab + 10, "middle"] : [cx + ab, cy - 2, "start"];
+      // versatz [x, y] in Einheiten des Kartenblatts rückt ein Schild nach, wo Nachbarn eng liegen.
+      const [vx, vy] = Array.isArray(v.versatz) ? v.versatz : [0, 0];
+      const [sx, sy] = [gx + vx, gy + vy];
       const zeile1 = zeigt(v) ? v.name : "Lkr. " + v.landkreis;
       const schild =
         '<text class="karte__schild" x="' + z(sx) + '" y="' + z(sy) + '" text-anchor="' + anker + '">' +
